@@ -1,0 +1,20 @@
+<persistence
+        xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
+        version="2.1">
+    <persistence-unit name="core.bet365.persistent_unit_xml">
+        <description>Hibernate EntityManager Demo</description>
+        <class>core.bet365.ResultEntity</class>
+        <class>core.bet365.TableTennisEventEntity</class>
+        <exclude-unlisted-classes>true</exclude-unlisted-classes>
+        <properties>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5Dialect"/>
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://127.0.0.1:3306/bet365v2db"/>
+            <property name="javax.persistence.jdbc.user" value="adminbet"/>
+            <property name="javax.persistence.jdbc.password" value="superSecretPass!111@"/>
+        </properties>
+    </persistence-unit>
+</persistence>
