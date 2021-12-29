@@ -99,8 +99,8 @@ public class BetwinnerService {
                     }
 
                     TableTennisEventEntity tableTennisEvent =  new TableTennisEventEntity();
-                    tableTennisEvent.setFirstPlayerName(playerNamesAsArray[1]);
-                    tableTennisEvent.setSecondPlayerName(playerNamesAsArray[3]);
+                    tableTennisEvent.setFirstPlayerName(playerNamesAsArray[1].trim());
+                    tableTennisEvent.setSecondPlayerName(playerNamesAsArray[3].trim());
                     tableTennisEvent.setFirstPlayerWinningOdd(firstPlayerBet);
                     tableTennisEvent.setSecondPlayerWinningOdd(secondPlayerBet);
                     tableTennisEvent.setEventDate(eventDate);

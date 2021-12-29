@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class BwinDataNormalizationServiceImpl implements DataNormalizationService {
@@ -18,6 +20,8 @@ public class BwinDataNormalizationServiceImpl implements DataNormalizationServic
             Map.Entry<String, Object> value = ((Map<String, Object>) map)
                     .entrySet().stream().filter(en -> en.getKey().equals("fixtures")).findFirst().get();
             ArrayList<Object> valueAsList = (ArrayList<Object>) value.getValue();
+            final String regex = "(\\(\\w+\\))";
+            final Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
 
             for (Object v : valueAsList) {
 
@@ -53,6 +57,18 @@ public class BwinDataNormalizationServiceImpl implements DataNormalizationServic
 
                         Map<String, Object> otherOneOfThePlayersResultsMap = (Map<String, Object>) results.get(1);
                         Double otherOneOfThePlayersOdd = (Double) otherOneOfThePlayersResultsMap.get("odds");
+
+                        final Matcher matcher = pattern.matcher(player1NameAsString);
+                        if (matcher.find()){
+                            String abbreviation = matcher.group(1);
+                            player1NameAsString = player1NameAsString.replace(abbreviation, "").trim();
+                        }
+
+                        final Matcher matcher2 = pattern.matcher(player2NameAsString);
+                        if (matcher2.find()){
+                            String abbreviation = matcher2.group(1);
+                            player2NameAsString = player2NameAsString.replace(abbreviation, "").trim();
+                        }
 
                         if (oneOfThePlayersShortName.equals(player1ShortNameAsString)){
 

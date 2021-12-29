@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/arbitrage betting suite.iml" filepath="$PROJECT_DIR$/.idea/arbitrage betting suite.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bet365Core/bet354Core.iml" filepath="$PROJECT_DIR$/bet365Core/bet354Core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bet365/bet365.iml" filepath="$PROJECT_DIR$/bet365/bet365.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bets22/bets22.iml" filepath="$PROJECT_DIR$/bets22/bets22.iml" />
+      <module fileurl="file://$PROJECT_DIR$/betwinner/betwinner.iml" filepath="$PROJECT_DIR$/betwinner/betwinner.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bwin/bwin.iml" filepath="$PROJECT_DIR$/bwin/bwin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/commons/commons.iml" filepath="$PROJECT_DIR$/commons/commons.iml" />
+    </modules>
+  </component>
+</project>
