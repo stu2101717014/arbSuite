@@ -45,6 +45,8 @@ public class BwinDataNormalizationServiceImpl implements DataNormalizationServic
 
                     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
                     eventDate = formatter.parse(startDate);
+                    eventDate = addHoursToJavaUtilDate(eventDate, 2);
+
 
                     if (games.size() > 0){
                         Object game = games.stream().filter(g -> ((Map<String, Object>) g.get("name")).get("value").toString().equals("2Way - Who will win?")).findFirst().get();
@@ -96,5 +98,12 @@ public class BwinDataNormalizationServiceImpl implements DataNormalizationServic
             }
         }
         return resultList;
+    }
+
+    public Date addHoursToJavaUtilDate(Date date, int hours) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.HOUR_OF_DAY, hours);
+        return calendar.getTime();
     }
 }

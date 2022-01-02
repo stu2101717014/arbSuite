@@ -70,7 +70,9 @@ public class BetwinnerService {
 
                         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy hh:mm", Locale.getDefault());
                         eventDate = formatter.parse(finalDateAsString);
+                        eventDate = addHoursToJavaUtilDate(eventDate, -1);
                     }
+
 
                     List<Element> teamsEls = el.queryAll("span.c-events__teams");
                     List<Element> betsEls = el.queryAll("div.c-bets");
@@ -122,5 +124,12 @@ public class BetwinnerService {
         }
 
         return httpService.serializeResultEnt(resultEntity);
+    }
+
+    public Date addHoursToJavaUtilDate(Date date, int hours) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.HOUR_OF_DAY, hours);
+        return calendar.getTime();
     }
 }

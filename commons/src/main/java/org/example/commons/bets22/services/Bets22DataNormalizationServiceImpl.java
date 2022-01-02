@@ -27,7 +27,7 @@ public class Bets22DataNormalizationServiceImpl implements DataNormalizationServ
                     String timeStampAsString = valueEntityMap.get(valueEntityMap.keySet().stream().filter(fp -> fp.equals("S")).findFirst().get()).toString();
                     String resultTimeStamp = String.format("%.0f", Double.parseDouble(timeStampAsString));
                     Long timeStamp = Long.parseLong(resultTimeStamp);
-                    Date date = new Date(timeStamp);
+                    Date date = new Date(timeStamp * 1000);
 
                     ArrayList<Object> odds = (ArrayList<Object>) valueEntityMap.get(valueEntityMap.keySet().stream().filter(fp -> fp.equals("E")).findFirst().get());
                     if (odds.size() > 2) {
