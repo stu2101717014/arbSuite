@@ -7,8 +7,6 @@ public class RequestDataResult {
 
     private ResultEntity betwinnerResult;
 
-    private ResultEntity bet365Result;
-
     public ResultEntity getBwinResult() {
         return bwinResult;
     }
@@ -33,11 +31,4 @@ public class RequestDataResult {
         this.betwinnerResult = betwinnerResult;
     }
 
-    public ResultEntity getBet365Result() {
-        return bet365Result;
-    }
-
-    public void setBet365Result(ResultEntity bet365Result) {
-        this.bet365Result = bet365Result;
-    }
 }

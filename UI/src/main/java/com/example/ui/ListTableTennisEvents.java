@@ -32,7 +32,6 @@ public class ListTableTennisEvents extends VerticalLayout {
         grid.addColumn(FourPlatformsEventWrapper::getBwinEvent).setHeader("Bwin");
         grid.addColumn(FourPlatformsEventWrapper::getBetWinnerEvent).setHeader("BetWinner");
         grid.addColumn(FourPlatformsEventWrapper::getBets22Event).setHeader("Bets22");
-        grid.addColumn(FourPlatformsEventWrapper::getBet365Event).setHeader("Bet365");
 
         grid.setVisible(true);
         grid.getColumns().forEach(col -> col.setWidth("250px"));

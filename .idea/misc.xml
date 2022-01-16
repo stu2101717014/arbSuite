@@ -4,12 +4,10 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/bwin/pom.xml" />
-        <option value="$PROJECT_DIR$/bet365/pom.xml" />
         <option value="$PROJECT_DIR$/bets22/pom.xml" />
         <option value="$PROJECT_DIR$/betwinner/pom.xml" />
         <option value="$PROJECT_DIR$/UI/pom.xml" />
         <option value="$PROJECT_DIR$/commons/pom.xml" />
-        <option value="$PROJECT_DIR$/bet365Core/pom.xml" />
       </list>
     </option>
   </component>

@@ -48,8 +48,8 @@ public class UIServiceTests {
         Date time = Calendar.getInstance().getTime();
         RequestDataResult requestDataResult = new RequestDataResult();
 
-        ResultEntity bet365Entity = new ResultEntity();
-        HashSet<TableTennisEventEntity> bet365TableTennisEventEntities = new HashSet<>();
+        ResultEntity bwinEntity = new ResultEntity();
+        HashSet<TableTennisEventEntity> bwinTableTennisEventEntities = new HashSet<>();
 
         ResultEntity bets22ResultEnt = new ResultEntity();
         HashSet<TableTennisEventEntity> bets22TableTennisEventEntities = new HashSet<>();
@@ -68,13 +68,14 @@ public class UIServiceTests {
         tableTennisEventEntity2.setFirstPlayerWinningOdd(1.35D);
         tableTennisEventEntity2.setSecondPlayerWinningOdd(3.2d);
 
-        bet365TableTennisEventEntities.add(tableTennisEventEntity);
+        bwinTableTennisEventEntities.add(tableTennisEventEntity);
+        bwinTableTennisEventEntities.add(tableTennisEventEntity);
         bets22TableTennisEventEntities.add(tableTennisEventEntity2);
 
-        bet365Entity.setTableTennisEventEntitySet(bet365TableTennisEventEntities);
+        bwinEntity.setTableTennisEventEntitySet(bwinTableTennisEventEntities);
         bets22ResultEnt.setTableTennisEventEntitySet(bets22TableTennisEventEntities);
 
-        requestDataResult.setBet365Result(bet365Entity);
+        requestDataResult.setBwinResult(bwinEntity);
         requestDataResult.setBets22Result(bets22ResultEnt);
 
         return requestDataResult;

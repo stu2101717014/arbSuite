@@ -20,8 +20,6 @@ public class FourPlatformsEventWrapper implements IComparable<FourPlatformsEvent
 
     private String betWinnerEvent;
 
-    private String bet365Event;
-
     public Long getId() {
         return id;
     }
@@ -78,13 +76,6 @@ public class FourPlatformsEventWrapper implements IComparable<FourPlatformsEvent
         this.betWinnerEvent = betWinnerEvent;
     }
 
-    public String getBet365Event() {
-        return bet365Event;
-    }
-
-    public void setBet365Event(String bet365Event) {
-        this.bet365Event = bet365Event;
-    }
 
     @Override
     public boolean equals(Object obj) {

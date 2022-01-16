@@ -91,25 +91,6 @@ public class UIService {
                 }
             }
 
-            if (requestDataResult != null && requestDataResult.getBet365Result() != null && requestDataResult.getBet365Result().getTableTennisEventEntitySet() != null){
-                for(TableTennisEventEntity ttee : requestDataResult.getBet365Result().getTableTennisEventEntitySet()){
-                    FourPlatformsEventWrapper current = new FourPlatformsEventWrapper();
-                    current.setEventDate(ttee.getEventDate());
-                    current.setFirstPlayer(ttee.getFirstPlayerName());
-                    current.setSecondPlayer(ttee.getSecondPlayerName());
-
-                    Optional<FourPlatformsEventWrapper> first = eventWrapperTreeSet.stream().filter(wr -> wr.equals(current)).findFirst();
-                    if (first.isPresent()){
-                        FourPlatformsEventWrapper fourPlatformsEventWrapper = first.get();
-                        eventWrapperTreeSet.remove(fourPlatformsEventWrapper);
-                        fourPlatformsEventWrapper.setBet365Event(this.TableTennisEventToString(ttee));
-                        eventWrapperTreeSet.add(fourPlatformsEventWrapper);
-                    }else {
-                        current.setBet365Event(this.TableTennisEventToString(ttee));
-                        eventWrapperTreeSet.add(current);
-                    }
-                }
-            }
 
         }catch (Exception e){
 

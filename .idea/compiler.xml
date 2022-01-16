@@ -7,11 +7,9 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="betwinner" />
-        <module name="bet354Core" />
         <module name="bets22" />
         <module name="bwin" />
         <module name="UI" />
-        <module name="bet365" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
