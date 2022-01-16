@@ -15,8 +15,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 @Import(org.example.commons.evaluation.services.TestConfig.class)
 public class EvaluationServiceTests {
 
-    @Autowired
-    private EvaluationService evaluationService;
+//    @Autowired
+//    private EvaluationService evaluationService;
 
     @Test
     public void EvaluateTableTennisDataStrategyExactMatchNoSwitchingPositions_whenEvaluate_thenNotThrowException()  {

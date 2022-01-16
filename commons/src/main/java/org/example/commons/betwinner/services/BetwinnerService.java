@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -70,7 +71,8 @@ public class BetwinnerService {
 
                         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy hh:mm", Locale.getDefault());
                         eventDate = formatter.parse(finalDateAsString);
-                        eventDate = addHoursToJavaUtilDate(eventDate, -1);
+
+                        eventDate = new Date(eventDate.getTime() - TimeUnit.HOURS.toMillis(1));
                     }
 
 

@@ -68,7 +68,9 @@ public class Main {
             System.out.println(e.getMessage());
         } finally {
             try {
-                driver.close();
+                if(driver != null){
+                    driver.close();
+                }
                 Process p = Runtime.getRuntime().exec("taskkill /im chromedriver.exe /f");
             } catch (IOException e) {
             }

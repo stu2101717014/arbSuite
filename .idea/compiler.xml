@@ -6,13 +6,12 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="betwinner" />
         <module name="bet354Core" />
         <module name="bets22" />
         <module name="bwin" />
-        <module name="betwinner" />
-        <module name="arbUI" />
+        <module name="UI" />
         <module name="bet365" />
-        <module name="commons" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -23,10 +22,12 @@
       <module name="betwinner" target="1.8" />
       <module name="bwin" target="1.8" />
       <module name="commons" target="8" />
+      <module name="UI" target="1.8" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="UI" options="-parameters" />
       <module name="arbUI" options="-parameters" />
       <module name="bet365" options="-parameters" />
       <module name="bets22" options="-parameters" />
