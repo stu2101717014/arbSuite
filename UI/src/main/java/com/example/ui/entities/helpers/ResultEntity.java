@@ -1,4 +1,4 @@
-package com.example.ui.entities;
+package com.example.ui.entities.helpers;
 
 import java.util.Date;
 import java.util.Set;
@@ -12,6 +12,8 @@ public class ResultEntity {
     private Date time;
 
     private Set<TableTennisEventEntity> tableTennisEventEntitySet;
+
+    private String platformName;
 
     public Long getId() {
         return id;
@@ -43,5 +45,13 @@ public class ResultEntity {
 
     public void setTableTennisEventEntitySet(Set<TableTennisEventEntity> payload) {
         this.tableTennisEventEntitySet = payload;
+    }
+
+    public String getPlatformName() {
+        return platformName;
+    }
+
+    public void setPlatformName(String platformName) {
+        this.platformName = platformName;
     }
 }

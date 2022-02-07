@@ -1,7 +1,8 @@
 package com.example.ui.services;
 
-import com.example.ui.entities.RequestDataResult;
-import com.example.ui.entities.ResultEntity;
+import com.example.ui.entities.helpers.RequestDataResult;
+import com.example.ui.entities.helpers.ResultEntity;
+import com.example.ui.entities.jpa.PlatformDataRequestWrapperEntity;
 import com.example.ui.services.helpers.ClientMultiThreaded;
 import com.example.ui.services.interfaces.DataRequestService;
 import com.google.gson.Gson;
@@ -14,47 +15,46 @@ import org.apache.http.util.EntityUtils;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class DataRequestServiceImpl implements DataRequestService {
 
-    private static String BWIN_TABLE_TENNIS_REQUEST_URL = "http://localhost:8084/api/bwin";
 
-    private static String BETS22_TABLE_TENNIS_REQUEST_URL = "http://localhost:8082/api/22bets";
-
-    private static String BETWINNER_TABLE_TENNIS_REQUEST_URL = "http://localhost:8085/api/betwinner";
-
-
-    public RequestDataResult requestData(RequestDataResult requestDataResult) throws InterruptedException, IOException {
+    public RequestDataResult requestData(RequestDataResult requestDataResult, List<PlatformDataRequestWrapperEntity> platformsList) throws InterruptedException, IOException {
         PoolingHttpClientConnectionManager connManager = new PoolingHttpClientConnectionManager();
         connManager.setMaxTotal(100);
         HttpClientBuilder clientBuilder = HttpClients.custom().setConnectionManager(connManager);
         CloseableHttpClient httpclient = clientBuilder.build();
 
-        HttpGet bWinHttpGet = new HttpGet(BWIN_TABLE_TENNIS_REQUEST_URL);
-        HttpGet bets22HttpGet = new HttpGet(BETS22_TABLE_TENNIS_REQUEST_URL);
-        HttpGet betWinnerHttpGet = new HttpGet(BETWINNER_TABLE_TENNIS_REQUEST_URL);
+        List<ClientMultiThreaded> threadList = new ArrayList<>();
+        for(PlatformDataRequestWrapperEntity pe : platformsList){
+            if (pe.getAccessible()){
+                HttpGet httpGet = new HttpGet(pe.getUrl());
+                ClientMultiThreaded httpGetThread = new ClientMultiThreaded(httpclient, httpGet, pe.getPlatformName());
 
-        ClientMultiThreaded bWinThread = new ClientMultiThreaded(httpclient, bWinHttpGet);
-        ClientMultiThreaded bets22Thread = new ClientMultiThreaded(httpclient, bets22HttpGet);
-        ClientMultiThreaded betWinnerThread = new ClientMultiThreaded(httpclient, betWinnerHttpGet);
+                httpGetThread.start();
+                threadList.add(httpGetThread);
+            }
+        }
 
-        bWinThread.start();
-        bets22Thread.start();
-        betWinnerThread.start();
+        for(ClientMultiThreaded thread : threadList){
+            thread.join();
+        }
 
-        bWinThread.join();
-        bets22Thread.join();
-        betWinnerThread.join();
-
-        String bWinResultAsString = EntityUtils.toString(bWinThread.entity, "UTF-8");
-        requestDataResult.setBwinResult(new Gson().fromJson(bWinResultAsString, ResultEntity.class));
-
-        String bets22ResultAsString = EntityUtils.toString(bets22Thread.entity, "UTF-8");
-        requestDataResult.setBets22Result(new Gson().fromJson(bets22ResultAsString, ResultEntity.class));
-
-        String betWinnerResultAsString = EntityUtils.toString(betWinnerThread.entity, "UTF-8");
-        requestDataResult.setBetwinnerResult(new Gson().fromJson(betWinnerResultAsString, ResultEntity.class));
+        for(ClientMultiThreaded thread : threadList){
+            String resultAsString  = EntityUtils.toString(thread.entity, "UTF-8");
+            if (requestDataResult.getEntityList() == null){
+                requestDataResult.setEntityList(new ArrayList<>());
+            }
+            ResultEntity resultEntity = new Gson().fromJson(resultAsString, ResultEntity.class);
+            resultEntity.setPlatformName(thread.platformName);
+            int statusCode = thread.statusCode;
+            if (statusCode == 200 &&  resultEntity.getTableTennisEventEntitySet().size() > 0){
+                requestDataResult.getEntityList().add(resultEntity);
+            }
+        }
 
         return requestDataResult;
     }

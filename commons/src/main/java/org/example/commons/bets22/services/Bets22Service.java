@@ -17,7 +17,7 @@ import java.util.Set;
 @Service
 public class Bets22Service {
 
-    private static String BETS_22_TABLE_TENNIS_REQUEST_URL ="https://22bets.me/LineFeed/Get1x2_VZip?sports=10&count=5000&lng=en&tf=3000000&tz=2&mode=4&partner=151&getEmpty=true";
+    private static String BETS_22_TABLE_TENNIS_REQUEST_URL ="https://22betz.com/LineFeed/Get1x2_VZip?sports=10&count=5000&lng=en&tf=3000000&tz=2&mode=4&partner=151&getEmpty=true";
 
     private DataNormalizationService dataNormalizationService;
 

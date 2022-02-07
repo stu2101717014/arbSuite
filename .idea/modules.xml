@@ -8,6 +8,7 @@
       <module fileurl="file://$PROJECT_DIR$/betwinner/betwinner.iml" filepath="$PROJECT_DIR$/betwinner/betwinner.iml" />
       <module fileurl="file://$PROJECT_DIR$/bwin/bwin.iml" filepath="$PROJECT_DIR$/bwin/bwin.iml" />
       <module fileurl="file://$PROJECT_DIR$/commons/commons.iml" filepath="$PROJECT_DIR$/commons/commons.iml" />
+      <module fileurl="file://$PROJECT_DIR$/williamhill/williamhill.iml" filepath="$PROJECT_DIR$/williamhill/williamhill.iml" />
     </modules>
   </component>
 </project>

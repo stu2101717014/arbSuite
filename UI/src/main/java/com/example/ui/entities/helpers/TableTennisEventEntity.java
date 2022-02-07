@@ -1,6 +1,4 @@
-package com.example.ui.entities;
-
-import com.example.ui.entities.ResultEntity;
+package com.example.ui.entities.helpers;
 
 import java.util.Date;
 import java.util.Set;
@@ -72,5 +70,11 @@ public class TableTennisEventEntity {
 
     public void setEventDate(Date eventDate) {
         this.eventDate = eventDate;
+    }
+
+    @Override
+    public String toString() {
+        return getFirstPlayerName() + " : " + getSecondPlayerName() + "\n"
+                + getFirstPlayerWinningOdd() + " : " + getSecondPlayerWinningOdd();
     }
 }

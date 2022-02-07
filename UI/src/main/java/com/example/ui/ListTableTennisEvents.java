@@ -1,8 +1,11 @@
 package com.example.ui;
 
-import com.example.ui.entities.FourPlatformsEventWrapper;
-import com.example.ui.services.UIService;
+import com.example.ui.entities.helpers.TableTennisEventWrapper;
+import com.example.ui.services.TableTennisService;
+import com.vaadin.flow.component.ClickEvent;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 
@@ -11,34 +14,74 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.TreeSet;
+import java.util.*;
 
 @Component
 @Route(value="", layout = MainLayout.class)
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class ListTableTennisEvents extends VerticalLayout {
 
-    private final Grid<FourPlatformsEventWrapper> grid = new Grid<>(FourPlatformsEventWrapper.class, false);
+    private final Grid<TableTennisEventWrapper> grid = new Grid<>(TableTennisEventWrapper.class, false);
 
-    public ListTableTennisEvents(@Autowired UIService uiService) {
+    private final Button eval = new Button("Eval");
 
-        List<FourPlatformsEventWrapper> tableTennisEvents = uiService.getData();
+    private Set<TableTennisEventWrapper> selectedSet;
 
+
+    private TableTennisService tableTennisService;
+
+    public ListTableTennisEvents(@Autowired TableTennisService tableTennisService) {
+        this.tableTennisService = tableTennisService;
+
+        List<TableTennisEventWrapper> tableTennisEvents = tableTennisService.getData();
+        List<String> platformNames = tableTennisService.getPlatformNames();
+        selectedSet = new HashSet<>();
+
+        configureGrid(tableTennisEvents, platformNames);
+        VerticalLayout verticalLayout = configureButtons();
+
+        add(verticalLayout);
+        addAndExpand(grid);
+    }
+
+
+    private VerticalLayout configureButtons() {
+        VerticalLayout verticalLayout = new VerticalLayout();
+        this.eval.addClickListener(this::buttonEvalClicked);
+        verticalLayout.add(this.eval);
+
+        verticalLayout.getStyle().set("position","absolute");
+        verticalLayout.getStyle().set("bottom",20 + "px");
+        verticalLayout.getStyle().set("left",20 + "px");
+        return verticalLayout;
+    }
+
+    private void buttonEvalClicked(ClickEvent<Button> buttonClickEvent) {
+
+
+        this.grid.deselectAll();
+    }
+
+    private void configureGrid(List<TableTennisEventWrapper> tableTennisEvents, List<String> platformNames) {
         grid.addClassNames("ttee-grid");
-        grid.addColumn(FourPlatformsEventWrapper::getEventDate).setHeader("Date");
-        grid.addColumn(FourPlatformsEventWrapper::getFirstPlayer).setHeader("First Player Name");
-        grid.addColumn(FourPlatformsEventWrapper::getSecondPlayer).setHeader("Second Player Name");
-        grid.addColumn(FourPlatformsEventWrapper::getBwinEvent).setHeader("Bwin");
-        grid.addColumn(FourPlatformsEventWrapper::getBetWinnerEvent).setHeader("BetWinner");
-        grid.addColumn(FourPlatformsEventWrapper::getBets22Event).setHeader("Bets22");
+        grid.addThemeVariants(GridVariant.LUMO_WRAP_CELL_CONTENT);
+
+        grid.addColumn(е -> е.getTableTennisEventEntityShort().getEventDate()).setHeader("Date");
+        grid.addColumn(е -> е.getTableTennisEventEntityShort().getSecondPlayer()).setHeader("Second Player");
+        grid.addColumn(е -> е.getTableTennisEventEntityShort().getFirstPlayer()).setHeader("First Player");
+
+        for (String platformName : platformNames){
+            grid.addColumn(e -> e.getEventEntityMap().getOrDefault(platformName, null) == null ?
+                    "" : e.getEventEntityMap().getOrDefault(platformName, null).toString()).setHeader(platformName);
+        }
 
         grid.setVisible(true);
-        grid.getColumns().forEach(col -> col.setWidth("250px"));
+        grid.getColumns().forEach(col -> col.setAutoWidth(true));
 
         grid.setItems(tableTennisEvents);
-        //grid.setSizeFull();
 
-        addAndExpand(grid);
+        grid.addSelectionListener(selection -> {
+            this.selectedSet = selection.getAllSelectedItems();
+        });
     }
 }
