@@ -9,6 +9,8 @@ public class TableTennisEventWrapper {
 
     private Map<String, TableTennisEventEntity> eventEntityMap;
 
+    private boolean hasArbitrage;
+
     public TableTennisEventEntityShort getTableTennisEventEntityShort() {
         return tableTennisEventEntityShort;
     }
@@ -23,5 +25,13 @@ public class TableTennisEventWrapper {
 
     public void setEventEntityMap(Map<String, TableTennisEventEntity> eventEntityMap) {
         this.eventEntityMap = eventEntityMap;
+    }
+
+    public boolean isHasArbitrage() {
+        return hasArbitrage;
+    }
+
+    public void setHasArbitrage(boolean hasArbitrage) {
+        this.hasArbitrage = hasArbitrage;
     }
 }

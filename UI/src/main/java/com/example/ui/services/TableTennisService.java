@@ -1,13 +1,10 @@
 package com.example.ui.services;
 
-
 import com.example.ui.entities.helpers.*;
 import com.example.ui.entities.jpa.PlatformDataRequestWrapperEntity;
-import com.example.ui.repos.NamesSimilaritiesRepository;
 import com.example.ui.services.interfaces.DataRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -19,17 +16,19 @@ public class TableTennisService {
 
     private RequestDataResult lastRequestedData;
 
+    private ApisService apisService;
 
     @Autowired
-    public TableTennisService(DataRequestService dataRequestService, NamesSimilaritiesRepository namesSimilaritiesRepository) {
+    public TableTennisService(DataRequestService dataRequestService, ApisService apisService) {
         this.dataRequestService = dataRequestService;
+        this.apisService = apisService;
     }
 
     public List<TableTennisEventWrapper> getData() {
         try {
             lastRequestedData = new RequestDataResult();
 
-            ArrayList<PlatformDataRequestWrapperEntity> platformWrapperEntities = getPlatformDataRequestWrapperEntities();
+            List<PlatformDataRequestWrapperEntity> platformWrapperEntities = getPlatformDataRequestWrapperEntities();
             lastRequestedData = dataRequestService.requestData(lastRequestedData, platformWrapperEntities);
 
             List<TableTennisEventWrapper> eventWrapperList = reshapeTableTennisEventsData(lastRequestedData);
@@ -86,43 +85,12 @@ public class TableTennisService {
     }
 
 
-    private ArrayList<PlatformDataRequestWrapperEntity> getPlatformDataRequestWrapperEntities() {
-        //TODO : PlatformDataRequestWrapperEntity must has its own UI and must be persisted in the UI db
-        PlatformDataRequestWrapperEntity platformDataRequestWrapperEntity = new PlatformDataRequestWrapperEntity();
-        platformDataRequestWrapperEntity.setPlatformName("BWin");
-        platformDataRequestWrapperEntity.setUrl("http://localhost:8084/api/bwin");
-        platformDataRequestWrapperEntity.setAccessible(true);
-
-        PlatformDataRequestWrapperEntity platformDataRequestWrapperEntity2 = new PlatformDataRequestWrapperEntity();
-        platformDataRequestWrapperEntity2.setPlatformName("BetWinner");
-        platformDataRequestWrapperEntity2.setUrl("http://localhost:8085/api/betwinner");
-        platformDataRequestWrapperEntity2.setAccessible(true);
-
-        PlatformDataRequestWrapperEntity platformDataRequestWrapperEntity3 = new PlatformDataRequestWrapperEntity();
-        platformDataRequestWrapperEntity3.setPlatformName("22Bet");
-        platformDataRequestWrapperEntity3.setUrl("http://localhost:8082/api/22bets");
-        platformDataRequestWrapperEntity3.setAccessible(true);
-
-        PlatformDataRequestWrapperEntity platformDataRequestWrapperEntity4 = new PlatformDataRequestWrapperEntity();
-        platformDataRequestWrapperEntity4.setPlatformName("WilliamHill");
-        platformDataRequestWrapperEntity4.setUrl("http://localhost:8083/api/williamhill");
-        platformDataRequestWrapperEntity4.setAccessible(true);
-
-        ArrayList<PlatformDataRequestWrapperEntity> platformWrapperEntities = new ArrayList<>();
-        platformWrapperEntities.add(platformDataRequestWrapperEntity);
-        platformWrapperEntities.add(platformDataRequestWrapperEntity2);
-        platformWrapperEntities.add(platformDataRequestWrapperEntity3);
-        platformWrapperEntities.add(platformDataRequestWrapperEntity4);
-        return platformWrapperEntities;
+    private List<PlatformDataRequestWrapperEntity> getPlatformDataRequestWrapperEntities() {
+        return this.apisService.getAll().stream().filter(PlatformDataRequestWrapperEntity::getAccessible).collect(Collectors.toList());
     }
 
     public List<String> getPlatformNames() {
-        List<String> resList = new ArrayList<>();
-        resList.add("BWin");
-        resList.add("BetWinner");
-        resList.add("22Bet");
-        resList.add("WilliamHill");
-
-        return resList;
+        return this.apisService.getAll().stream().filter(PlatformDataRequestWrapperEntity::getAccessible).map(PlatformDataRequestWrapperEntity::getPlatformName)
+                .collect(Collectors.toList());
     }
 }

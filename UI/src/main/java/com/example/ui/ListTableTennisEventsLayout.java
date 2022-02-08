@@ -17,20 +17,17 @@ import org.springframework.stereotype.Component;
 import java.util.*;
 
 @Component
-@Route(value="", layout = MainLayout.class)
+@Route(value="TableTennisEvents", layout = MainLayout.class)
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class ListTableTennisEvents extends VerticalLayout {
+public class ListTableTennisEventsLayout extends VerticalLayout {
 
     private final Grid<TableTennisEventWrapper> grid = new Grid<>(TableTennisEventWrapper.class, false);
 
-    private final Button eval = new Button("Eval");
-
     private Set<TableTennisEventWrapper> selectedSet;
-
 
     private TableTennisService tableTennisService;
 
-    public ListTableTennisEvents(@Autowired TableTennisService tableTennisService) {
+    public ListTableTennisEventsLayout(@Autowired TableTennisService tableTennisService) {
         this.tableTennisService = tableTennisService;
 
         List<TableTennisEventWrapper> tableTennisEvents = tableTennisService.getData();
@@ -47,8 +44,6 @@ public class ListTableTennisEvents extends VerticalLayout {
 
     private VerticalLayout configureButtons() {
         VerticalLayout verticalLayout = new VerticalLayout();
-        this.eval.addClickListener(this::buttonEvalClicked);
-        verticalLayout.add(this.eval);
 
         verticalLayout.getStyle().set("position","absolute");
         verticalLayout.getStyle().set("bottom",20 + "px");
@@ -56,11 +51,6 @@ public class ListTableTennisEvents extends VerticalLayout {
         return verticalLayout;
     }
 
-    private void buttonEvalClicked(ClickEvent<Button> buttonClickEvent) {
-
-
-        this.grid.deselectAll();
-    }
 
     private void configureGrid(List<TableTennisEventWrapper> tableTennisEvents, List<String> platformNames) {
         grid.addClassNames("ttee-grid");
