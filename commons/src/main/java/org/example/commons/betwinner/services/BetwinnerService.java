@@ -77,7 +77,7 @@ public class BetwinnerService {
 
 
                     List<Element> teamsEls = el.queryAll("span.c-events__teams");
-                    List<Element> betsEls = el.queryAll("div.c-bets");
+                    List<Element> betsEls = el.queryAll("span.c-bets__bet.c-bets__bet_coef");
 
                     String playerNames = teamsEls.get(0).getText();
                     String playerNamesAsArray[] = playerNames.split("\\r?\\n", -1);
@@ -85,33 +85,26 @@ public class BetwinnerService {
 
                     final String regex = "(\\d+.\\d+)-(\\d+.\\d+)\\d.";
 
-                    String betsAsText = betsEls.get(0).getText();
+                    if (betsEls.size() >=1){
+                        Double firstPlayerBet = Double.parseDouble(betsEls.get(0).getText());
+                        Double secondPlayerBet = Double.parseDouble(betsEls.get(1).getText());
 
-                    final Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
-                    final Matcher matcher = pattern.matcher(betsAsText);
+                        if ((firstPlayerBet + secondPlayerBet) == 0.0d ){
+                            continue;
+                        }
 
-                    Double firstPlayerBet = 0.0d;
-                    Double secondPlayerBet = 0.0d;
+                        TableTennisEventEntity tableTennisEvent =  new TableTennisEventEntity();
+                        tableTennisEvent.setFirstPlayerName(playerNamesAsArray[1].trim());
+                        tableTennisEvent.setSecondPlayerName(playerNamesAsArray[3].trim());
+                        tableTennisEvent.setFirstPlayerWinningOdd(firstPlayerBet);
+                        tableTennisEvent.setSecondPlayerWinningOdd(secondPlayerBet);
+                        tableTennisEvent.setEventDate(eventDate);
 
-                    while (matcher.find()) {
-                        firstPlayerBet = Double.parseDouble(matcher.group(1));
-                        secondPlayerBet = Double.parseDouble(matcher.group(2));
+                        tableTennisEvent.setResultEntity(resultEntityHashSet);
+
+                        tableTennisEventEntities.add(tableTennisEvent);
                     }
 
-                    if ((firstPlayerBet + secondPlayerBet) == 0.0d ){
-                        continue;
-                    }
-
-                    TableTennisEventEntity tableTennisEvent =  new TableTennisEventEntity();
-                    tableTennisEvent.setFirstPlayerName(playerNamesAsArray[1].trim());
-                    tableTennisEvent.setSecondPlayerName(playerNamesAsArray[3].trim());
-                    tableTennisEvent.setFirstPlayerWinningOdd(firstPlayerBet);
-                    tableTennisEvent.setSecondPlayerWinningOdd(secondPlayerBet);
-                    tableTennisEvent.setEventDate(eventDate);
-
-                    tableTennisEvent.setResultEntity(resultEntityHashSet);
-
-                    tableTennisEventEntities.add(tableTennisEvent);
                 }
             }
 

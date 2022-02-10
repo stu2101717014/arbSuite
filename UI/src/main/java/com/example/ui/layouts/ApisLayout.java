@@ -1,4 +1,4 @@
-package com.example.ui;
+package com.example.ui.layouts;
 
 import com.example.ui.entities.jpa.PlatformDataRequestWrapperEntity;
 import com.example.ui.services.ApisService;
@@ -42,11 +42,13 @@ public class ApisLayout extends HorizontalLayout {
 
     public ApisLayout(@Autowired ApisService apisService) {
         this.apisService = apisService;
+
         List<PlatformDataRequestWrapperEntity> all = apisService.getAll();
         configureGrid(all);
-        FlexLayout verticalLayout = configureForm();
+
+        FlexLayout flexLayout = configureForm();
         addAndExpand(grid);
-        add(verticalLayout);
+        add(flexLayout);
     }
 
     private FlexLayout configureForm(){

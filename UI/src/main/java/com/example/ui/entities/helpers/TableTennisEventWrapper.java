@@ -9,7 +9,7 @@ public class TableTennisEventWrapper {
 
     private Map<String, TableTennisEventEntity> eventEntityMap;
 
-    private boolean hasArbitrage;
+    private Double arbitragePercentage;
 
     public TableTennisEventEntityShort getTableTennisEventEntityShort() {
         return tableTennisEventEntityShort;
@@ -27,11 +27,11 @@ public class TableTennisEventWrapper {
         this.eventEntityMap = eventEntityMap;
     }
 
-    public boolean isHasArbitrage() {
-        return hasArbitrage;
+    public Double getArbitragePercentage() {
+        return arbitragePercentage;
     }
 
-    public void setHasArbitrage(boolean hasArbitrage) {
-        this.hasArbitrage = hasArbitrage;
+    public void setArbitragePercentage(Double arbitragePercentage) {
+        this.arbitragePercentage = arbitragePercentage;
     }
 }

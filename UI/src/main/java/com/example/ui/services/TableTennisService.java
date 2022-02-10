@@ -9,6 +9,9 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static java.util.Comparator.naturalOrder;
+import static java.util.Comparator.nullsLast;
+
 @Service
 public class TableTennisService {
 
@@ -33,12 +36,33 @@ public class TableTennisService {
 
             List<TableTennisEventWrapper> eventWrapperList = reshapeTableTennisEventsData(lastRequestedData);
 
+            checkForArbitrage(eventWrapperList);
 
             return eventWrapperList;
         } catch (Exception e) {
             e.printStackTrace();
         }
         return new ArrayList<>();
+    }
+
+    private void checkForArbitrage(List<TableTennisEventWrapper> eventWrapperList) {
+        for (TableTennisEventWrapper ttew : eventWrapperList) {
+            Map<String, TableTennisEventEntity> eventEntityMap = ttew.getEventEntityMap();
+            List<TableTennisEventEntity> values = new ArrayList<>(eventEntityMap.values());
+            if (values.size() >= 2) {
+                double firstOdd = values.get(0).getFirstPlayerWinningOdd();
+                double secondOdd = values.get(0).getSecondPlayerWinningOdd();
+                for (int i = 1; i < values.size(); i++) {
+                    if (values.get(i).getFirstPlayerWinningOdd() > firstOdd) {
+                        firstOdd = values.get(i).getFirstPlayerWinningOdd();
+                    }
+                    if (values.get(i).getSecondPlayerWinningOdd() > secondOdd) {
+                        secondOdd = values.get(i).getSecondPlayerWinningOdd();
+                    }
+                }
+                ttew.setArbitragePercentage(1d / firstOdd + 1d / secondOdd);
+            }
+        }
     }
 
     public List<TableTennisEventWrapper> reshapeTableTennisEventsData(RequestDataResult requestDataResult) {
@@ -78,10 +102,11 @@ public class TableTennisService {
         }
 
 
-        return resultAsList.stream().sorted(Comparator.comparing(e -> e.getTableTennisEventEntityShort().getEventDate()))
-                .sorted(Comparator.comparing(e -> e.getTableTennisEventEntityShort().getSecondPlayer()))
-                .sorted(Comparator.comparing(e -> e.getTableTennisEventEntityShort().getFirstPlayer()))
+        return resultAsList.stream().sorted(nullsLast(Comparator.comparing(e -> e.getTableTennisEventEntityShort().getEventDate(), nullsLast(naturalOrder()))))
+                .sorted(nullsLast(Comparator.comparing(e -> e.getTableTennisEventEntityShort().getSecondPlayer(), nullsLast(naturalOrder()))))
+                .sorted(nullsLast(Comparator.comparing(e -> e.getTableTennisEventEntityShort().getFirstPlayer(), nullsLast(naturalOrder()))))
                 .collect(Collectors.toList());
+
     }
 
 

@@ -12,16 +12,13 @@ public class NamesSimilarities {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="lastTimeUsed")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date lastTimeUsed;
-
     @Column(name = "universalPlayerName", length = 255, nullable = true)
     private String universalPlayerName;
 
     @Column(name = "platformName", length = 255, nullable = true)
     private String platformName;
 
+    @Column(name = "platformSpecificPlayerName", length = 255, nullable = true)
     private String platformSpecificPlayerName;
 
     public Long getId() {
@@ -30,14 +27,6 @@ public class NamesSimilarities {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Date getLastTimeUsed() {
-        return lastTimeUsed;
-    }
-
-    public void setLastTimeUsed(Date lastTimeUsed) {
-        this.lastTimeUsed = lastTimeUsed;
     }
 
     public String getUniversalPlayerName() {
