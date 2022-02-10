@@ -84,6 +84,8 @@ public class NamesSimilaritiesLayout extends VerticalLayout {
     private void deleteButtonClicked(ClickEvent<Button> buttonClickEvent) {
         if (selected != null){
             namesSimilaritiesService.deleteNameSimilarity(selected);
+            grid.setItems(namesSimilaritiesService.getAll());
+            grid.getDataProvider().refreshAll();
         }
     }
 

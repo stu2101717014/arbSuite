@@ -4,8 +4,6 @@ import java.util.Date;
 import java.util.Set;
 
 public class TableTennisEventEntity {
-    private Long id;
-
     private String firstPlayerName;
 
     private String secondPlayerName;
@@ -14,23 +12,7 @@ public class TableTennisEventEntity {
 
     private Double secondPlayerWinningOdd;
 
-    private transient Set<ResultEntity> resultEntity;
-
     private java.util.Date eventDate;
-
-    public Set<ResultEntity> getResultEntity() {
-        return resultEntity;
-    }
-
-    public void setResultEntity(Set<ResultEntity> resultEntity) {this.resultEntity = resultEntity ;}
-
-    public Long getId() {
-        return this.id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getFirstPlayerName() {
         return firstPlayerName;
