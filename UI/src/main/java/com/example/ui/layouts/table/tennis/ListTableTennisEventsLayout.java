@@ -1,7 +1,8 @@
-package com.example.ui.layouts;
+package com.example.ui.layouts.table.tennis;
 
 import com.example.ui.entities.helpers.TableTennisEventWrapper;
 import com.example.ui.entities.jpa.NamesSimilarities;
+import com.example.ui.layouts.MainLayout;
 import com.example.ui.services.NamesSimilaritiesService;
 import com.example.ui.services.TableTennisService;
 import com.vaadin.flow.component.ClickEvent;
@@ -22,66 +23,42 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-@Route(value="TableTennisEvents", layout = MainLayout.class)
+@Route(value = "TableTennisEvents", layout = MainLayout.class)
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class ListTableTennisEventsLayout extends VerticalLayout {
 
     private final Grid<TableTennisEventWrapper> grid = new Grid<>(TableTennisEventWrapper.class, false);
 
-    private final NamesSimilaritiesService namesSimilaritiesService;
-
-    private TextField playerPlatformSpecificName;
-    private TextField playerUniversalName;
-    private TextField platformName;
-
-
     public ListTableTennisEventsLayout(@Autowired TableTennisService tableTennisService, @Autowired NamesSimilaritiesService namesSimilaritiesService) {
-        this.namesSimilaritiesService = namesSimilaritiesService;
 
         List<TableTennisEventWrapper> tableTennisEvents = tableTennisService.getData();
         List<String> platformNames = tableTennisService.getPlatformNames();
 
         configureGrid(tableTennisEvents, platformNames);
-        HorizontalLayout formLayout = configureForm();
 
-        addAndExpand(grid);
-        add(formLayout);
+        AddNamesSimilaritiesFormLayout addNamesSimilaritiesFormLayout = new AddNamesSimilaritiesFormLayout(namesSimilaritiesService);
+
+        FlexLayout content = configureContent(addNamesSimilaritiesFormLayout);
+        Button showAddNewNamesSimilarities = new Button("Add Name Similarity");
+        showAddNewNamesSimilarities.addClickListener(e -> addNamesSimilaritiesFormLayout.setVisible(true));
+
+        addAndExpand(new HorizontalLayout(showAddNewNamesSimilarities), content);
+        setHeightFull();
     }
 
-    private HorizontalLayout configureForm(){
-        HorizontalLayout layout = new HorizontalLayout();
+    private FlexLayout configureContent(AddNamesSimilaritiesFormLayout addNamesSimilaritiesFormLayout) {
+        addNamesSimilaritiesFormLayout.setWidth("6em");
+        addNamesSimilaritiesFormLayout.setVisible(false);
 
-        playerPlatformSpecificName = new TextField();
-        playerPlatformSpecificName.setLabel("Platform Specific Name");
-
-        playerUniversalName = new TextField();
-        playerUniversalName.setLabel("Player Universal Name");
-
-        platformName = new TextField();
-        platformName.setLabel("Platform Name");
-
-        Button addNameSimilarity = new Button("Add");
-        addNameSimilarity.addClickListener(this::addNameSimilarity);
-
-        layout.add(playerPlatformSpecificName, playerUniversalName, platformName, addNameSimilarity);
-        return layout;
+        FlexLayout content = new FlexLayout(grid, addNamesSimilaritiesFormLayout);
+        content.setFlexGrow(4, grid);
+        content.setFlexGrow(1, addNamesSimilaritiesFormLayout);
+        content.setFlexShrink(0, addNamesSimilaritiesFormLayout);
+        content.addClassNames("content", "gap-m");
+        content.setSizeFull();
+        return content;
     }
 
-    private void addNameSimilarity(ClickEvent<Button> event) {
-        String playerPlatformSpecificNameAsString = playerPlatformSpecificName.getValue();
-        String playerUniversalNameAsString = playerUniversalName.getValue();
-        String platformNameAsString = platformName.getValue();
-
-        NamesSimilarities namesSimilarities = new NamesSimilarities();
-        namesSimilarities.setUniversalPlayerName(playerUniversalNameAsString);
-        namesSimilarities.setPlatformName(platformNameAsString);
-        namesSimilarities.setPlatformSpecificPlayerName(playerPlatformSpecificNameAsString);
-
-        this.namesSimilaritiesService.saveAndFlushNameSimilarity(namesSimilarities);
-        playerPlatformSpecificName.setValue("");
-        playerUniversalName.setValue("");
-        platformName.setValue("");
-    }
 
     private void configureGrid(List<TableTennisEventWrapper> tableTennisEvents, List<String> platformNames) {
         grid.addClassNames("ttee-grid");
@@ -92,7 +69,7 @@ public class ListTableTennisEventsLayout extends VerticalLayout {
         grid.addColumn(е -> е.getTableTennisEventEntityShort().getSecondPlayer()).setHeader("Second Player");
         grid.addColumn(TableTennisEventWrapper::getArbitragePercentage).setHeader("Arb N");
 
-        for (String platformName : platformNames){
+        for (String platformName : platformNames) {
             grid.addColumn(e -> e.getEventEntityMap().getOrDefault(platformName, null) == null ?
                     "" : e.getEventEntityMap().getOrDefault(platformName, null).toString()).setHeader(platformName);
         }
@@ -100,6 +77,6 @@ public class ListTableTennisEventsLayout extends VerticalLayout {
         grid.setVisible(true);
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
         grid.setItems(tableTennisEvents);
-
+        grid.setHeightFull();
     }
 }

@@ -1,5 +1,6 @@
 package com.example.ui.layouts;
 
+import com.example.ui.layouts.table.tennis.ListTableTennisEventsLayout;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.HighlightConditions;

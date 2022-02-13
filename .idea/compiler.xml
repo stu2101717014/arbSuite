@@ -10,6 +10,7 @@
         <module name="bets22" />
         <module name="bwin" />
         <module name="UI" />
+        <module name="mybookie" />
         <module name="williamhill" />
       </profile>
     </annotationProcessing>
@@ -21,6 +22,7 @@
       <module name="betwinner" target="1.8" />
       <module name="bwin" target="1.8" />
       <module name="commons" target="8" />
+      <module name="mybookie" target="1.8" />
       <module name="UI" target="1.8" />
       <module name="williamhill" target="1.8" />
     </bytecodeTargetLevel>
@@ -33,6 +35,7 @@
       <module name="bets22" options="-parameters" />
       <module name="betwinner" options="-parameters" />
       <module name="bwin" options="-parameters" />
+      <module name="mybookie" options="-parameters" />
       <module name="williamhill" options="-parameters" />
     </option>
   </component>
