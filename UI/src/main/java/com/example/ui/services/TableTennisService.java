@@ -3,6 +3,7 @@ package com.example.ui.services;
 import com.example.ui.entities.helpers.*;
 import com.example.ui.entities.jpa.NamesSimilarities;
 import com.example.ui.entities.jpa.PlatformDataRequestWrapperEntity;
+import com.example.ui.services.helpers.CalculatorService;
 import com.example.ui.services.interfaces.DataRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,11 +25,17 @@ public class TableTennisService {
 
     private NamesSimilaritiesService namesSimilaritiesService;
 
+    private CalculatorService calculatorService;
+
     @Autowired
-    public TableTennisService(DataRequestService dataRequestService, ApisService apisService, NamesSimilaritiesService namesSimilaritiesService) {
+    public TableTennisService(DataRequestService dataRequestService,
+                              ApisService apisService,
+                              NamesSimilaritiesService namesSimilaritiesService,
+                              CalculatorService calculatorService) {
         this.dataRequestService = dataRequestService;
         this.apisService = apisService;
         this.namesSimilaritiesService = namesSimilaritiesService;
+        this.calculatorService = calculatorService;
     }
 
     public List<TableTennisEventWrapper> getData() {
@@ -51,7 +58,7 @@ public class TableTennisService {
             List<TableTennisEventWrapper> eventWrapperList = reshapeTableTennisEventsData(lastRequestedData);
 
             //Check For Arbitrage
-            checkForArbitrage(eventWrapperList);
+            calculatorService.checkForArbitrage(eventWrapperList);
 
             return eventWrapperList;
         } catch (Exception e) {
@@ -89,25 +96,7 @@ public class TableTennisService {
         }
     }
 
-    private void checkForArbitrage(List<TableTennisEventWrapper> eventWrapperList) {
-        for (TableTennisEventWrapper ttew : eventWrapperList) {
-            Map<String, TableTennisEventEntity> eventEntityMap = ttew.getEventEntityMap();
-            List<TableTennisEventEntity> values = new ArrayList<>(eventEntityMap.values());
-            if (values.size() >= 2) {
-                double firstOdd = values.get(0).getFirstPlayerWinningOdd();
-                double secondOdd = values.get(0).getSecondPlayerWinningOdd();
-                for (int i = 1; i < values.size(); i++) {
-                    if (values.get(i).getFirstPlayerWinningOdd() > firstOdd) {
-                        firstOdd = values.get(i).getFirstPlayerWinningOdd();
-                    }
-                    if (values.get(i).getSecondPlayerWinningOdd() > secondOdd) {
-                        secondOdd = values.get(i).getSecondPlayerWinningOdd();
-                    }
-                }
-                ttew.setArbitragePercentage(1d / firstOdd + 1d / secondOdd);
-            }
-        }
-    }
+
 
     public List<TableTennisEventWrapper> reshapeTableTennisEventsData(RequestDataResult requestDataResult) {
 

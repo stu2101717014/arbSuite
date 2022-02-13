@@ -11,6 +11,10 @@ public class TableTennisEventWrapper {
 
     private Double arbitragePercentage;
 
+    private String winningPlatformOne;
+
+    private String winningPlatformTwo;
+
     public TableTennisEventEntityShort getTableTennisEventEntityShort() {
         return tableTennisEventEntityShort;
     }
@@ -33,5 +37,21 @@ public class TableTennisEventWrapper {
 
     public void setArbitragePercentage(Double arbitragePercentage) {
         this.arbitragePercentage = arbitragePercentage;
+    }
+
+    public String getWinningPlatformOne() {
+        return winningPlatformOne;
+    }
+
+    public void setWinningPlatformOne(String winningPlatformOne) {
+        this.winningPlatformOne = winningPlatformOne;
+    }
+
+    public String getWinningPlatformTwo() {
+        return winningPlatformTwo;
+    }
+
+    public void setWinningPlatformTwo(String winningPlatformTwo) {
+        this.winningPlatformTwo = winningPlatformTwo;
     }
 }

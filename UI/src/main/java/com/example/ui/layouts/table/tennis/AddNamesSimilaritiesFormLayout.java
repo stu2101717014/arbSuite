@@ -31,7 +31,10 @@ public class AddNamesSimilaritiesFormLayout extends VerticalLayout {
         Button addNameSimilarity = new Button("Add");
         addNameSimilarity.addClickListener(this::addNameSimilarity);
 
-        add(playerPlatformSpecificName, playerUniversalName, platformName, addNameSimilarity);
+        Button hide = new Button("Hide");
+        hide.addClickListener(e -> this.setVisible(false));
+
+        add(playerPlatformSpecificName, playerUniversalName, platformName, addNameSimilarity, hide);
     }
 
 
