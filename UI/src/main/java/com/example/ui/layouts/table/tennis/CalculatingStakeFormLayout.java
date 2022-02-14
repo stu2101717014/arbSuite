@@ -12,7 +12,7 @@ import java.util.*;
 
 public class CalculatingStakeFormLayout extends VerticalLayout {
 
-    private Label amount;
+    private TextField amount;
 
     private Label playerOneName;
     private Label playerTwoName;
@@ -26,11 +26,15 @@ public class CalculatingStakeFormLayout extends VerticalLayout {
     private Label total;
 
     private Button hideForm;
+    private Button reEvaluate;
     private CalculatorService calculatorService;
 
-    public CalculatingStakeFormLayout(CalculatorService calculatorService) {
+    private TableTennisEventWrapper selected;
+
+    public CalculatingStakeFormLayout(CalculatorService calculatorService, TableTennisEventWrapper selected) {
+        this.selected = selected;
         this.calculatorService = calculatorService;
-        this.amount = new Label();
+        this.amount = new TextField();
         this.playerOneName = new Label();
         this.playerTwoName = new Label();
 
@@ -42,20 +46,34 @@ public class CalculatingStakeFormLayout extends VerticalLayout {
         this.total =  new Label();
 
         this.hideForm = new Button("Hide Form");
+        this.reEvaluate =  new Button("Reevaluate");
+        this.reEvaluate.addClickListener(e->this.initCalculatingStakeFormLayout(Double.parseDouble(this.amount.getValue())));
+
         this.hideForm.addClickListener(e -> this.setVisible(false));
-        add(amount, playerOneName, playerTwoName, playerOneOdd, playerTwoOdd, platformOne, platformTwo, total, hideForm);
+        add(amount, playerOneName, playerTwoName, playerOneOdd, playerTwoOdd, platformOne, platformTwo, total, hideForm, reEvaluate);
     }
 
-    public void initCalculatingStakeFormLayout(TableTennisEventWrapper tableTennisEventWrapper, double amount){
+    public TableTennisEventWrapper getSelected() {
+        return selected;
+    }
 
-        this.amount.setText(String.valueOf(amount));
+    public void setSelected(TableTennisEventWrapper selected) {
+        this.selected = selected;
+    }
 
-        this.playerOneName.setText(tableTennisEventWrapper.getTableTennisEventEntityShort().getFirstPlayer());
-        this.playerTwoName.setText(tableTennisEventWrapper.getTableTennisEventEntityShort().getSecondPlayer());
+    public void initCalculatingStakeFormLayout(double amount){
+        if (this.selected == null){
+            return;
+        }
+
+        this.amount.setValue(String.valueOf(amount));
+
+        this.playerOneName.setText(selected.getTableTennisEventEntityShort().getFirstPlayer());
+        this.playerTwoName.setText(selected.getTableTennisEventEntityShort().getSecondPlayer());
 
         List<Double> winningOdds = new ArrayList<Double>();
 
-        Optional<TableTennisEventEntity> firstPlayerTTEE = tableTennisEventWrapper.getEventEntityMap().values().stream()
+        Optional<TableTennisEventEntity> firstPlayerTTEE = selected.getEventEntityMap().values().stream()
                 .max(Comparator.comparing(TableTennisEventEntity::getFirstPlayerWinningOdd));
         firstPlayerTTEE.ifPresent(ttee -> {
             this.playerOneOdd.setText("Highest odd : " + ttee.getFirstPlayerWinningOdd().toString());
@@ -63,7 +81,7 @@ public class CalculatingStakeFormLayout extends VerticalLayout {
         });
 
 
-        Optional<TableTennisEventEntity> secondPlayerTTEE = tableTennisEventWrapper.getEventEntityMap().values().stream()
+        Optional<TableTennisEventEntity> secondPlayerTTEE = selected.getEventEntityMap().values().stream()
                 .max(Comparator.comparing(TableTennisEventEntity::getSecondPlayerWinningOdd));
         secondPlayerTTEE.ifPresent(ttee -> {
             this.playerTwoOdd.setText("Highest odd : " + ttee.getSecondPlayerWinningOdd().toString());
@@ -71,11 +89,11 @@ public class CalculatingStakeFormLayout extends VerticalLayout {
         });
 
         List<Double> calculatedSingleBets = this.calculatorService
-                .calculateBets(amount, winningOdds, tableTennisEventWrapper.getArbitragePercentage());
+                .calculateBets(amount, winningOdds, selected.getArbitragePercentage());
 
-        this.platformOne.setText("Platform : " + tableTennisEventWrapper.getWinningPlatformOne() + " : "
+        this.platformOne.setText("Platform : " + selected.getWinningPlatformOne() + " : "
                 + String.format("Bet : %.2f", calculatedSingleBets.get(0)));
-        this.platformTwo.setText("Platform : " + tableTennisEventWrapper.getWinningPlatformTwo()+ " : "
+        this.platformTwo.setText("Platform : " + selected.getWinningPlatformTwo()+ " : "
                 + String.format("Bet : %.2f", calculatedSingleBets.get(1)));
 
         if (firstPlayerTTEE.isPresent() && secondPlayerTTEE.isPresent()){

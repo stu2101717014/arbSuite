@@ -29,6 +29,8 @@ public class ListTableTennisEventsLayout extends VerticalLayout {
 
     private final Grid<TableTennisEventWrapper> grid = new Grid<>(TableTennisEventWrapper.class, false);
 
+    CalculatingStakeFormLayout calculatingStakeFormLayout;
+
     TableTennisEventWrapper selectedRow;
 
     public ListTableTennisEventsLayout(@Autowired TableTennisService tableTennisService,
@@ -43,10 +45,11 @@ public class ListTableTennisEventsLayout extends VerticalLayout {
         AddNamesSimilaritiesFormLayout addNamesSimilaritiesFormLayout = new AddNamesSimilaritiesFormLayout(namesSimilaritiesService);
 
         Button showStakesCalculator = new Button("Show Stakes");
-        CalculatingStakeFormLayout calculatingStakeFormLayout = new CalculatingStakeFormLayout(calculatorService);
+        calculatingStakeFormLayout = new CalculatingStakeFormLayout(calculatorService, selectedRow);
         showStakesCalculator.addClickListener(e -> {
             if (this.selectedRow != null) {
-                calculatingStakeFormLayout.initCalculatingStakeFormLayout(this.selectedRow, 100d);
+                calculatingStakeFormLayout.setSelected(this.selectedRow);
+                calculatingStakeFormLayout.initCalculatingStakeFormLayout( 100d);
                 calculatingStakeFormLayout.setVisible(true);
             }
         });
@@ -97,6 +100,7 @@ public class ListTableTennisEventsLayout extends VerticalLayout {
         grid.addSelectionListener(event -> {
             Optional<TableTennisEventWrapper> first = event.getAllSelectedItems().stream().findFirst();
             first.ifPresent(tableTennisEventWrapper -> selectedRow = tableTennisEventWrapper);
+            calculatingStakeFormLayout.setSelected(this.selectedRow);
         });
 
         grid.setVisible(true);
