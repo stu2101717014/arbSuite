@@ -8,7 +8,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 
 
-public class AddNamesSimilaritiesFormLayout extends VerticalLayout {
+public class AddNamesSimilaritiesFormView extends VerticalLayout {
 
     private TextField playerPlatformSpecificName;
     private TextField playerUniversalName;
@@ -16,7 +16,7 @@ public class AddNamesSimilaritiesFormLayout extends VerticalLayout {
 
     private final NamesSimilaritiesService namesSimilaritiesService;
 
-    public AddNamesSimilaritiesFormLayout(NamesSimilaritiesService namesSimilaritiesService) {
+    public AddNamesSimilaritiesFormView(NamesSimilaritiesService namesSimilaritiesService) {
         this.namesSimilaritiesService = namesSimilaritiesService;
 
         playerPlatformSpecificName = new TextField();

@@ -10,7 +10,7 @@ import com.vaadin.flow.component.textfield.TextField;
 
 import java.util.*;
 
-public class CalculatingStakeFormLayout extends VerticalLayout {
+public class CalculatingStakeFormView extends VerticalLayout {
 
     private TextField amount;
 
@@ -31,7 +31,7 @@ public class CalculatingStakeFormLayout extends VerticalLayout {
 
     private TableTennisEventWrapper selected;
 
-    public CalculatingStakeFormLayout(CalculatorService calculatorService, TableTennisEventWrapper selected) {
+    public CalculatingStakeFormView(CalculatorService calculatorService, TableTennisEventWrapper selected) {
         this.selected = selected;
         this.calculatorService = calculatorService;
         this.amount = new TextField();

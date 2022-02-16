@@ -21,9 +21,9 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-@Route(value="APIs", layout = MainLayout.class)
+@Route(value="apis", layout = MainLayout.class)
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class ApisLayout extends HorizontalLayout {
+public class ApisView extends HorizontalLayout {
 
     private final Grid<PlatformDataRequestWrapperEntity> grid = new Grid<>(PlatformDataRequestWrapperEntity.class, false);
 
@@ -40,7 +40,7 @@ public class ApisLayout extends HorizontalLayout {
 
     private ApisService apisService;
 
-    public ApisLayout(@Autowired ApisService apisService) {
+    public ApisView(@Autowired ApisService apisService) {
         this.apisService = apisService;
 
         List<PlatformDataRequestWrapperEntity> all = apisService.getAll();

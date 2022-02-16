@@ -11,7 +11,6 @@ import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.data.selection.SingleSelect;
 import com.vaadin.flow.router.Route;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,58 +22,58 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
-@Route(value = "TableTennisEvents", layout = MainLayout.class)
+@Route(value = "tabletennisevents", layout = MainLayout.class)
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class ListTableTennisEventsLayout extends VerticalLayout {
+public class ListTableTennisEventsView extends VerticalLayout {
 
     private final Grid<TableTennisEventWrapper> grid = new Grid<>(TableTennisEventWrapper.class, false);
 
-    CalculatingStakeFormLayout calculatingStakeFormLayout;
+    CalculatingStakeFormView calculatingStakeFormView;
 
     TableTennisEventWrapper selectedRow;
 
-    public ListTableTennisEventsLayout(@Autowired TableTennisService tableTennisService,
-                                       @Autowired NamesSimilaritiesService namesSimilaritiesService,
-                                       @Autowired CalculatorService calculatorService) {
+    public ListTableTennisEventsView(@Autowired TableTennisService tableTennisService,
+                                     @Autowired NamesSimilaritiesService namesSimilaritiesService,
+                                     @Autowired CalculatorService calculatorService) {
 
         List<TableTennisEventWrapper> tableTennisEvents = tableTennisService.getData();
         List<String> platformNames = tableTennisService.getPlatformNames();
 
         configureGrid(tableTennisEvents, platformNames);
 
-        AddNamesSimilaritiesFormLayout addNamesSimilaritiesFormLayout = new AddNamesSimilaritiesFormLayout(namesSimilaritiesService);
+        AddNamesSimilaritiesFormView addNamesSimilaritiesFormView = new AddNamesSimilaritiesFormView(namesSimilaritiesService);
 
         Button showStakesCalculator = new Button("Show Stakes");
-        calculatingStakeFormLayout = new CalculatingStakeFormLayout(calculatorService, selectedRow);
+        calculatingStakeFormView = new CalculatingStakeFormView(calculatorService, selectedRow);
         showStakesCalculator.addClickListener(e -> {
             if (this.selectedRow != null) {
-                calculatingStakeFormLayout.setSelected(this.selectedRow);
-                calculatingStakeFormLayout.initCalculatingStakeFormLayout( 100d);
-                calculatingStakeFormLayout.setVisible(true);
+                calculatingStakeFormView.setSelected(this.selectedRow);
+                calculatingStakeFormView.initCalculatingStakeFormLayout( 100d);
+                calculatingStakeFormView.setVisible(true);
             }
         });
 
-        FlexLayout content = configureContent(addNamesSimilaritiesFormLayout, calculatingStakeFormLayout);
+        FlexLayout content = configureContent(addNamesSimilaritiesFormView, calculatingStakeFormView);
         Button showAddNewNamesSimilarities = new Button("Add Name Similarity");
-        showAddNewNamesSimilarities.addClickListener(e -> addNamesSimilaritiesFormLayout.setVisible(true));
+        showAddNewNamesSimilarities.addClickListener(e -> addNamesSimilaritiesFormView.setVisible(true));
 
         addAndExpand(new HorizontalLayout(showAddNewNamesSimilarities, showStakesCalculator), content);
         setHeightFull();
     }
 
-    private FlexLayout configureContent(AddNamesSimilaritiesFormLayout addNamesSimilaritiesFormLayout, CalculatingStakeFormLayout calculatingStakeFormLayout) {
-        calculatingStakeFormLayout.setWidth("6em");
-        calculatingStakeFormLayout.setVisible(false);
+    private FlexLayout configureContent(AddNamesSimilaritiesFormView addNamesSimilaritiesFormView, CalculatingStakeFormView calculatingStakeFormView) {
+        calculatingStakeFormView.setWidth("6em");
+        calculatingStakeFormView.setVisible(false);
 
-        addNamesSimilaritiesFormLayout.setWidth("6em");
-        addNamesSimilaritiesFormLayout.setVisible(false);
+        addNamesSimilaritiesFormView.setWidth("6em");
+        addNamesSimilaritiesFormView.setVisible(false);
 
-        FlexLayout content = new FlexLayout(grid, addNamesSimilaritiesFormLayout, calculatingStakeFormLayout);
+        FlexLayout content = new FlexLayout(grid, addNamesSimilaritiesFormView, calculatingStakeFormView);
         content.setFlexGrow(4, grid);
-        content.setFlexGrow(1, addNamesSimilaritiesFormLayout);
-        content.setFlexGrow(1, calculatingStakeFormLayout);
-        content.setFlexShrink(0, addNamesSimilaritiesFormLayout);
-        content.setFlexShrink(0, calculatingStakeFormLayout);
+        content.setFlexGrow(1, addNamesSimilaritiesFormView);
+        content.setFlexGrow(1, calculatingStakeFormView);
+        content.setFlexShrink(0, addNamesSimilaritiesFormView);
+        content.setFlexShrink(0, calculatingStakeFormView);
         content.addClassNames("content", "gap-m");
         content.setSizeFull();
         return content;
@@ -100,7 +99,7 @@ public class ListTableTennisEventsLayout extends VerticalLayout {
         grid.addSelectionListener(event -> {
             Optional<TableTennisEventWrapper> first = event.getAllSelectedItems().stream().findFirst();
             first.ifPresent(tableTennisEventWrapper -> selectedRow = tableTennisEventWrapper);
-            calculatingStakeFormLayout.setSelected(this.selectedRow);
+            calculatingStakeFormView.setSelected(this.selectedRow);
         });
 
         grid.setVisible(true);
