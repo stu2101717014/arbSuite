@@ -1,15 +1,16 @@
-package com.example.ui.security;
+package com.example.ui.security.configs;
 
-import org.springframework.context.annotation.Bean;
+import com.example.ui.security.CustomRequestCache;
+import com.example.ui.security.utils.SecurityUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @EnableWebSecurity
 @Configuration
@@ -19,6 +20,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String LOGIN_FAILURE_URL = "/login?error";
     private static final String LOGIN_URL = "/login";
     private static final String LOGOUT_SUCCESS_URL = "/login";
+    public static final String TABLE_TENNIS_EVENTS_URL = "/tabletennisevents";
+    public static final String APIS_URL = "/apis";
+    public static final String NAMES_SIMILARITIES_URL = "/namessimilarities";
+
+    @Autowired
+    private UserDetailsService uds;
+
+    @Autowired
+    private BCryptPasswordEncoder encoder;
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(uds).passwordEncoder(encoder);
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -29,7 +44,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .requestCache().requestCache(new CustomRequestCache())
 
                 // Restrict access to our application.
-                .and().authorizeRequests()
+                .and().authorizeRequests().antMatchers(TABLE_TENNIS_EVENTS_URL).hasAuthority("admin")
+                .and().authorizeRequests().antMatchers(APIS_URL).hasAuthority("admin")
+                .and().authorizeRequests().antMatchers(NAMES_SIMILARITIES_URL).hasAuthority("admin")
 
                 // Allow all Vaadin internal requests.
                 .requestMatchers(SecurityUtils::isFrameworkInternalRequest).permitAll()
@@ -44,18 +61,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .failureUrl(LOGIN_FAILURE_URL)
 
                 // Configure logout
-                .and().logout().logoutSuccessUrl(LOGOUT_SUCCESS_URL);
-    }
-
-    @Bean
-    @Override
-    public UserDetailsService userDetailsService() {
-        UserDetails user = User.withUsername("admin")
-                .password("{noop}admin")
-                .roles("admin")
-                .build();
-
-        return new InMemoryUserDetailsManager(user);
+                .and().logout().logoutSuccessUrl(LOGOUT_SUCCESS_URL)
+        ;
     }
 
     /**
@@ -81,9 +88,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // icons and images
                 "/icons/**",
                 "/images/**",
-                "/styles/**",
+                "/styles/**"
 
                 // (development mode) H2 debugging console
-                "/h2-console/**");
+                //"/h2-console/**"
+        );
     }
 }
