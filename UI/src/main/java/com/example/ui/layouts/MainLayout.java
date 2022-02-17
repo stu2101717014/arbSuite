@@ -2,7 +2,7 @@ package com.example.ui.layouts;
 
 import com.example.ui.layouts.names.similarities.NamesSimilaritiesView;
 import com.example.ui.layouts.table.tennis.ListTableTennisEventsView;
-import com.example.ui.security.SecurityService;
+import com.example.ui.security.services.SecurityService;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.button.Button;

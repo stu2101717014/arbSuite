@@ -2,6 +2,7 @@ package com.example.ui.layouts.names.similarities;
 
 import com.example.ui.entities.jpa.NamesSimilarities;
 import com.example.ui.layouts.MainLayout;
+import com.example.ui.security.utils.SecuredByRole;
 import com.example.ui.services.NamesSimilaritiesService;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
@@ -15,8 +16,8 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-
 @Component
+@SecuredByRole("ROLE_Admin")
 @Route(value="namessimilarities", layout = MainLayout.class)
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class NamesSimilaritiesView extends VerticalLayout {

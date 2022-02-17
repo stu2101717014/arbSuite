@@ -19,18 +19,20 @@ import java.util.Set;
 @Service
 public class UserServiceImpl implements IUserService, UserDetailsService {
 
-    @Autowired
-    private UserRepository userRepo;
+    private final UserRepository userRepo;
 
     @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
+    public UserServiceImpl( UserRepository userRepo) {
+        this.userRepo = userRepo;
+    }
+
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
         Optional<User> opt = userRepo.findUserByEmail(email);
 
-        org.springframework.security.core.userdetails.User springUser=null;
+        org.springframework.security.core.userdetails.User springUser = null;
 
         if(!opt.isPresent()) {
             throw new UsernameNotFoundException("User with email: " +email +" not found");
@@ -54,10 +56,8 @@ public class UserServiceImpl implements IUserService, UserDetailsService {
     }
 
     @Override
-    public Integer saveUser(User user) {
-        return null;
+    public User saveUser(User user) {
+        return this.userRepo.saveAndFlush(user);
     }
-
-
 
 }

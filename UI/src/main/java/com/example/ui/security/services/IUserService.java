@@ -4,5 +4,5 @@ import com.example.ui.security.data.User;
 
 public interface IUserService {
 
-    public Integer saveUser(User user);
+    public User saveUser(User user);
 }

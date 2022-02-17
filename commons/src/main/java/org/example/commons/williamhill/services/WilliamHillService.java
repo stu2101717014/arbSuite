@@ -44,6 +44,9 @@ public class WilliamHillService {
         HashSet<ResultEntity> resultEntityHashSet = new HashSet<>();
         resultEntityHashSet.add(resultEntity);
 
+        Date date = new Date(System.currentTimeMillis());
+        resultEntity.setTime(date);
+
         BrowserEngine browser = BrowserFactory.getWebKit();
 
         try (Page page = browser.navigate(WILLIAM_HILL_TABLE_TENNIS_REQUEST_URL)) {

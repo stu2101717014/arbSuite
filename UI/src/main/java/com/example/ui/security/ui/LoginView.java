@@ -6,11 +6,18 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.Route;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
-@Route("login")
+@Component
+@Route(value="login")
+@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class LoginView extends VerticalLayout implements BeforeEnterObserver {
 
     private final LoginForm login = new LoginForm();
+
+    public static final String ROUTE = "login";
 
     public LoginView(){
         addClassName("login-view");
@@ -25,11 +32,7 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
 
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
-        if(event.getLocation()
-                .getQueryParameters()
-                .getParameters()
-                .containsKey("error")) {
-            login.setError(true);
-        }
+        login.setError(event.getLocation().getQueryParameters().getParameters().containsKey("error"));
     }
+
 }

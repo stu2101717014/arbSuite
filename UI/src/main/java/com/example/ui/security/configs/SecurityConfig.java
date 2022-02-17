@@ -23,12 +23,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public static final String TABLE_TENNIS_EVENTS_URL = "/tabletennisevents";
     public static final String APIS_URL = "/apis";
     public static final String NAMES_SIMILARITIES_URL = "/namessimilarities";
+    public static final String REGISTRATION_URL = "/registration";
+
+    private final UserDetailsService uds;
+
+    private final BCryptPasswordEncoder encoder;
 
     @Autowired
-    private UserDetailsService uds;
-
-    @Autowired
-    private BCryptPasswordEncoder encoder;
+    public SecurityConfig(UserDetailsService uds, BCryptPasswordEncoder encoder) {
+        this.uds = uds;
+        this.encoder = encoder;
+    }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -37,33 +42,65 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        // Vaadin handles CSRF internally
+        // Not using Spring CSRF here to be able to use plain HTML for the login page
         http.csrf().disable()
 
-                // Register our CustomRequestCache, which saves unauthorized access attempts, so the user is redirected after login.
+                // Register our CustomRequestCache, that saves unauthorized access attempts, so
+                // the user is redirected after login.
                 .requestCache().requestCache(new CustomRequestCache())
 
                 // Restrict access to our application.
-                .and().authorizeRequests().antMatchers(TABLE_TENNIS_EVENTS_URL).hasAuthority("admin")
-                .and().authorizeRequests().antMatchers(APIS_URL).hasAuthority("admin")
-                .and().authorizeRequests().antMatchers(NAMES_SIMILARITIES_URL).hasAuthority("admin")
+                .and().authorizeRequests()
 
-                // Allow all Vaadin internal requests.
+                // Allow all flow internal requests.
                 .requestMatchers(SecurityUtils::isFrameworkInternalRequest).permitAll()
 
-                // Allow all requests by logged-in users.
+                // Allow all requests by logged in users.
                 .anyRequest().authenticated()
 
                 // Configure the login page.
-                .and().formLogin()
-                .loginPage(LOGIN_URL).permitAll()
-                .loginProcessingUrl(LOGIN_PROCESSING_URL)
+                .and().formLogin().loginPage(LOGIN_URL).permitAll().loginProcessingUrl(LOGIN_PROCESSING_URL)
                 .failureUrl(LOGIN_FAILURE_URL)
 
                 // Configure logout
-                .and().logout().logoutSuccessUrl(LOGOUT_SUCCESS_URL)
-        ;
+                .and().logout().logoutSuccessUrl(LOGOUT_SUCCESS_URL);
     }
+
+
+
+//    @Override
+//    protected void configure(HttpSecurity http) throws Exception {
+//        // Vaadin handles CSRF internally
+//        http.csrf().disable()
+//
+//                // Register our CustomRequestCache, which saves unauthorized access attempts, so the user is redirected after login.
+//                .requestCache().requestCache(new CustomRequestCache())
+//
+//                // Registration page
+//                .and().authorizeRequests().antMatchers(REGISTRATION_URL).permitAll()
+//
+//                // Restrict access to our application.
+//                .and().authorizeRequests().antMatchers(TABLE_TENNIS_EVENTS_URL).hasAuthority("admin")
+//                .and().authorizeRequests().antMatchers(APIS_URL).hasAuthority("admin")
+//                .and().authorizeRequests().antMatchers(NAMES_SIMILARITIES_URL).hasAuthority("admin")
+//
+//
+//                // Allow all Vaadin internal requests.
+//                .requestMatchers(SecurityUtils::isFrameworkInternalRequest).permitAll()
+//
+//                // Allow all requests by logged-in users.
+//                .anyRequest().authenticated()
+//
+//                // Configure the login page.
+//                .and().formLogin()
+//                .loginPage(LOGIN_URL).permitAll()
+//                .loginProcessingUrl(LOGIN_PROCESSING_URL)
+//                .failureUrl(LOGIN_FAILURE_URL)
+//
+//                // Configure logout
+//                .and().logout().logoutSuccessUrl(LOGOUT_SUCCESS_URL)
+//        ;
+//    }
 
     /**
      * Allows access to static resources, bypassing Spring Security.

@@ -1,6 +1,7 @@
 package com.example.ui.layouts;
 
 import com.example.ui.entities.jpa.PlatformDataRequestWrapperEntity;
+import com.example.ui.security.utils.SecuredByRole;
 import com.example.ui.services.ApisService;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.button.Button;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@SecuredByRole("ROLE_Admin")
 @Component
 @Route(value="apis", layout = MainLayout.class)
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
