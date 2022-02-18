@@ -1,6 +1,7 @@
 package com.example.ui.security.data;
 
 import javax.persistence.*;
+import java.util.Arrays;
 import java.util.List;
 
 @Entity
@@ -65,7 +66,7 @@ public class User {
         return roles;
     }
 
-    public void setRoles(List<String> roles) {
-        this.roles = roles;
+    public void setRoles(String... roles) {
+        this.roles = Arrays.asList(roles);
     }
 }

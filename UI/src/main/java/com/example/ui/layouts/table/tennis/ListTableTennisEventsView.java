@@ -89,7 +89,7 @@ public class ListTableTennisEventsView extends VerticalLayout {
         grid.addColumn(е -> е.getTableTennisEventEntityShort().getEventDate()).setHeader("Date");
         grid.addColumn(е -> е.getTableTennisEventEntityShort().getFirstPlayer()).setHeader("First Player");
         grid.addColumn(е -> е.getTableTennisEventEntityShort().getSecondPlayer()).setHeader("Second Player");
-        grid.addColumn(TableTennisEventWrapper::getArbitragePercentage).setHeader("Arb N");
+        grid.addColumn(TableTennisEventWrapper::getArbitragePercentage).setHeader("Arb N").setSortable(true);
 
         for (String platformName : platformNames) {
             grid.addColumn(e -> e.getEventEntityMap().getOrDefault(platformName, null) == null ?

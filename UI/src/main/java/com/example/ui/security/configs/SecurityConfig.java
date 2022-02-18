@@ -1,6 +1,7 @@
 package com.example.ui.security.configs;
 
 import com.example.ui.security.CustomRequestCache;
+import com.example.ui.security.ui.RegistrationView;
 import com.example.ui.security.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -50,6 +51,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .requestCache().requestCache(new CustomRequestCache())
 
                 // Restrict access to our application.
+                .and().authorizeRequests().antMatchers("/" + RegistrationView.ROUTE).permitAll()
                 .and().authorizeRequests()
 
                 // Allow all flow internal requests.
@@ -66,41 +68,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().logout().logoutSuccessUrl(LOGOUT_SUCCESS_URL);
     }
 
-
-
-//    @Override
-//    protected void configure(HttpSecurity http) throws Exception {
-//        // Vaadin handles CSRF internally
-//        http.csrf().disable()
-//
-//                // Register our CustomRequestCache, which saves unauthorized access attempts, so the user is redirected after login.
-//                .requestCache().requestCache(new CustomRequestCache())
-//
-//                // Registration page
-//                .and().authorizeRequests().antMatchers(REGISTRATION_URL).permitAll()
-//
-//                // Restrict access to our application.
-//                .and().authorizeRequests().antMatchers(TABLE_TENNIS_EVENTS_URL).hasAuthority("admin")
-//                .and().authorizeRequests().antMatchers(APIS_URL).hasAuthority("admin")
-//                .and().authorizeRequests().antMatchers(NAMES_SIMILARITIES_URL).hasAuthority("admin")
-//
-//
-//                // Allow all Vaadin internal requests.
-//                .requestMatchers(SecurityUtils::isFrameworkInternalRequest).permitAll()
-//
-//                // Allow all requests by logged-in users.
-//                .anyRequest().authenticated()
-//
-//                // Configure the login page.
-//                .and().formLogin()
-//                .loginPage(LOGIN_URL).permitAll()
-//                .loginProcessingUrl(LOGIN_PROCESSING_URL)
-//                .failureUrl(LOGIN_FAILURE_URL)
-//
-//                // Configure logout
-//                .and().logout().logoutSuccessUrl(LOGOUT_SUCCESS_URL)
-//        ;
-//    }
 
     /**
      * Allows access to static resources, bypassing Spring Security.
