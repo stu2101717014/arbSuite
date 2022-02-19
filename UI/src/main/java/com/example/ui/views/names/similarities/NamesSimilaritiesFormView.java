@@ -1,4 +1,4 @@
-package com.example.ui.layouts.names.similarities;
+package com.example.ui.views.names.similarities;
 
 import com.example.ui.entities.jpa.NamesSimilarities;
 import com.example.ui.services.NamesSimilaritiesService;

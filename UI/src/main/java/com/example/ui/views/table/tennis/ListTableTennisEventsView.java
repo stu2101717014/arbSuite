@@ -1,7 +1,7 @@
-package com.example.ui.layouts.table.tennis;
+package com.example.ui.views.table.tennis;
 
 import com.example.ui.entities.helpers.TableTennisEventWrapper;
-import com.example.ui.layouts.MainLayout;
+import com.example.ui.views.MainLayout;
 import com.example.ui.security.utils.SecuredByRole;
 import com.example.ui.services.NamesSimilaritiesService;
 import com.example.ui.services.TableTennisService;

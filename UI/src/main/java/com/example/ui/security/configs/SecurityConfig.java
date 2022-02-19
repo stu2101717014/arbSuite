@@ -1,7 +1,7 @@
 package com.example.ui.security.configs;
 
 import com.example.ui.security.CustomRequestCache;
-import com.example.ui.security.ui.RegistrationView;
+import com.example.ui.security.ui.RegisterView;
 import com.example.ui.security.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -24,7 +24,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public static final String TABLE_TENNIS_EVENTS_URL = "/tabletennisevents";
     public static final String APIS_URL = "/apis";
     public static final String NAMES_SIMILARITIES_URL = "/namessimilarities";
-    public static final String REGISTRATION_URL = "/registration";
 
     private final UserDetailsService uds;
 
@@ -51,7 +50,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .requestCache().requestCache(new CustomRequestCache())
 
                 // Restrict access to our application.
-                .and().authorizeRequests().antMatchers("/" + RegistrationView.ROUTE).permitAll()
+                .and().authorizeRequests().antMatchers("/" + RegisterView.ROUTE).permitAll()
                 .and().authorizeRequests()
 
                 // Allow all flow internal requests.

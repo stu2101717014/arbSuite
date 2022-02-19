@@ -1,4 +1,4 @@
-package com.example.ui.layouts.table.tennis;
+package com.example.ui.views.table.tennis;
 
 import com.example.ui.entities.helpers.TableTennisEventEntity;
 import com.example.ui.entities.helpers.TableTennisEventWrapper;

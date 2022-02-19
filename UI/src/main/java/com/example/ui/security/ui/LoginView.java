@@ -1,6 +1,5 @@
 package com.example.ui.security.ui;
 
-import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.login.LoginForm;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -30,7 +29,7 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
         login.setAction("login");
         login.setForgotPasswordButtonVisible(false);
 
-        add(new H1("Login"), login, new RouterLink("Register", RegistrationView.class));
+        add(new H1("Login"), login, new RouterLink("Register", RegisterView.class));
 
     }
 

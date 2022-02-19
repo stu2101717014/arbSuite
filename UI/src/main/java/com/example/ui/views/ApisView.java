@@ -1,4 +1,4 @@
-package com.example.ui.layouts;
+package com.example.ui.views;
 
 import com.example.ui.entities.jpa.PlatformDataRequestWrapperEntity;
 import com.example.ui.security.utils.SecuredByRole;

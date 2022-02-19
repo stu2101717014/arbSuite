@@ -1,7 +1,7 @@
-package com.example.ui.layouts.names.similarities;
+package com.example.ui.views.names.similarities;
 
 import com.example.ui.entities.jpa.NamesSimilarities;
-import com.example.ui.layouts.MainLayout;
+import com.example.ui.views.MainLayout;
 import com.example.ui.security.utils.SecuredByRole;
 import com.example.ui.services.NamesSimilaritiesService;
 import com.vaadin.flow.component.button.Button;

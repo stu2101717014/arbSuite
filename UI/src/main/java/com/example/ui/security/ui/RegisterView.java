@@ -2,7 +2,6 @@ package com.example.ui.security.ui;
 
 import com.example.ui.security.data.User;
 import com.example.ui.security.services.IUserService;
-import com.example.ui.security.services.UserServiceImpl;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -18,11 +17,11 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 @Component
-@Route(value = RegistrationView.ROUTE)
+@Route(value = RegisterView.ROUTE)
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class RegistrationView extends VerticalLayout implements BeforeEnterObserver {
+public class RegisterView extends VerticalLayout implements BeforeEnterObserver {
 
-    public static final String ROUTE = "registration";
+    public static final String ROUTE = "register";
 
     private final IUserService userService;
 
@@ -35,7 +34,7 @@ public class RegistrationView extends VerticalLayout implements BeforeEnterObser
     private Button register;
 
     @Autowired
-    public RegistrationView(IUserService userService) {
+    public RegisterView(IUserService userService) {
         this.userService = userService;
 
         this.username = new TextField();
