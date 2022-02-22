@@ -3,17 +3,16 @@
   <component name="MavenProjectsManager">
     <option name="originalFiles">
       <list>
-        <option value="$PROJECT_DIR$/bwin/pom.xml" />
-        <option value="$PROJECT_DIR$/bets22/pom.xml" />
-        <option value="$PROJECT_DIR$/betwinner/pom.xml" />
         <option value="$PROJECT_DIR$/UI/pom.xml" />
         <option value="$PROJECT_DIR$/commons/pom.xml" />
-        <option value="$PROJECT_DIR$/williamhill/pom.xml" />
-        <option value="$PROJECT_DIR$/mybookie/pom.xml" />
         <option value="$PROJECT_DIR$/bets22experimental/pom.xml" />
         <option value="$PROJECT_DIR$/betwinner-experimental/pom.xml" />
         <option value="$PROJECT_DIR$/bwin-experimental/pom.xml" />
         <option value="$PROJECT_DIR$/williamhill-experimental/pom.xml" />
+        <option value="$PROJECT_DIR$/williamhill/pom.xml" />
+        <option value="$PROJECT_DIR$/betwinner/pom.xml" />
+        <option value="$PROJECT_DIR$/bets22/pom.xml" />
+        <option value="$PROJECT_DIR$/bwin/pom.xml" />
       </list>
     </option>
   </component>

@@ -6,16 +6,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="bwin-experimental" />
-        <module name="bets22" />
-        <module name="williamhill-experimental" />
-        <module name="bwin" />
-        <module name="UI" />
-        <module name="williamhill" />
-        <module name="betwinner-experimental" />
         <module name="betwinner" />
-        <module name="bets22experimental" />
-        <module name="mybookie" />
+        <module name="bets22" />
+        <module name="ui" />
+        <module name="bwin" />
+        <module name="williamhill" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -30,14 +25,13 @@
       <module name="bwin-experimental" target="1.8" />
       <module name="commons" target="8" />
       <module name="mybookie" target="1.8" />
-      <module name="UI" target="1.8" />
+      <module name="ui" target="1.8" />
       <module name="williamhill" target="1.8" />
       <module name="williamhill-experimental" target="1.8" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="UI" options="-parameters" />
       <module name="arbUI" options="-parameters" />
       <module name="bet365" options="-parameters" />
       <module name="bets22" options="-parameters" />
@@ -47,6 +41,7 @@
       <module name="bwin" options="-parameters" />
       <module name="bwin-experimental" options="-parameters" />
       <module name="mybookie" options="-parameters" />
+      <module name="ui" options="-parameters" />
       <module name="williamhill" options="-parameters" />
       <module name="williamhill-experimental" options="-parameters" />
     </option>
