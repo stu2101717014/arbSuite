@@ -84,4 +84,9 @@ public class TableTennisEventEntityDAO {
     public void setEventDate(Date eventDate) {
         this.eventDate = eventDate;
     }
+
+    @Override
+    public String toString() {
+        return getFirstPlayerWinningOdd() + " : " + getSecondPlayerWinningOdd();
+    }
 }

@@ -1,12 +1,14 @@
 package com.example.ui.entities.helpers;
 
+import com.example.ui.entities.jpa.TableTennisEventEntityDAO;
+
 import java.util.Map;
 
 public class TableTennisEventWrapperDTO {
 
     private TableTennisEventEntityShortDTO tableTennisEventEntityShortDTO;
 
-    private Map<String, TableTennisEventEntity> eventEntityMap;
+    private Map<String, TableTennisEventEntityDAO> eventEntityMap;
 
     private Double arbitragePercentage;
 
@@ -22,11 +24,11 @@ public class TableTennisEventWrapperDTO {
         this.tableTennisEventEntityShortDTO = tableTennisEventEntityShortDTO;
     }
 
-    public Map<String, TableTennisEventEntity> getEventEntityMap() {
+    public Map<String, TableTennisEventEntityDAO> getEventEntityMap() {
         return eventEntityMap;
     }
 
-    public void setEventEntityMap(Map<String, TableTennisEventEntity> eventEntityMap) {
+    public void setEventEntityMap(Map<String, TableTennisEventEntityDAO> eventEntityMap) {
         this.eventEntityMap = eventEntityMap;
     }
 

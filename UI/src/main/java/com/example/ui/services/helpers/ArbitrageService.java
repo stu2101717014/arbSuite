@@ -1,7 +1,7 @@
 package com.example.ui.services.helpers;
 
-import com.example.ui.entities.helpers.TableTennisEventEntity;
 import com.example.ui.entities.helpers.TableTennisEventWrapperDTO;
+import com.example.ui.entities.jpa.TableTennisEventEntityDAO;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class CalculatorService {
+public class ArbitrageService {
 
     public List<Double> calculateBets(double investment, List<Double> odds, double arbitragePercentage){
         double oddsSize = odds.size();
@@ -26,9 +26,9 @@ public class CalculatorService {
 
     public void checkForArbitrage(List<TableTennisEventWrapperDTO> eventWrapperList) {
         for (TableTennisEventWrapperDTO ttew : eventWrapperList) {
-            Map<String, TableTennisEventEntity> eventEntityMap = ttew.getEventEntityMap();
+            Map<String, TableTennisEventEntityDAO> eventEntityMap = ttew.getEventEntityMap();
 
-            List<Map.Entry<String, TableTennisEventEntity>> entries = new ArrayList<>(eventEntityMap.entrySet());
+            List<Map.Entry<String, TableTennisEventEntityDAO>> entries = new ArrayList<>(eventEntityMap.entrySet());
             if (entries.size() >= 2) {
                 double firstOdd = entries.get(0).getValue().getFirstPlayerWinningOdd();
                 double secondOdd = entries.get(0).getValue().getSecondPlayerWinningOdd();

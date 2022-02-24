@@ -21,7 +21,7 @@ public class ResultEntityDAO {
     @Column(name="dateCreated", nullable = true)
     private Date time;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @JoinTable(
             name = "result_tableTennisEvent",
             joinColumns = @JoinColumn(name = "resultId"),

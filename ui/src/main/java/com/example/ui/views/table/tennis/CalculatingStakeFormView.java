@@ -1,8 +1,8 @@
 package com.example.ui.views.table.tennis;
 
-import com.example.ui.entities.helpers.TableTennisEventEntity;
 import com.example.ui.entities.helpers.TableTennisEventWrapperDTO;
-import com.example.ui.services.helpers.CalculatorService;
+import com.example.ui.entities.jpa.TableTennisEventEntityDAO;
+import com.example.ui.services.helpers.ArbitrageService;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -27,14 +27,15 @@ public class CalculatingStakeFormView extends VerticalLayout {
 
     private Button hideForm;
     private Button reEvaluate;
-    private CalculatorService calculatorService;
+    private ArbitrageService arbitrageService;
 
     private TableTennisEventWrapperDTO selected;
 
-    public CalculatingStakeFormView(CalculatorService calculatorService, TableTennisEventWrapperDTO selected) {
+    public CalculatingStakeFormView(ArbitrageService arbitrageService, TableTennisEventWrapperDTO selected) {
         this.selected = selected;
-        this.calculatorService = calculatorService;
+        this.arbitrageService = arbitrageService;
         this.amount = new TextField();
+        this.amount.setValue(ListTableTennisEventsView.INITIAL_AMOUNT.toString());
         this.playerOneName = new Label();
         this.playerTwoName = new Label();
 
@@ -62,7 +63,7 @@ public class CalculatingStakeFormView extends VerticalLayout {
     }
 
     public void initCalculatingStakeFormLayout(double amount){
-        if (this.selected == null){
+        if (this.selected == null || this.selected.getArbitragePercentage() == null){
             return;
         }
 
@@ -73,22 +74,22 @@ public class CalculatingStakeFormView extends VerticalLayout {
 
         List<Double> winningOdds = new ArrayList<Double>();
 
-        Optional<TableTennisEventEntity> firstPlayerTTEE = selected.getEventEntityMap().values().stream()
-                .max(Comparator.comparing(TableTennisEventEntity::getFirstPlayerWinningOdd));
+        Optional<TableTennisEventEntityDAO> firstPlayerTTEE = selected.getEventEntityMap().values().stream()
+                .max(Comparator.comparing(TableTennisEventEntityDAO::getFirstPlayerWinningOdd));
         firstPlayerTTEE.ifPresent(ttee -> {
             this.playerOneOdd.setText("Highest odd : " + ttee.getFirstPlayerWinningOdd().toString());
             winningOdds.add(ttee.getFirstPlayerWinningOdd());
         });
 
 
-        Optional<TableTennisEventEntity> secondPlayerTTEE = selected.getEventEntityMap().values().stream()
-                .max(Comparator.comparing(TableTennisEventEntity::getSecondPlayerWinningOdd));
+        Optional<TableTennisEventEntityDAO> secondPlayerTTEE = selected.getEventEntityMap().values().stream()
+                .max(Comparator.comparing(TableTennisEventEntityDAO::getSecondPlayerWinningOdd));
         secondPlayerTTEE.ifPresent(ttee -> {
             this.playerTwoOdd.setText("Highest odd : " + ttee.getSecondPlayerWinningOdd().toString());
             winningOdds.add(ttee.getSecondPlayerWinningOdd());
         });
 
-        List<Double> calculatedSingleBets = this.calculatorService
+        List<Double> calculatedSingleBets = this.arbitrageService
                 .calculateBets(amount, winningOdds, selected.getArbitragePercentage());
 
         this.platformOne.setText("Platform : " + selected.getWinningPlatformOne() + " : "

@@ -1,6 +1,6 @@
 package com.example.ui.mqtt;
 
-import com.example.ui.entities.helpers.ResultEntity;
+
 import com.example.ui.entities.jpa.ResultEntityDAO;
 import com.example.ui.services.DataReceiverService;
 import com.google.gson.Gson;
@@ -26,7 +26,7 @@ public class TTEEReceiver {
     @RabbitListener(queues = "#{qu.getName()}")
     public void getMsg(final String resultEntAsString) {
         try {
-            ResultEntity resultEntity = new Gson().fromJson(resultEntAsString, ResultEntity.class);
+            ResultEntityDAO resultEntity = new Gson().fromJson(resultEntAsString, ResultEntityDAO.class);
 
             this.dataReceiverService.persistResultEntity(resultEntity);
 

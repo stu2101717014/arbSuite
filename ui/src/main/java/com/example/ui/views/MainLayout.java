@@ -44,14 +44,11 @@ public class MainLayout extends AppLayout {
         RouterLink tableTennisEvents = new RouterLink("Table Tennis Events", ListTableTennisEventsView.class);
         tableTennisEvents.setHighlightCondition(HighlightConditions.sameLocation());
 
-        RouterLink apis = new RouterLink("APIs", ApisView.class);
-        apis.setHighlightCondition(HighlightConditions.sameLocation());
 
         RouterLink namesSimilarities = new RouterLink("Names Similarities", NamesSimilaritiesView.class);
         namesSimilarities.setHighlightCondition(HighlightConditions.sameLocation());
 
         addToDrawer(new VerticalLayout(
-                apis,
                 namesSimilarities,
                 tableTennisEvents
 

@@ -1,11 +1,15 @@
 package com.example.ui.views.table.tennis;
 
 import com.example.ui.entities.helpers.TableTennisEventWrapperDTO;
+import com.example.ui.entities.jpa.PostProcessTableTennisWrapperDAO;
+import com.example.ui.entities.jpa.ResultEntityDAO;
 import com.example.ui.views.MainLayout;
 import com.example.ui.security.utils.SecuredByRole;
 import com.example.ui.services.NamesSimilaritiesService;
 import com.example.ui.services.TableTennisService;
-import com.example.ui.services.helpers.CalculatorService;
+import com.example.ui.services.helpers.ArbitrageService;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
@@ -19,6 +23,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,15 +35,23 @@ public class ListTableTennisEventsView extends VerticalLayout {
 
     private final Grid<TableTennisEventWrapperDTO> grid = new Grid<>(TableTennisEventWrapperDTO.class, false);
 
-    CalculatingStakeFormView calculatingStakeFormView;
+    private CalculatingStakeFormView calculatingStakeFormView;
 
-    TableTennisEventWrapperDTO selectedRow;
+    private TableTennisEventWrapperDTO selectedRow;
 
-    public ListTableTennisEventsView(@Autowired TableTennisService tableTennisService,
-                                     @Autowired NamesSimilaritiesService namesSimilaritiesService,
-                                     @Autowired CalculatorService calculatorService) {
+    public static final Double INITIAL_AMOUNT = 100d;
 
-        List<TableTennisEventWrapperDTO> tableTennisEvents = tableTennisService.getData();
+    public ListTableTennisEventsView(@Autowired NamesSimilaritiesService namesSimilaritiesService,
+                                     @Autowired ArbitrageService arbitrageService,
+                                     @Autowired TableTennisService tableTennisService) {
+
+        PostProcessTableTennisWrapperDAO processedData = tableTennisService.getProcessedData();
+
+        List<TableTennisEventWrapperDTO> tableTennisEvents = new Gson().fromJson(processedData.getResultAsJson(),
+                new TypeToken<ArrayList<TableTennisEventWrapperDTO>>(){}.getType());
+
+        tableTennisEvents = tableTennisService.sortReshapedData(tableTennisEvents);
+
         List<String> platformNames = tableTennisService.getPlatformNames();
 
         configureGrid(tableTennisEvents, platformNames);
@@ -46,11 +59,11 @@ public class ListTableTennisEventsView extends VerticalLayout {
         AddNamesSimilaritiesFormView addNamesSimilaritiesFormView = new AddNamesSimilaritiesFormView(namesSimilaritiesService);
 
         Button showStakesCalculator = new Button("Show Stakes");
-        calculatingStakeFormView = new CalculatingStakeFormView(calculatorService, selectedRow);
+        calculatingStakeFormView = new CalculatingStakeFormView(arbitrageService, selectedRow);
         showStakesCalculator.addClickListener(e -> {
             if (this.selectedRow != null) {
                 calculatingStakeFormView.setSelected(this.selectedRow);
-                calculatingStakeFormView.initCalculatingStakeFormLayout( 100d);
+                calculatingStakeFormView.initCalculatingStakeFormLayout(INITIAL_AMOUNT );
                 calculatingStakeFormView.setVisible(true);
             }
         });
