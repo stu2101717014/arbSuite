@@ -75,7 +75,7 @@ public class BetwinnerService {
 
                         String finalDateAsString = eventDatePartsAsList.get(0).replace(".", "-") + "-" + year + " " + eventDatePartsAsList.get(1);
 
-                        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy hh:mm", Locale.getDefault());
+                        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.getDefault());
                         eventDate = formatter.parse(finalDateAsString);
 
                         eventDate = new Date(eventDate.getTime() - TimeUnit.HOURS.toMillis(1));
