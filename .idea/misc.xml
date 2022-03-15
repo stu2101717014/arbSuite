@@ -4,7 +4,6 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/UI/pom.xml" />
-        <option value="$PROJECT_DIR$/commons/pom.xml" />
         <option value="$PROJECT_DIR$/bets22experimental/pom.xml" />
         <option value="$PROJECT_DIR$/betwinner-experimental/pom.xml" />
         <option value="$PROJECT_DIR$/bwin-experimental/pom.xml" />
