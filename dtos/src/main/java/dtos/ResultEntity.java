@@ -1,4 +1,4 @@
-package com.example.williamhillexperimental.entities;
+package dtos;
 
 import java.util.Date;
 import java.util.Set;

@@ -1,7 +1,7 @@
 package com.example.bwinexperimental.services;
 
 
-import com.example.bwinexperimental.entities.TableTennisEventEntity;
+import dtos.TableTennisEventEntity;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;

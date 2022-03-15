@@ -1,7 +1,7 @@
 package com.example.williamhillexperimental.services;
 
-import com.example.williamhillexperimental.entities.ResultEntity;
-import com.example.williamhillexperimental.entities.TableTennisEventEntity;
+import dtos.ResultEntity;
+import dtos.TableTennisEventEntity;
 import io.webfolder.ui4j.api.browser.BrowserEngine;
 import io.webfolder.ui4j.api.browser.BrowserFactory;
 import io.webfolder.ui4j.api.browser.Page;

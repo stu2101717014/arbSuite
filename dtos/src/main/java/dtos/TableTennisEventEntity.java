@@ -1,6 +1,5 @@
-package com.example.betwinnerexperimental.entities;
+package dtos;
 
-import javax.persistence.*;
 import java.util.Date;
 import java.util.Set;
 

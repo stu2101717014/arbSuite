@@ -1,7 +1,7 @@
 package com.example.bwinexperimental.services;
 
-import com.example.bwinexperimental.entities.ResultEntity;
-import com.example.bwinexperimental.entities.TableTennisEventEntity;
+import dtos.ResultEntity;
+import dtos.TableTennisEventEntity;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,8 +1,8 @@
 package com.example.bets22experimental.services;
 
 
-import com.example.bets22experimental.entities.ResultEntity;
 import com.google.gson.*;
+import dtos.ResultEntity;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;

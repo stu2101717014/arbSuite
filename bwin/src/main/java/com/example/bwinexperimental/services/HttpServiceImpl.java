@@ -1,7 +1,7 @@
 package com.example.bwinexperimental.services;
 
-import com.example.bwinexperimental.entities.ResultEntity;
 import com.google.gson.*;
+import dtos.ResultEntity;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;

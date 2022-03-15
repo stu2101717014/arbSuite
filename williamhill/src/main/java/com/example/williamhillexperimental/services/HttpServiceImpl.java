@@ -1,7 +1,7 @@
 package com.example.williamhillexperimental.services;
 
-import com.example.williamhillexperimental.entities.ResultEntity;
 import com.google.gson.*;
+import dtos.ResultEntity;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;

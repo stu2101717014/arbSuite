@@ -1,6 +1,6 @@
 package com.example.bets22experimental.services;
 
-import com.example.bets22experimental.entities.TableTennisEventEntity;
+import dtos.TableTennisEventEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.*;

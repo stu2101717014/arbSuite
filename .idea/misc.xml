@@ -12,6 +12,8 @@
         <option value="$PROJECT_DIR$/betwinner/pom.xml" />
         <option value="$PROJECT_DIR$/bets22/pom.xml" />
         <option value="$PROJECT_DIR$/bwin/pom.xml" />
+        <option value="$PROJECT_DIR$/arbParentProject/pom.xml" />
+        <option value="$PROJECT_DIR$/dtos/pom.xml" />
       </list>
     </option>
   </component>

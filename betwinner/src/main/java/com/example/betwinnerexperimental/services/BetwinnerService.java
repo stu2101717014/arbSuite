@@ -1,7 +1,8 @@
 package com.example.betwinnerexperimental.services;
 
-import com.example.betwinnerexperimental.entities.ResultEntity;
-import com.example.betwinnerexperimental.entities.TableTennisEventEntity;
+
+import dtos.ResultEntity;
+import dtos.TableTennisEventEntity;
 import io.webfolder.ui4j.api.browser.BrowserEngine;
 import io.webfolder.ui4j.api.browser.BrowserFactory;
 import io.webfolder.ui4j.api.browser.Page;

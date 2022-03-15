@@ -1,7 +1,7 @@
 package com.example.betwinnerexperimental.services;
 
-import com.example.betwinnerexperimental.entities.ResultEntity;
 import com.google.gson.*;
+import dtos.ResultEntity;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Type;
