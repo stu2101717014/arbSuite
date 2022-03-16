@@ -25,13 +25,11 @@ public class RegisterView extends VerticalLayout implements BeforeEnterObserver 
 
     private final UserService userService;
 
-    private TextField username;
+    private final TextField username;
 
-    private EmailField emailField;
+    private final EmailField emailField;
 
-    private PasswordField passwordField;
-
-    private Button register;
+    private final PasswordField passwordField;
 
     @Autowired
     public RegisterView(UserService userService) {
@@ -43,10 +41,10 @@ public class RegisterView extends VerticalLayout implements BeforeEnterObserver 
         this.emailField.setLabel("Email");
         this.passwordField = new PasswordField();
         this.passwordField.setLabel("Password");
-        this.register = new Button("Register");
-        this.register.addClickListener(this::registerUser);
+        Button register = new Button("Register");
+        register.addClickListener(this::registerUser);
 
-        add(this.username, this.emailField, this.passwordField, this.register);
+        add(this.username, this.emailField, this.passwordField, register);
         setSizeFull();
 
         setAlignItems(Alignment.CENTER);
@@ -59,7 +57,7 @@ public class RegisterView extends VerticalLayout implements BeforeEnterObserver 
         user.setName(this.username.getValue());
         user.setEmail(this.emailField.getValue());
         user.setPassword(this.passwordField.getValue());
-        user.setRoles("ROLE_User");
+        this.userService.setDefaultRole(user);
         this.userService.saveUser(user);
     }
 

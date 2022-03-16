@@ -1,5 +1,7 @@
 package com.example.ui.security.services;
 
+import com.example.ui.security.data.Role;
+import com.example.ui.security.data.RoleRepository;
 import com.example.ui.security.data.User;
 import com.example.ui.security.data.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class UserServiceImpl implements UserService, UserDetailsService {
@@ -23,10 +27,19 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    private final RoleRepository roleRepository;
+
+    private static final String ROLE_USER = "ROLE_User";
+
+    private static final String ROLE_ADMIN = "ROLE_Admin";
+
     @Autowired
-    public UserServiceImpl( UserRepository userRepo, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public UserServiceImpl(UserRepository userRepo,
+                           BCryptPasswordEncoder bCryptPasswordEncoder,
+                           RoleRepository roleRepository) {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.userRepo = userRepo;
+        this.roleRepository = roleRepository;
     }
 
 
@@ -42,7 +55,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         }else {
             User user = opt.get();
 
-            List<String> roles = user.getRoles();
+            List<String> roles = user.getRoles().stream().map(Role::getName).collect(Collectors.toList());
             Set<GrantedAuthority> ga = new HashSet<>();
             for(String role:roles) {
                 ga.add(new SimpleGrantedAuthority(role));
@@ -56,6 +69,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         }
 
         return springUser;
+    }
+
+    @Override
+    public User setDefaultRole(User user){
+        List<Role> all = this.roleRepository.findAll();
+        Stream<Role> roleStream = all.stream().filter(role -> role.getName().equals(ROLE_USER));
+        Role role = roleStream.findFirst().get();
+        user.setRoles(role);
+        return user;
     }
 
     @Override

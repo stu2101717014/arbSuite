@@ -2,6 +2,7 @@ package com.example.ui.security.data;
 
 import javax.persistence.*;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -11,7 +12,7 @@ public class User {
     @Id
     @GeneratedValue
     @Column(name="user_id")
-    private Integer id;
+    private Long id;
 
     @Column(name="user_name")
     private String name;
@@ -22,19 +23,20 @@ public class User {
     @Column(name="user_email")
     private String email;
 
-    @ElementCollection(fetch= FetchType.EAGER)
-    @CollectionTable(
-            name="roles",
-            joinColumns = @JoinColumn(name="user_id")
-    )
-    @Column(name="user_role")
-    private List<String> roles;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = @JoinColumn(
+                    name = "user_id", referencedColumnName = "user_id"),
+            inverseJoinColumns = @JoinColumn(
+                    name = "role_id", referencedColumnName = "id"))
+    private Collection<Role> roles;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -62,11 +64,11 @@ public class User {
         this.email = email;
     }
 
-    public List<String> getRoles() {
+    public Collection<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(String... roles) {
+    public void setRoles(Role... roles) {
         this.roles = Arrays.asList(roles);
     }
 }
