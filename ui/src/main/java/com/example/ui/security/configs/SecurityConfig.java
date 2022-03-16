@@ -21,9 +21,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String LOGIN_FAILURE_URL = "/login?error";
     private static final String LOGIN_URL = "/login";
     private static final String LOGOUT_SUCCESS_URL = "/login";
-    public static final String TABLE_TENNIS_EVENTS_URL = "/tabletennisevents";
-    public static final String APIS_URL = "/apis";
-    public static final String NAMES_SIMILARITIES_URL = "/namessimilarities";
 
     private final UserDetailsService uds;
 

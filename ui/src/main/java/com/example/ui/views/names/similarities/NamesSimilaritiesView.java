@@ -1,9 +1,9 @@
 package com.example.ui.views.names.similarities;
 
 import com.example.ui.entities.jpa.NamesSimilaritiesDAO;
+import com.example.ui.services.interfaces.NamesSimilaritiesService;
 import com.example.ui.views.MainLayout;
 import com.example.ui.security.utils.SecuredByRole;
-import com.example.ui.services.NamesSimilaritiesService;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;

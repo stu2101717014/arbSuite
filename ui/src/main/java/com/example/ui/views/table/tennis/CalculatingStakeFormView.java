@@ -2,37 +2,36 @@ package com.example.ui.views.table.tennis;
 
 import com.example.ui.entities.helpers.TableTennisEventWrapperDTO;
 import com.example.ui.entities.jpa.TableTennisEventEntityDAO;
-import com.example.ui.services.helpers.ArbitrageService;
+import com.example.ui.services.interfaces.ArbitrageService;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import org.springframework.stereotype.Component;
 
 import java.util.*;
 
+@Component
 public class CalculatingStakeFormView extends VerticalLayout {
 
-    private TextField amount;
+    private final TextField amount;
 
-    private Label playerOneName;
-    private Label playerTwoName;
+    private final Label playerOneName;
+    private final Label playerTwoName;
 
-    private Label playerOneOdd;
-    private Label playerTwoOdd;
+    private final Label playerOneOdd;
+    private final Label playerTwoOdd;
 
-    private Label platformOne;
-    private Label platformTwo;
+    private final Label platformOne;
+    private final Label platformTwo;
 
-    private Label total;
+    private final Label total;
 
-    private Button hideForm;
-    private Button reEvaluate;
-    private ArbitrageService arbitrageService;
+    private final ArbitrageService arbitrageService;
 
     private TableTennisEventWrapperDTO selected;
 
-    public CalculatingStakeFormView(ArbitrageService arbitrageService, TableTennisEventWrapperDTO selected) {
-        this.selected = selected;
+    public CalculatingStakeFormView(ArbitrageService arbitrageService) {
         this.arbitrageService = arbitrageService;
         this.amount = new TextField();
         this.amount.setValue(ListTableTennisEventsView.INITIAL_AMOUNT.toString());
@@ -46,11 +45,11 @@ public class CalculatingStakeFormView extends VerticalLayout {
         this.platformTwo = new Label();
         this.total =  new Label();
 
-        this.hideForm = new Button("Hide Form");
-        this.reEvaluate =  new Button("Reevaluate");
-        this.reEvaluate.addClickListener(e->this.initCalculatingStakeFormLayout(Double.parseDouble(this.amount.getValue())));
+        Button hideForm = new Button("Hide Form");
+        Button reEvaluate = new Button("Reevaluate");
+        reEvaluate.addClickListener(e->this.initCalculatingStakeFormLayout(Double.parseDouble(this.amount.getValue())));
 
-        this.hideForm.addClickListener(e -> this.setVisible(false));
+        hideForm.addClickListener(e -> this.setVisible(false));
         add(amount, playerOneName, playerTwoName, playerOneOdd, playerTwoOdd, platformOne, platformTwo, total, hideForm, reEvaluate);
     }
 

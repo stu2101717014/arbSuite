@@ -1,7 +1,7 @@
 package com.example.ui.security.ui;
 
 import com.example.ui.security.data.User;
-import com.example.ui.security.services.IUserService;
+import com.example.ui.security.services.UserService;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -23,7 +23,7 @@ public class RegisterView extends VerticalLayout implements BeforeEnterObserver 
 
     public static final String ROUTE = "register";
 
-    private final IUserService userService;
+    private final UserService userService;
 
     private TextField username;
 
@@ -34,7 +34,7 @@ public class RegisterView extends VerticalLayout implements BeforeEnterObserver 
     private Button register;
 
     @Autowired
-    public RegisterView(IUserService userService) {
+    public RegisterView(UserService userService) {
         this.userService = userService;
 
         this.username = new TextField();

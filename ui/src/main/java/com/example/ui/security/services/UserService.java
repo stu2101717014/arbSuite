@@ -2,7 +2,8 @@ package com.example.ui.security.services;
 
 import com.example.ui.security.data.User;
 
-public interface IUserService {
+public interface UserService {
 
-    public User saveUser(User user);
+    User saveUser(User user);
+
 }

@@ -2,7 +2,7 @@ package com.example.ui.mqtt;
 
 
 import com.example.ui.entities.jpa.ResultEntityDAO;
-import com.example.ui.services.DataReceiverService;
+import com.example.ui.services.interfaces.DataReceiverService;
 import com.google.gson.Gson;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;

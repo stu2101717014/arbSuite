@@ -2,12 +2,10 @@ package com.example.ui.views.table.tennis;
 
 import com.example.ui.entities.helpers.TableTennisEventWrapperDTO;
 import com.example.ui.entities.jpa.PostProcessTableTennisWrapperDAO;
-import com.example.ui.entities.jpa.ResultEntityDAO;
+import com.example.ui.services.interfaces.NamesSimilaritiesService;
+import com.example.ui.services.interfaces.TableTennisService;
 import com.example.ui.views.MainLayout;
 import com.example.ui.security.utils.SecuredByRole;
-import com.example.ui.services.NamesSimilaritiesService;
-import com.example.ui.services.TableTennisService;
-import com.example.ui.services.helpers.ArbitrageService;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.vaadin.flow.component.button.Button;
@@ -33,17 +31,18 @@ import java.util.Optional;
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class ListTableTennisEventsView extends VerticalLayout {
 
-    private final Grid<TableTennisEventWrapperDTO> grid = new Grid<>(TableTennisEventWrapperDTO.class, false);
+    private final Grid<TableTennisEventWrapperDTO> grid =
+            new Grid<>(TableTennisEventWrapperDTO.class, false);
 
-    private CalculatingStakeFormView calculatingStakeFormView;
+    private final CalculatingStakeFormView calculatingStakeFormView;
 
     private TableTennisEventWrapperDTO selectedRow;
 
     public static final Double INITIAL_AMOUNT = 100d;
 
     public ListTableTennisEventsView(@Autowired NamesSimilaritiesService namesSimilaritiesService,
-                                     @Autowired ArbitrageService arbitrageService,
-                                     @Autowired TableTennisService tableTennisService) {
+                                     @Autowired TableTennisService tableTennisService,
+                                     @Autowired CalculatingStakeFormView calculatingStakeFormView) {
 
         PostProcessTableTennisWrapperDAO processedData = tableTennisService.getProcessedData();
 
@@ -56,10 +55,14 @@ public class ListTableTennisEventsView extends VerticalLayout {
 
         configureGrid(tableTennisEvents, platformNames);
 
-        AddNamesSimilaritiesFormView addNamesSimilaritiesFormView = new AddNamesSimilaritiesFormView(namesSimilaritiesService);
+        AddNamesSimilaritiesFormView addNamesSimilaritiesFormView =
+                new AddNamesSimilaritiesFormView(namesSimilaritiesService);
 
         Button showStakesCalculator = new Button("Show Stakes");
-        calculatingStakeFormView = new CalculatingStakeFormView(arbitrageService, selectedRow);
+
+        this.calculatingStakeFormView = calculatingStakeFormView;
+        this.calculatingStakeFormView.setSelected(this.selectedRow);
+
         showStakesCalculator.addClickListener(e -> {
             if (this.selectedRow != null) {
                 calculatingStakeFormView.setSelected(this.selectedRow);

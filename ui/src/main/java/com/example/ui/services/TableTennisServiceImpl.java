@@ -1,20 +1,18 @@
 package com.example.ui.services;
 
 import com.example.ui.entities.helpers.*;
-import com.example.ui.entities.jpa.NamesSimilaritiesDAO;
 import com.example.ui.entities.jpa.PostProcessTableTennisWrapperDAO;
 import com.example.ui.entities.jpa.ResultEntityDAO;
 import com.example.ui.entities.jpa.TableTennisEventEntityDAO;
 import com.example.ui.repos.PostProcessTableTennisWrapperRepository;
 import com.example.ui.repos.ResultEntityRepository;
-import com.example.ui.services.helpers.ArbitrageService;
+import com.example.ui.services.helpers.LocalDateAdapter;
+import com.example.ui.services.interfaces.TableTennisService;
 import com.google.gson.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Type;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -22,55 +20,20 @@ import static java.util.Comparator.naturalOrder;
 import static java.util.Comparator.nullsLast;
 
 @Service
-public class TableTennisService {
-
-
-    private NamesSimilaritiesService namesSimilaritiesService;
-
-    private ArbitrageService arbitrageService;
+public class TableTennisServiceImpl implements TableTennisService {
 
     private final PostProcessTableTennisWrapperRepository postProcessTableTennisWrapperRepository;
 
     private final ResultEntityRepository resultEntityRepository;
 
     @Autowired
-    public TableTennisService(NamesSimilaritiesService namesSimilaritiesService,
-                              ArbitrageService arbitrageService,
-                              PostProcessTableTennisWrapperRepository postProcessTableTennisWrapperRepository,
-                              ResultEntityRepository resultEntityRepository) {
-        this.namesSimilaritiesService = namesSimilaritiesService;
-        this.arbitrageService = arbitrageService;
+    public TableTennisServiceImpl(PostProcessTableTennisWrapperRepository postProcessTableTennisWrapperRepository,
+                                  ResultEntityRepository resultEntityRepository) {
+
         this.postProcessTableTennisWrapperRepository = postProcessTableTennisWrapperRepository;
         this.resultEntityRepository = resultEntityRepository;
     }
 
-
-    // TODO TEST remapNamesSimilarities
-    public void remapNamesSimilarities(List<ResultEntityDAO> resultEntityDAOList, List<NamesSimilaritiesDAO> namesSimilaritiesDAOList) {
-
-        HashMap<String, HashMap<String, NamesSimilaritiesDAO>> helperMap = new HashMap<>();
-
-        for (NamesSimilaritiesDAO namesSimilarity : namesSimilaritiesDAOList) {
-            if (!helperMap.containsKey(namesSimilarity.getPlatformName())) {
-                helperMap.put(namesSimilarity.getPlatformName(), new HashMap<String, NamesSimilaritiesDAO>());
-            }
-            helperMap.get(namesSimilarity.getPlatformName()).put(namesSimilarity.getPlatformSpecificPlayerName(), namesSimilarity);
-        }
-
-        for (ResultEntityDAO resultEntity : resultEntityDAOList) {
-            Set<TableTennisEventEntityDAO> tableTennisEventEntitySet = resultEntity.getTableTennisEventEntitySet();
-            for (TableTennisEventEntityDAO ttee : tableTennisEventEntitySet) {
-                if (helperMap.containsKey(resultEntity.getPlatformName()) && helperMap.get(resultEntity.getPlatformName()).containsKey(ttee.getFirstPlayerName())) {
-                    NamesSimilaritiesDAO forReplace = helperMap.get(resultEntity.getPlatformName()).get(ttee.getFirstPlayerName());
-                    ttee.setFirstPlayerName(forReplace.getUniversalPlayerName());
-                }
-                if (helperMap.containsKey(resultEntity.getPlatformName()) && helperMap.get(resultEntity.getPlatformName()).containsKey(ttee.getSecondPlayerName())) {
-                    NamesSimilaritiesDAO forReplace = helperMap.get(resultEntity.getPlatformName()).get(ttee.getSecondPlayerName());
-                    ttee.setSecondPlayerName(forReplace.getUniversalPlayerName());
-                }
-            }
-        }
-    }
 
     public List<TableTennisEventWrapperDTO> sortReshapedData(List<TableTennisEventWrapperDTO> tableTennisEventWrapperDTOList) {
         return tableTennisEventWrapperDTOList.stream().sorted(nullsLast(Comparator.comparing(e -> e.getTableTennisEventEntityShort().getEventDate(), nullsLast(naturalOrder()))))
@@ -118,7 +81,7 @@ public class TableTennisService {
 
     }
 
-    public void persistProcessedData(List<TableTennisEventWrapperDTO> eventWrapperList) {
+    public void persistPostProcessedData(List<TableTennisEventWrapperDTO> eventWrapperList) {
         Gson gson = new GsonBuilder()
                 .setPrettyPrinting()
                 .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
@@ -140,9 +103,4 @@ public class TableTennisService {
     }
 }
 
-class LocalDateAdapter implements JsonSerializer<LocalDate> {
-    @Override
-    public JsonElement serialize(LocalDate localDate, Type type, JsonSerializationContext jsonSerializationContext) {
-        return new JsonPrimitive(localDate.format(DateTimeFormatter.ISO_LOCAL_DATE));
-    }
-}
+

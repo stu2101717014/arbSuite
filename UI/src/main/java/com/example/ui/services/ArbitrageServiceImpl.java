@@ -1,7 +1,8 @@
-package com.example.ui.services.helpers;
+package com.example.ui.services;
 
 import com.example.ui.entities.helpers.TableTennisEventWrapperDTO;
 import com.example.ui.entities.jpa.TableTennisEventEntityDAO;
+import com.example.ui.services.interfaces.ArbitrageService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -9,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class ArbitrageService {
+public class ArbitrageServiceImpl implements ArbitrageService {
 
     public List<Double> calculateBets(double investment, List<Double> odds, double arbitragePercentage){
         double oddsSize = odds.size();
