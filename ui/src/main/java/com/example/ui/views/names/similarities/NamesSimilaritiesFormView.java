@@ -10,16 +10,12 @@ import com.vaadin.flow.component.textfield.TextField;
 
 public class NamesSimilaritiesFormView extends VerticalLayout {
 
-    private Button newNameSimilarity;
-    private Button save;
-    private Button delete;
-
-    private TextField platformName;
-    private TextField platformSpecificPlayerName;
-    private TextField universalPlayerName;
+    private final TextField platformName;
+    private final TextField platformSpecificPlayerName;
+    private final TextField universalPlayerName;
 
     private NamesSimilaritiesDAO selected;
-    private NamesSimilaritiesService namesSimilaritiesService;
+    private final NamesSimilaritiesService namesSimilaritiesService;
 
     private final Grid<NamesSimilaritiesDAO> gridRef;
 
@@ -35,9 +31,9 @@ public class NamesSimilaritiesFormView extends VerticalLayout {
         universalPlayerName = new TextField();
         universalPlayerName.setLabel("Universal Name");
 
-        newNameSimilarity = new Button("New");
-        save = new Button("Save");
-        delete = new Button("Delete");
+        Button newNameSimilarity = new Button("New");
+        Button save = new Button("Save");
+        Button delete = new Button("Delete");
 
         newNameSimilarity.addClickListener(this::addNewNameSimilarityButtonClicked);
         save.addClickListener(this::saveButtonClicked);

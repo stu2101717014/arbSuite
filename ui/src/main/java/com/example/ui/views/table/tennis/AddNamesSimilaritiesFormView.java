@@ -6,16 +6,22 @@ import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
-
+@Component
+@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class AddNamesSimilaritiesFormView extends VerticalLayout {
 
-    private TextField playerPlatformSpecificName;
-    private TextField playerUniversalName;
-    private TextField platformName;
+    private final TextField playerPlatformSpecificName;
+    private final TextField playerUniversalName;
+    private final TextField platformName;
 
     private final NamesSimilaritiesService namesSimilaritiesService;
 
+    @Autowired
     public AddNamesSimilaritiesFormView(NamesSimilaritiesService namesSimilaritiesService) {
         this.namesSimilaritiesService = namesSimilaritiesService;
 

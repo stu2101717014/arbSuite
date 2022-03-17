@@ -4,16 +4,16 @@ import com.example.ui.security.data.Role;
 import com.example.ui.security.data.RoleRepository;
 import com.example.ui.security.data.User;
 import com.example.ui.security.data.UserRepository;
-import com.vaadin.flow.spring.annotation.SpringComponent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-@SpringComponent
+@Component
 public class DataInitializer implements ApplicationRunner {
 
     private final UserRepository userRepository;

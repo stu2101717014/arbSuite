@@ -40,23 +40,22 @@ public class ListTableTennisEventsView extends VerticalLayout {
 
     public static final Double INITIAL_AMOUNT = 100d;
 
-    public ListTableTennisEventsView(@Autowired NamesSimilaritiesService namesSimilaritiesService,
-                                     @Autowired TableTennisService tableTennisService,
-                                     @Autowired CalculatingStakeFormView calculatingStakeFormView) {
+    @Autowired
+    public ListTableTennisEventsView(TableTennisService tableTennisService,
+                                     CalculatingStakeFormView calculatingStakeFormView,
+                                     AddNamesSimilaritiesFormView addNamesSimilaritiesFormView) {
 
         PostProcessTableTennisWrapperDAO processedData = tableTennisService.getProcessedData();
 
         List<TableTennisEventWrapperDTO> tableTennisEvents = new Gson().fromJson(processedData.getResultAsJson(),
-                new TypeToken<ArrayList<TableTennisEventWrapperDTO>>(){}.getType());
+                new TypeToken<ArrayList<TableTennisEventWrapperDTO>>() {
+                }.getType());
 
         tableTennisEvents = tableTennisService.sortReshapedData(tableTennisEvents);
 
         List<String> platformNames = tableTennisService.getPlatformNames();
 
         configureGrid(tableTennisEvents, platformNames);
-
-        AddNamesSimilaritiesFormView addNamesSimilaritiesFormView =
-                new AddNamesSimilaritiesFormView(namesSimilaritiesService);
 
         Button showStakesCalculator = new Button("Show Stakes");
 
@@ -66,7 +65,7 @@ public class ListTableTennisEventsView extends VerticalLayout {
         showStakesCalculator.addClickListener(e -> {
             if (this.selectedRow != null) {
                 calculatingStakeFormView.setSelected(this.selectedRow);
-                calculatingStakeFormView.initCalculatingStakeFormLayout(INITIAL_AMOUNT );
+                calculatingStakeFormView.initCalculatingStakeFormLayout(INITIAL_AMOUNT);
                 calculatingStakeFormView.setVisible(true);
             }
         });

@@ -7,6 +7,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -34,6 +35,7 @@ public class CalculatingStakeFormView extends VerticalLayout {
 
     private TableTennisEventWrapperDTO selected;
 
+    @Autowired
     public CalculatingStakeFormView(ArbitrageService arbitrageService) {
         this.arbitrageService = arbitrageService;
         this.amount = new TextField();
