@@ -22,7 +22,7 @@ import java.util.List;
 @EnableScheduling
 public class ScheduleDataProcessor {
 
-    private final static int DELAY = 40000;
+    private final static long DELAY = 40000L;
 
     private final ResultEntityRepository resultEntityRepository;
 
@@ -46,6 +46,8 @@ public class ScheduleDataProcessor {
         this.namesSimilaritiesService = namesSimilaritiesService;
         this.arbitrageService = arbitrageService;
         this.postProcessTableTennisWrapperRepository = postProcessTableTennisWrapperRepository;
+
+
     }
 
     @Scheduled(fixedDelay = DELAY)

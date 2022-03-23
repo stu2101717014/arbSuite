@@ -24,15 +24,11 @@ public class NamesSimilaritiesView extends VerticalLayout {
 
     private final Grid<NamesSimilaritiesDAO> grid = new Grid<>(NamesSimilaritiesDAO.class, true);
 
-    private NamesSimilaritiesService namesSimilaritiesService;
-
-    private NamesSimilaritiesFormView namesSimilaritiesFormView;
+    private final NamesSimilaritiesFormView namesSimilaritiesFormView;
 
     private NamesSimilaritiesDAO selected;
 
-
     public NamesSimilaritiesView(@Autowired NamesSimilaritiesService namesSimilaritiesService) {
-        this.namesSimilaritiesService = namesSimilaritiesService;
 
         configureGrid(namesSimilaritiesService);
         this.namesSimilaritiesFormView = new NamesSimilaritiesFormView(namesSimilaritiesService, grid);

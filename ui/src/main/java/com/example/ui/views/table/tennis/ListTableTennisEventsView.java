@@ -34,6 +34,8 @@ public class ListTableTennisEventsView extends VerticalLayout {
     private final Grid<TableTennisEventWrapperDTO> grid =
             new Grid<>(TableTennisEventWrapperDTO.class, false);
 
+    private final TableTennisService tableTennisService;
+
     private final CalculatingStakeFormView calculatingStakeFormView;
 
     private TableTennisEventWrapperDTO selectedRow;
@@ -45,13 +47,9 @@ public class ListTableTennisEventsView extends VerticalLayout {
                                      CalculatingStakeFormView calculatingStakeFormView,
                                      AddNamesSimilaritiesFormView addNamesSimilaritiesFormView) {
 
-        PostProcessTableTennisWrapperDAO processedData = tableTennisService.getProcessedData();
+        this.tableTennisService = tableTennisService;
 
-        List<TableTennisEventWrapperDTO> tableTennisEvents = new Gson().fromJson(processedData.getResultAsJson(),
-                new TypeToken<ArrayList<TableTennisEventWrapperDTO>>() {
-                }.getType());
-
-        tableTennisEvents = tableTennisService.sortReshapedData(tableTennisEvents);
+        List<TableTennisEventWrapperDTO> tableTennisEvents = getTableTennisProcessedData(this.tableTennisService);
 
         List<String> platformNames = tableTennisService.getPlatformNames();
 
@@ -76,6 +74,17 @@ public class ListTableTennisEventsView extends VerticalLayout {
 
         addAndExpand(new HorizontalLayout(showAddNewNamesSimilarities, showStakesCalculator), content);
         setHeightFull();
+    }
+
+    private List<TableTennisEventWrapperDTO> getTableTennisProcessedData(TableTennisService tableTennisService) {
+        PostProcessTableTennisWrapperDAO processedData = tableTennisService.getProcessedData();
+
+        List<TableTennisEventWrapperDTO> tableTennisEvents = new Gson().fromJson(processedData.getResultAsJson(),
+                new TypeToken<ArrayList<TableTennisEventWrapperDTO>>() {
+                }.getType());
+
+        tableTennisEvents = tableTennisService.sortReshapedData(tableTennisEvents);
+        return tableTennisEvents;
     }
 
     private FlexLayout configureContent(AddNamesSimilaritiesFormView addNamesSimilaritiesFormView, CalculatingStakeFormView calculatingStakeFormView) {
