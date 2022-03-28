@@ -41,7 +41,7 @@ public class BwinService {
     }
 
     @Scheduled(fixedDelay = DELAY)
-    public void createAndExecuteTableTennisUserStory(){
+    public void getTableTennisData(){
         ResultEntity resultEntity = new ResultEntity();
 
         try {

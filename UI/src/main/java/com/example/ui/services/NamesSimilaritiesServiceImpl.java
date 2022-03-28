@@ -15,7 +15,7 @@ import java.util.Set;
 @Service
 public class NamesSimilaritiesServiceImpl implements NamesSimilaritiesService {
 
-    private NamesSimilaritiesRepository namesSimilaritiesRepository;
+    private final NamesSimilaritiesRepository namesSimilaritiesRepository;
 
     @Autowired
     public NamesSimilaritiesServiceImpl(NamesSimilaritiesRepository namesSimilaritiesRepository) {

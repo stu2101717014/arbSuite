@@ -45,7 +45,7 @@ public class WilliamHillService {
     }
 
     @Scheduled(fixedDelay = DELAY)
-    public void createAndExecuteTableTennisUserStory() {
+    public void getTableTennisData() {
         ResultEntity resultEntity = new ResultEntity();
         HashSet<TableTennisEventEntity> tableTennisEventEntities =  new HashSet<>();
 

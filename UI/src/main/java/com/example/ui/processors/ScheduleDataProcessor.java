@@ -22,7 +22,9 @@ import java.util.List;
 @EnableScheduling
 public class ScheduleDataProcessor {
 
-    private final static long DELAY = 40000L;
+    private final static long PROCESS_TABLE_TENNIS_EVENT_DELAY = 40000L;
+
+    private final static long CLEANUP_OLD_DATA_OFFSET = 600000L;
 
     private final ResultEntityRepository resultEntityRepository;
 
@@ -33,7 +35,6 @@ public class ScheduleDataProcessor {
     private final ArbitrageService arbitrageService;
 
     private final PostProcessTableTennisWrapperRepository postProcessTableTennisWrapperRepository;
-
 
     @Autowired
     public ScheduleDataProcessor(ResultEntityRepository resultEntityRepository,
@@ -46,11 +47,9 @@ public class ScheduleDataProcessor {
         this.namesSimilaritiesService = namesSimilaritiesService;
         this.arbitrageService = arbitrageService;
         this.postProcessTableTennisWrapperRepository = postProcessTableTennisWrapperRepository;
-
-
     }
 
-    @Scheduled(fixedDelay = DELAY)
+    @Scheduled(fixedDelay = PROCESS_TABLE_TENNIS_EVENT_DELAY)
     public void processTableTennisData() {
         List<String> allPlatformNames = this.resultEntityRepository.getAllPlatformNames();
 
@@ -69,12 +68,12 @@ public class ScheduleDataProcessor {
 
         tableTennisService.persistPostProcessedData(eventWrapperList);
 
-        this.cleanUpOldData();
+        this.cleanUpOldData(CLEANUP_OLD_DATA_OFFSET);
     }
 
 
-    private void cleanUpOldData() {
-        Date date = new Date(System.currentTimeMillis() - 10 * 60 * 1000);
+    private void cleanUpOldData(long offset) {
+        Date date = new Date(System.currentTimeMillis() - offset);
         List<ResultEntityDAO> oldResultEntities = this.resultEntityRepository.selectAllCreatedBefore(date);
 
         resultEntityRepository.deleteAll(oldResultEntities);

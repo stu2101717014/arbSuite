@@ -41,7 +41,7 @@ public class Bets22Service {
     }
 
     @Scheduled(fixedDelay = DELAY)
-    public void get22BetsData() {
+    public void getTableTennisData() {
         ResultEntity resultEntity = new ResultEntity();
 
         try {
