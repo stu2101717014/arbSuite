@@ -6,13 +6,12 @@ import com.example.ui.entities.jpa.ResultEntityDAO;
 import com.example.ui.entities.jpa.TableTennisEventEntityDAO;
 import com.example.ui.repos.PostProcessTableTennisWrapperRepository;
 import com.example.ui.repos.ResultEntityRepository;
-import com.example.ui.services.helpers.LocalDateAdapter;
+import com.example.ui.services.helpers.GsonService;
 import com.example.ui.services.interfaces.TableTennisService;
 import com.google.gson.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -26,12 +25,16 @@ public class TableTennisServiceImpl implements TableTennisService {
 
     private final ResultEntityRepository resultEntityRepository;
 
+    private final GsonService gsonService;
+
     @Autowired
     public TableTennisServiceImpl(PostProcessTableTennisWrapperRepository postProcessTableTennisWrapperRepository,
-                                  ResultEntityRepository resultEntityRepository) {
+                                  ResultEntityRepository resultEntityRepository,
+                                  GsonService gsonService) {
 
         this.postProcessTableTennisWrapperRepository = postProcessTableTennisWrapperRepository;
         this.resultEntityRepository = resultEntityRepository;
+        this.gsonService = gsonService;
     }
 
 
@@ -82,11 +85,7 @@ public class TableTennisServiceImpl implements TableTennisService {
     }
 
     public void persistPostProcessedData(List<TableTennisEventWrapperDTO> eventWrapperList) {
-        Gson gson = new GsonBuilder()
-                .setPrettyPrinting()
-                .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
-                .create();
-
+        Gson gson = gsonService.getGson();
         String toJson = gson.toJson(eventWrapperList);
         PostProcessTableTennisWrapperDAO postProcessTableTennisWrapperDAO = new PostProcessTableTennisWrapperDAO();
         postProcessTableTennisWrapperDAO.setTime(new Date(System.currentTimeMillis()));

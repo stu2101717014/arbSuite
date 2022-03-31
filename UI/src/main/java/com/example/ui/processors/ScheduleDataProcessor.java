@@ -60,13 +60,15 @@ public class ScheduleDataProcessor {
         }
 
         List<NamesSimilaritiesDAO> all = this.namesSimilaritiesService.getAll();
-        namesSimilaritiesService.remapNamesSimilarities(resultEntityDAOList, all);
+        this.namesSimilaritiesService.remapNamesSimilarities(resultEntityDAOList, all);
 
-        List<TableTennisEventWrapperDTO> eventWrapperList = tableTennisService.reshapeTableTennisEventsData(resultEntityDAOList);
+        List<TableTennisEventWrapperDTO> eventWrapperList = this.tableTennisService.reshapeTableTennisEventsData(resultEntityDAOList);
 
-        arbitrageService.checkForArbitrage(eventWrapperList);
+        this.arbitrageService.checkForArbitrage(eventWrapperList);
 
-        tableTennisService.persistPostProcessedData(eventWrapperList);
+        this.arbitrageService.persistPositiveArbitrageRecords(eventWrapperList);
+
+        this.tableTennisService.persistPostProcessedData(eventWrapperList);
 
         this.cleanUpOldData(CLEANUP_OLD_DATA_OFFSET);
     }
@@ -76,8 +78,8 @@ public class ScheduleDataProcessor {
         Date date = new Date(System.currentTimeMillis() - offset);
         List<ResultEntityDAO> oldResultEntities = this.resultEntityRepository.selectAllCreatedBefore(date);
 
-        resultEntityRepository.deleteAll(oldResultEntities);
-        postProcessTableTennisWrapperRepository.deleteRecordsCreatedEarlierThan(date);
+        this.resultEntityRepository.deleteAll(oldResultEntities);
+        this.postProcessTableTennisWrapperRepository.deleteRecordsCreatedEarlierThan(date);
 
     }
 }

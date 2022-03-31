@@ -17,7 +17,7 @@ public class Bets22DataNormalizationServiceImpl {
             ArrayList<Object> valueAsList = (ArrayList<Object>) value.getValue();
 
             for (Object v : valueAsList) {
-                try{
+                try {
                     Map<String, Object> valueEntityMap = (Map<String, Object>) v;
 
                     String firstPlayer = valueEntityMap.get(valueEntityMap.keySet().stream().filter(fp -> fp.equals("O1")).findFirst().get()).toString();
@@ -27,6 +27,9 @@ public class Bets22DataNormalizationServiceImpl {
                     String resultTimeStamp = String.format("%.0f", Double.parseDouble(timeStampAsString));
                     Long timeStamp = Long.parseLong(resultTimeStamp);
                     Date date = new Date(timeStamp * 1000);
+                    if (TimeZone.getDefault().inDaylightTime(new Date())) {
+                        date = new Date(timeStamp * 1000 - 3600 * 1000);
+                    }
 
                     ArrayList<Object> odds = (ArrayList<Object>) valueEntityMap.get(valueEntityMap.keySet().stream().filter(fp -> fp.equals("E")).findFirst().get());
                     if (odds.size() > 2) {
@@ -45,7 +48,7 @@ public class Bets22DataNormalizationServiceImpl {
 
                         resultList.add(tblTnsEventEnt);
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
 
                 }
             }
