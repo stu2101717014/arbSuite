@@ -3,7 +3,7 @@ package dtos;
 import java.util.Date;
 import java.util.Set;
 
-public class ResultEntity {
+public class ResultEntityDTO {
 
     private String platformName;
 
@@ -11,7 +11,7 @@ public class ResultEntity {
 
     private Date time;
 
-    private Set<TableTennisEventEntity> tableTennisEventEntitySet;
+    private Set<TableTennisEventEntityDTO> tableTennisEventEntitySet;
 
     public String getPlatformName() {
         return platformName;
@@ -37,11 +37,11 @@ public class ResultEntity {
         this.time = time;
     }
 
-    public Set<TableTennisEventEntity> getTableTennisEventEntitySet() {
+    public Set<TableTennisEventEntityDTO> getTableTennisEventEntitySet() {
         return tableTennisEventEntitySet;
     }
 
-    public void setTableTennisEventEntitySet(Set<TableTennisEventEntity> payload) {
+    public void setTableTennisEventEntitySet(Set<TableTennisEventEntityDTO> payload) {
         this.tableTennisEventEntitySet = payload;
     }
 }
