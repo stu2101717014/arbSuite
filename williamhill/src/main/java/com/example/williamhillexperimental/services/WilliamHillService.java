@@ -47,7 +47,7 @@ public class WilliamHillService {
     @Scheduled(fixedDelay = DELAY)
     public void getTableTennisData() {
         ResultEntity resultEntity = new ResultEntity();
-        HashSet<TableTennisEventEntity> tableTennisEventEntities =  new HashSet<>();
+        HashSet<TableTennisEventEntity> tableTennisEventEntities = new HashSet<>();
 
         HashSet<ResultEntity> resultEntityHashSet = new HashSet<>();
         resultEntityHashSet.add(resultEntity);
@@ -78,10 +78,10 @@ public class WilliamHillService {
 
             List<Element> elements = page.getDocument().queryAll("div.btmarket");
 
-            for(Element el : elements){
-                try{
+            for (Element el : elements) {
+                try {
                     List<Element> dateEls = el.queryAll("span.btmarket__name.btmarket__name--disabled");
-                    if (dateEls.size() > 0){
+                    if (dateEls.size() > 0) {
 
                         Element element = dateEls.get(0);
                         String text = element.getText();
@@ -89,20 +89,20 @@ public class WilliamHillService {
                         Date eventDate = parseEventDate(text);
 
                         List<Element> playerNamesAsList = el.queryAll("div.btmarket__link-name");
-                        if (playerNamesAsList.size() > 0){
+                        if (playerNamesAsList.size() > 0) {
 
                             Element playerNames = playerNamesAsList.get(0);
                             String playerNamesAsString = playerNames.getText();
 
                             String[] playersParts = playerNamesAsString.split("\\s+");
 
-                            if (playersParts.length == 4){
+                            if (playersParts.length == 4) {
                                 String firstPlayerName = playersParts[0] + " " + playersParts[1];
                                 String secondPlayerName = playersParts[2] + " " + playersParts[3];
 
                                 List<Element> oddsList = el.queryAll("div.btmarket__selection");
 
-                                if (oddsList.size() == 2){
+                                if (oddsList.size() == 2) {
                                     Double firstPlayerOdd = round(parseFraction(oddsList.get(0).getText().trim()) + 1, 2);
                                     Double secondPlayerOdd = round(parseFraction(oddsList.get(1).getText().trim()) + 1, 2);
 
@@ -124,7 +124,7 @@ public class WilliamHillService {
                     resultEntity.setTableTennisEventEntitySet(tableTennisEventEntities);
 
 
-                }catch (Exception e){
+                } catch (Exception e) {
                     resultEntity.setException(e);
                 }
 
@@ -140,7 +140,8 @@ public class WilliamHillService {
         if (ratio.contains("/")) {
             String[] rat = ratio.split("/");
             return Double.parseDouble(rat[0]) / Double.parseDouble(rat[1]);
-        } if (ratio.equals("EVS")){
+        }
+        if (ratio.equals("EVS")) {
             return 1d;
         }
         return 0d;
@@ -148,10 +149,10 @@ public class WilliamHillService {
 
     private Date parseEventDate(String text) throws ParseException {
         Date eventDate;
-        if (text.toLowerCase(Locale.ROOT).startsWith("live")){
+        if (text.toLowerCase(Locale.ROOT).startsWith("live")) {
             eventDate = Calendar.getInstance().getTime();
-        }else {
-            if (text.toLowerCase(Locale.ROOT).endsWith("live")){
+        } else {
+            if (text.toLowerCase(Locale.ROOT).endsWith("live")) {
                 text = text.replace("Live", "");
             }
             SimpleDateFormat formatter = new SimpleDateFormat("dd MMM HH:mm");
@@ -159,14 +160,22 @@ public class WilliamHillService {
 
             Calendar instance = Calendar.getInstance();
             instance.setTime(eventDate);
-            instance.set(Calendar.YEAR,Calendar.getInstance().get(Calendar.YEAR));
+            instance.set(Calendar.YEAR, Calendar.getInstance().get(Calendar.YEAR));
             eventDate = instance.getTime();
             if (Calendar.getInstance().get(Calendar.MONTH) == Calendar.DECEMBER
-                    && instance.get(Calendar.MONTH) == Calendar.JANUARY){
-                instance.set(Calendar.YEAR,(Calendar.getInstance().get(Calendar.YEAR) + 1));
+                    && instance.get(Calendar.MONTH) == Calendar.JANUARY) {
+                instance.set(Calendar.YEAR, (Calendar.getInstance().get(Calendar.YEAR) + 1));
                 eventDate = instance.getTime();
             }
         }
+
+        if (TimeZone.getDefault().inDaylightTime(new Date())) {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(eventDate);
+            cal.add(Calendar.HOUR, -1);
+            return cal.getTime();
+        }
+
         return eventDate;
     }
 }
