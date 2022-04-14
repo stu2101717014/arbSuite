@@ -2,7 +2,7 @@ package com.example.bets22experimental.services;
 
 
 import com.google.gson.*;
-import dtos.ResultEntity;
+import dtos.ResultEntityDTO;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -40,13 +40,13 @@ public class HttpServiceImpl  {
         return responseString;
     }
 
-    public String serializeResultEnt(ResultEntity resultEntity) {
+    public String serializeResultEnt(ResultEntityDTO resultEntityDTO) {
         Gson gson = new GsonBuilder()
                 .setPrettyPrinting()
                 .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
                 .create();
 
-        return gson.toJson(resultEntity);
+        return gson.toJson(resultEntityDTO);
     }
 }
 

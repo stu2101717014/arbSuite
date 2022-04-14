@@ -8,7 +8,7 @@ public class TableTennisEventWrapperDTO {
 
     private TableTennisEventEntityShortDTO tableTennisEventEntityShortDTO;
 
-    private Map<String, TableTennisEventEntityDAO> eventEntityMap;
+    private Map<String, TableTennisEventEntityDTO> eventEntityMap;
 
     private Double arbitragePercentage;
 
@@ -24,11 +24,11 @@ public class TableTennisEventWrapperDTO {
         this.tableTennisEventEntityShortDTO = tableTennisEventEntityShortDTO;
     }
 
-    public Map<String, TableTennisEventEntityDAO> getEventEntityMap() {
+    public Map<String, TableTennisEventEntityDTO> getEventEntityMap() {
         return eventEntityMap;
     }
 
-    public void setEventEntityMap(Map<String, TableTennisEventEntityDAO> eventEntityMap) {
+    public void setEventEntityMap(Map<String, TableTennisEventEntityDTO> eventEntityMap) {
         this.eventEntityMap = eventEntityMap;
     }
 

@@ -1,7 +1,6 @@
 package com.example.bwinexperimental.services;
 
-
-import dtos.TableTennisEventEntity;
+import dtos.TableTennisEventEntityDTO;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
@@ -12,8 +11,8 @@ import java.util.regex.Pattern;
 @Service
 public class BwinDataNormalizationServiceImpl  {
 
-    public Set<TableTennisEventEntity> normalise(Map map) {
-        Set<TableTennisEventEntity> resultList = new HashSet<TableTennisEventEntity>();
+    public Set<TableTennisEventEntityDTO> normalise(Map map) {
+        Set<TableTennisEventEntityDTO> resultList = new HashSet<TableTennisEventEntityDTO>();
 
         if (map != null) {
             Map.Entry<String, Object> value = ((Map<String, Object>) map)
@@ -73,7 +72,7 @@ public class BwinDataNormalizationServiceImpl  {
 
                         if (oneOfThePlayersShortName.equals(player1ShortNameAsString)){
 
-                            TableTennisEventEntity tte = new TableTennisEventEntity();
+                            TableTennisEventEntityDTO tte = new TableTennisEventEntityDTO();
                             tte.setFirstPlayerName(player1NameAsString);
                             tte.setSecondPlayerName(player2NameAsString);
                             tte.setFirstPlayerWinningOdd(oneOfThePlayersOdd);
@@ -82,7 +81,7 @@ public class BwinDataNormalizationServiceImpl  {
                             resultList.add(tte);
 
                         }else {
-                            TableTennisEventEntity tte = new TableTennisEventEntity();
+                            TableTennisEventEntityDTO tte = new TableTennisEventEntityDTO();
                             tte.setFirstPlayerName(player2NameAsString);
                             tte.setSecondPlayerName(player1NameAsString);
                             tte.setFirstPlayerWinningOdd(oneOfThePlayersOdd);

@@ -1,5 +1,6 @@
 package com.example.ui.services;
 
+import com.example.ui.entities.helpers.TableTennisEventEntityDTO;
 import com.example.ui.entities.helpers.TableTennisEventWrapperDTO;
 import com.example.ui.entities.jpa.HistoricalTableTennisEventWrapperDAO;
 import com.example.ui.entities.jpa.TableTennisEventEntityDAO;
@@ -44,9 +45,9 @@ public class ArbitrageServiceImpl implements ArbitrageService {
 
     public void checkForArbitrage(List<TableTennisEventWrapperDTO> eventWrapperList) {
         for (TableTennisEventWrapperDTO ttew : eventWrapperList) {
-            Map<String, TableTennisEventEntityDAO> eventEntityMap = ttew.getEventEntityMap();
+            Map<String, TableTennisEventEntityDTO> eventEntityMap = ttew.getEventEntityMap();
 
-            List<Map.Entry<String, TableTennisEventEntityDAO>> entries = new ArrayList<>(eventEntityMap.entrySet());
+            List<Map.Entry<String, TableTennisEventEntityDTO>> entries = new ArrayList<>(eventEntityMap.entrySet());
             if (entries.size() >= 2) {
                 double firstOdd = entries.get(0).getValue().getFirstPlayerWinningOdd();
                 double secondOdd = entries.get(0).getValue().getSecondPlayerWinningOdd();

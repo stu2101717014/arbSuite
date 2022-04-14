@@ -1,7 +1,7 @@
 package com.example.williamhillexperimental.services;
 
-import dtos.ResultEntity;
-import dtos.TableTennisEventEntity;
+import dtos.ResultEntityDTO;
+import dtos.TableTennisEventEntityDTO;
 import io.webfolder.ui4j.api.browser.BrowserEngine;
 import io.webfolder.ui4j.api.browser.BrowserFactory;
 import io.webfolder.ui4j.api.browser.Page;
@@ -46,23 +46,22 @@ public class WilliamHillService {
 
     @Scheduled(fixedDelay = DELAY)
     public void getTableTennisData() {
-        ResultEntity resultEntity = new ResultEntity();
-        HashSet<TableTennisEventEntity> tableTennisEventEntities = new HashSet<>();
+        ResultEntityDTO resultEntityDTO = new ResultEntityDTO();
+        HashSet<TableTennisEventEntityDTO> tableTennisEventEntities = new HashSet<>();
 
-        HashSet<ResultEntity> resultEntityHashSet = new HashSet<>();
-        resultEntityHashSet.add(resultEntity);
+        HashSet<ResultEntityDTO> resultEntityDTOHashSet = new HashSet<>();
+        resultEntityDTOHashSet.add(resultEntityDTO);
 
         Date date = new Date(System.currentTimeMillis());
-        resultEntity.setTime(date);
+        resultEntityDTO.setTime(date);
 
         BrowserEngine browser = BrowserFactory.getWebKit();
 
-        this.dataExtraction(resultEntity, tableTennisEventEntities, resultEntityHashSet, browser);
+        this.dataExtraction(resultEntityDTO, tableTennisEventEntities, resultEntityDTOHashSet, browser);
 
-        String message = this.httpService.serializeResultEnt(resultEntity);
+        String message = this.httpService.serializeResultEnt(resultEntityDTO);
 
         rabbitTemplate.convertAndSend(binding.getExchange(), binding.getRoutingKey(), message);
-
     }
 
     public static double round(double value, int places) {
@@ -71,8 +70,8 @@ public class WilliamHillService {
         return bd.doubleValue();
     }
 
-    private void dataExtraction(ResultEntity resultEntity, HashSet<TableTennisEventEntity> tableTennisEventEntities, HashSet<ResultEntity> resultEntityHashSet, BrowserEngine browser) {
-        resultEntity.setPlatformName(PLATFORM_NAME);
+    private void dataExtraction(ResultEntityDTO resultEntityDTO, HashSet<TableTennisEventEntityDTO> tableTennisEventEntities, HashSet<ResultEntityDTO> resultEntityDTOHashSet, BrowserEngine browser) {
+        resultEntityDTO.setPlatformName(PLATFORM_NAME);
 
         try (Page page = browser.navigate(WILLIAM_HILL_TABLE_TENNIS_REQUEST_URL)) {
 
@@ -106,14 +105,14 @@ public class WilliamHillService {
                                     Double firstPlayerOdd = round(parseFraction(oddsList.get(0).getText().trim()) + 1, 2);
                                     Double secondPlayerOdd = round(parseFraction(oddsList.get(1).getText().trim()) + 1, 2);
 
-                                    TableTennisEventEntity tableTennisEventEntity = new TableTennisEventEntity();
+                                    TableTennisEventEntityDTO tableTennisEventEntity = new TableTennisEventEntityDTO();
                                     tableTennisEventEntity.setFirstPlayerName(firstPlayerName);
                                     tableTennisEventEntity.setFirstPlayerWinningOdd(firstPlayerOdd);
                                     tableTennisEventEntity.setSecondPlayerName(secondPlayerName);
                                     tableTennisEventEntity.setSecondPlayerWinningOdd(secondPlayerOdd);
                                     tableTennisEventEntity.setEventDate(eventDate);
 
-                                    tableTennisEventEntity.setResultEntity(resultEntityHashSet);
+                                    tableTennisEventEntity.setResultEntity(resultEntityDTOHashSet);
 
                                     tableTennisEventEntities.add(tableTennisEventEntity);
                                 }
@@ -121,17 +120,17 @@ public class WilliamHillService {
                         }
                     }
 
-                    resultEntity.setTableTennisEventEntitySet(tableTennisEventEntities);
+                    resultEntityDTO.setTableTennisEventEntitySet(tableTennisEventEntities);
 
 
                 } catch (Exception e) {
-                    resultEntity.setException(e);
+                    resultEntityDTO.setException(e);
                 }
 
             }
 
         } catch (Exception e) {
-            resultEntity.setException(e);
+            resultEntityDTO.setException(e);
         }
     }
 

@@ -64,12 +64,12 @@ public class TableTennisServiceImpl implements TableTennisService {
                     temporaryShort.setEventDate(tableTennisEventEntity.getEventDate());
 
                     if (resultMap.containsKey(temporaryShort)) {
-                        resultMap.get(temporaryShort).getEventEntityMap().put(re.getPlatformName(), tableTennisEventEntity);
+                        resultMap.get(temporaryShort).getEventEntityMap().put(re.getPlatformName(), remapDAOToDTO(tableTennisEventEntity));
                     } else {
                         TableTennisEventWrapperDTO tableTennisEventWrapperDTO = new TableTennisEventWrapperDTO();
                         tableTennisEventWrapperDTO.setTableTennisEventEntityShort(temporaryShort);
                         tableTennisEventWrapperDTO.setEventEntityMap(new HashMap<>());
-                        tableTennisEventWrapperDTO.getEventEntityMap().put(re.getPlatformName(), tableTennisEventEntity);
+                        tableTennisEventWrapperDTO.getEventEntityMap().put(re.getPlatformName(), remapDAOToDTO(tableTennisEventEntity));
                         resultMap.put(temporaryShort, tableTennisEventWrapperDTO);
                     }
                 }
@@ -93,12 +93,26 @@ public class TableTennisServiceImpl implements TableTennisService {
         postProcessTableTennisWrapperRepository.saveAndFlush(postProcessTableTennisWrapperDAO);
     }
 
-    public PostProcessTableTennisWrapperDAO getProcessedData(){
+    public PostProcessTableTennisWrapperDAO getProcessedData() {
         return this.postProcessTableTennisWrapperRepository.getLatestProcessedData();
     }
 
-    public List<String> getPlatformNames(){
+    public List<String> getPlatformNames() {
         return this.resultEntityRepository.getAllPlatformNames();
+    }
+
+
+    private TableTennisEventEntityDTO remapDAOToDTO(TableTennisEventEntityDAO tableTennisEventEntity) {
+        TableTennisEventEntityDTO tableTennisEventEntityDTO = new TableTennisEventEntityDTO();
+
+        tableTennisEventEntityDTO.setResultEntity(tableTennisEventEntity.getResultEntity());
+        tableTennisEventEntityDTO.setEventDate(tableTennisEventEntity.getEventDate());
+        tableTennisEventEntityDTO.setFirstPlayerName(tableTennisEventEntity.getFirstPlayerName());
+        tableTennisEventEntityDTO.setFirstPlayerWinningOdd(tableTennisEventEntity.getFirstPlayerWinningOdd());
+        tableTennisEventEntityDTO.setSecondPlayerName(tableTennisEventEntity.getSecondPlayerName());
+        tableTennisEventEntityDTO.setSecondPlayerWinningOdd(tableTennisEventEntity.getSecondPlayerWinningOdd());
+
+        return tableTennisEventEntityDTO;
     }
 }
 

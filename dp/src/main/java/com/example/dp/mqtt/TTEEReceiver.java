@@ -1,0 +1,41 @@
+package com.example.dp.mqtt;
+
+import com.example.dp.data.entities.ResultEntityDAO;
+import com.example.dp.services.interfaces.DataReceiverService;
+import com.google.gson.Gson;
+import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
+
+@Component
+public class TTEEReceiver {
+
+    public final Queue qu;
+
+    private final DataReceiverService dataReceiverService;
+
+
+    @Autowired
+    public TTEEReceiver(@Qualifier("tteeQueue")Queue qu, DataReceiverService dataReceiverService) {
+        this.qu = qu;
+        this.dataReceiverService = dataReceiverService;
+    }
+
+    @RabbitListener(queues = "#{tteeQueue.getName()}")
+    public void getMsg(final String resultEntAsString) {
+        try {
+            ResultEntityDAO resultEntity = new Gson().fromJson(resultEntAsString, ResultEntityDAO.class);
+
+            if(resultEntity != null && resultEntity.getTableTennisEventEntitySet() != null){
+                this.dataReceiverService.persistResultEntity(resultEntity);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+}
+

@@ -1,8 +1,7 @@
 package com.example.betwinnerexperimental.services;
 
-
-import dtos.ResultEntity;
-import dtos.TableTennisEventEntity;
+import dtos.ResultEntityDTO;
+import dtos.TableTennisEventEntityDTO;
 import io.webfolder.ui4j.api.browser.BrowserEngine;
 import io.webfolder.ui4j.api.browser.BrowserFactory;
 import io.webfolder.ui4j.api.browser.Page;
@@ -46,15 +45,15 @@ public class BetwinnerService {
 
     @Scheduled(fixedDelay = DELAY)
     public void getTableTennisData() {
-        ResultEntity resultEntity = new ResultEntity();
+        ResultEntityDTO resultEntityDTO = new ResultEntityDTO();
 
         try {
             Date date = new Date(System.currentTimeMillis());
-            resultEntity.setTime(date);
+            resultEntityDTO.setTime(date);
 
-            HashSet<TableTennisEventEntity> tableTennisEventEntities = new HashSet<>();
-            HashSet<ResultEntity> resultEntityHashSet = new HashSet<>();
-            resultEntityHashSet.add(resultEntity);
+            HashSet<TableTennisEventEntityDTO> tableTennisEventEntities = new HashSet<>();
+            HashSet<ResultEntityDTO> resultEntityDTOHashSet = new HashSet<>();
+            resultEntityDTOHashSet.add(resultEntityDTO);
 
             BrowserEngine browser = BrowserFactory.getWebKit();
 
@@ -97,30 +96,30 @@ public class BetwinnerService {
                             continue;
                         }
 
-                        TableTennisEventEntity tableTennisEvent = new TableTennisEventEntity();
+                        TableTennisEventEntityDTO tableTennisEvent = new TableTennisEventEntityDTO();
                         tableTennisEvent.setFirstPlayerName(playerNamesAsArray[1].trim());
                         tableTennisEvent.setSecondPlayerName(playerNamesAsArray[3].trim());
                         tableTennisEvent.setFirstPlayerWinningOdd(firstPlayerBet);
                         tableTennisEvent.setSecondPlayerWinningOdd(secondPlayerBet);
                         tableTennisEvent.setEventDate(eventDate);
 
-                        tableTennisEvent.setResultEntity(resultEntityHashSet);
+                        tableTennisEvent.setResultEntity(resultEntityDTOHashSet);
 
                         tableTennisEventEntities.add(tableTennisEvent);
                     }
                 }
             }
 
-            resultEntity.setTableTennisEventEntitySet(tableTennisEventEntities);
+            resultEntityDTO.setTableTennisEventEntitySet(tableTennisEventEntities);
 
-            resultEntity.setPlatformName(PLATFORM_NAME);
+            resultEntityDTO.setPlatformName(PLATFORM_NAME);
 
-            String message = this.httpService.serializeResultEnt(resultEntity);
+            String message = this.httpService.serializeResultEnt(resultEntityDTO);
 
             rabbitTemplate.convertAndSend(binding.getExchange(), binding.getRoutingKey(), message);
 
         } catch (Exception e) {
-            resultEntity.setException(e);
+            resultEntityDTO.setException(e);
         }
     }
 }

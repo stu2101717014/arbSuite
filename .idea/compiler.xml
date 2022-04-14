@@ -12,6 +12,8 @@
         <module name="williamhill" />
         <module name="betwinner" />
         <module name="dtos" />
+        <module name="hs" />
+        <module name="dp" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -26,7 +28,9 @@
       <module name="bwin" target="8" />
       <module name="bwin-experimental" target="1.8" />
       <module name="commons" target="8" />
+      <module name="dp" target="1.8" />
       <module name="dtos" target="8" />
+      <module name="hs" target="1.8" />
       <module name="mybookie" target="1.8" />
       <module name="ui" target="1.8" />
       <module name="williamhill" target="8" />
@@ -43,7 +47,9 @@
       <module name="betwinner-experimental" options="-parameters" />
       <module name="bwin" options="-parameters" />
       <module name="bwin-experimental" options="-parameters" />
+      <module name="dp" options="-parameters" />
       <module name="dtos" options="-parameters" />
+      <module name="hs" options="-parameters" />
       <module name="mybookie" options="-parameters" />
       <module name="ui" options="-parameters" />
       <module name="williamhill" options="-parameters" />
