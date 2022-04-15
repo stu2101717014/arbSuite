@@ -63,7 +63,6 @@ public class MQTTConfig {
     }
 
 
-
     @Value("${htte.rabbitmq.queue}")
     private String htteQueueName;
 
@@ -86,5 +85,56 @@ public class MQTTConfig {
     @Bean
     Binding htteQueueBinding(@Qualifier("htteQueue") final Queue htteQu, @Qualifier("htteTopicExchange") final TopicExchange htteTopicExchange) {
         return BindingBuilder.bind(htteQu).to(htteTopicExchange).with(htteRoutingKey);
+    }
+
+
+
+    @Value("${nsu.rabbitmq.queue}")
+    private String nsuQueueName;
+
+    @Value("${nsu.rabbitmq.exchange}")
+    private String nsuExchange;
+
+    @Value("${nsu.rabbitmq.routingkey}")
+    private String nsuRoutingKey;
+
+    @Bean
+    Queue nsuQueue() {
+        return new Queue(nsuQueueName, Boolean.FALSE);
+    }
+
+    @Bean
+    TopicExchange nsuTopicExchange() {
+        return new TopicExchange(nsuExchange);
+    }
+
+    @Bean
+    Binding nsuQueueBinding(@Qualifier("nsuQueue") final Queue nsuQu, @Qualifier("nsuTopicExchange") final TopicExchange nsuTopicExchange) {
+        return BindingBuilder.bind(nsuQu).to(nsuTopicExchange).with(nsuRoutingKey);
+    }
+
+
+    @Value("${nsd.rabbitmq.queue}")
+    private String nsdQueueName;
+
+    @Value("${nsd.rabbitmq.exchange}")
+    private String nsdExchange;
+
+    @Value("${nsd.rabbitmq.routingkey}")
+    private String nsdRoutingKey;
+
+    @Bean
+    Queue nsdQueue() {
+        return new Queue(nsdQueueName, Boolean.FALSE);
+    }
+
+    @Bean
+    TopicExchange nsdTopicExchange() {
+        return new TopicExchange(nsdExchange);
+    }
+
+    @Bean
+    Binding nsdQueueBinding(@Qualifier("nsdQueue") final Queue nsdQu, @Qualifier("nsdTopicExchange") final TopicExchange nsdTopicExchange) {
+        return BindingBuilder.bind(nsdQu).to(nsdTopicExchange).with(nsdRoutingKey);
     }
 }

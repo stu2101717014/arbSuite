@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class NamesSimilaritiesServiceImpl implements NamesSimilaritiesService {
@@ -21,16 +22,18 @@ public class NamesSimilaritiesServiceImpl implements NamesSimilaritiesService {
         this.namesSimilaritiesRepository = namesSimilaritiesRepository;
     }
 
-    public List<NamesSimilaritiesDAO> getAll(){
+    public List<NamesSimilaritiesDAO> getAll() {
         return namesSimilaritiesRepository.findAll();
     }
 
-    public NamesSimilaritiesDAO saveAndFlushNameSimilarity(NamesSimilaritiesDAO namesSimilaritiesDAO){
-        return this.namesSimilaritiesRepository.saveAndFlush(namesSimilaritiesDAO);
+    public List<NamesSimilaritiesDAO> saveAllAndFlushNamesSimilarities(List<NamesSimilaritiesDAO> namesSimilaritiesDAOList) {
+        this.namesSimilaritiesRepository.saveAllAndFlush(namesSimilaritiesDAOList);
+        return namesSimilaritiesRepository.findAll();
     }
 
-    public void deleteNameSimilarity(NamesSimilaritiesDAO namesSimilaritiesDAO){
-        namesSimilaritiesRepository.delete(namesSimilaritiesDAO);
+    public List<NamesSimilaritiesDAO> deleteNamesSimilarities(List<NamesSimilaritiesDAO> namesSimilaritiesDAOList) {
+        namesSimilaritiesRepository.deleteAllByIdInBatch(namesSimilaritiesDAOList.stream().map(NamesSimilaritiesDAO::getId).collect(Collectors.toList()));
+        return namesSimilaritiesRepository.findAll();
     }
 
     public void remapNamesSimilarities(List<ResultEntityDTO> resultEntityDAOList, List<NamesSimilaritiesDAO> namesSimilaritiesDAOList) {

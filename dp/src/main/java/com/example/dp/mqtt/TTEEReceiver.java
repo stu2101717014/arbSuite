@@ -1,6 +1,7 @@
 package com.example.dp.mqtt;
 
 import com.example.dp.data.entities.ResultEntityDAO;
+import com.example.dp.services.helpers.GsonService;
 import com.example.dp.services.interfaces.DataReceiverService;
 import com.google.gson.Gson;
 import org.springframework.amqp.core.Queue;
@@ -16,19 +17,21 @@ public class TTEEReceiver {
 
     private final DataReceiverService dataReceiverService;
 
+    private final GsonService gsonService;
 
     @Autowired
-    public TTEEReceiver(@Qualifier("tteeQueue")Queue qu, DataReceiverService dataReceiverService) {
+    public TTEEReceiver(@Qualifier("tteeQueue") Queue qu, DataReceiverService dataReceiverService, GsonService gsonService) {
         this.qu = qu;
         this.dataReceiverService = dataReceiverService;
+        this.gsonService = gsonService;
     }
 
     @RabbitListener(queues = "#{tteeQueue.getName()}")
     public void getMsg(final String resultEntAsString) {
         try {
-            ResultEntityDAO resultEntity = new Gson().fromJson(resultEntAsString, ResultEntityDAO.class);
+            ResultEntityDAO resultEntity = this.gsonService.getGson().fromJson(resultEntAsString, ResultEntityDAO.class);
 
-            if(resultEntity != null && resultEntity.getTableTennisEventEntitySet() != null){
+            if (resultEntity != null && resultEntity.getTableTennisEventEntitySet() != null) {
                 this.dataReceiverService.persistResultEntity(resultEntity);
             }
 

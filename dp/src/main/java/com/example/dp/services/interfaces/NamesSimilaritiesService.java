@@ -9,9 +9,9 @@ public interface NamesSimilaritiesService {
 
     List<NamesSimilaritiesDTO> getAll();
 
-    NamesSimilaritiesDTO saveAndFlushNameSimilarity(NamesSimilaritiesDTO namesSimilaritiesDAO);
+    List<NamesSimilaritiesDTO> saveAndFlushNamesSimilarities(List<NamesSimilaritiesDTO> namesSimilaritiesDTOList);
 
-    void deleteNameSimilarity(NamesSimilaritiesDTO namesSimilaritiesDAO);
+    List<NamesSimilaritiesDTO> deleteNamesSimilarities(List<NamesSimilaritiesDTO> namesSimilaritiesDTOList);
 
     void remapNamesSimilarities(List<ResultEntityDTO> resultEntityDTODAOList, List<NamesSimilaritiesDTO> namesSimilaritiesDAOList);
 }

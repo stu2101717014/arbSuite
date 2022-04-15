@@ -37,7 +37,7 @@ public class HtteReceiver {
         Type listType = new TypeToken<List<HistoricalTableTennisEventWrapperDAO>>() {
         }.getType();
 
-        List<TableTennisEventWrapperDTO> dtos = new Gson().fromJson(message, listType);
+        List<TableTennisEventWrapperDTO> dtos = this.gsonService.getGson().fromJson(message, listType);
 
         this.historicalService.persistPositiveArbitrageRecords(dtos);
 

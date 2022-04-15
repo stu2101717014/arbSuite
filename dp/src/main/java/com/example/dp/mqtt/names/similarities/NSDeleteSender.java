@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class NSGetAllSender {
+public class NSDeleteSender {
 
     private final RabbitTemplate rabbitTemplate;
 
@@ -23,19 +23,21 @@ public class NSGetAllSender {
     private final GsonService gsonService;
 
     @Autowired
-    public NSGetAllSender(RabbitTemplate rabbitTemplate,
-                          @Qualifier("nsQueueBinding") Binding binding,
+    public NSDeleteSender(RabbitTemplate rabbitTemplate,
+                          @Qualifier("nsdQueueBinding") Binding binding,
                           GsonService gsonService) {
         this.rabbitTemplate = rabbitTemplate;
         this.binding = binding;
         this.gsonService = gsonService;
     }
 
-    public List<NamesSimilaritiesDTO> getAllNamesSimilarities() {
-        // The message sent doesn't matter(empty message produces exception)
-        Object getNamesSimilarities = rabbitTemplate.convertSendAndReceive(binding.getExchange(), binding.getRoutingKey(), "getAllNamesSimilarities");
-        if (getNamesSimilarities != null) {
-            String s = getNamesSimilarities.toString();
+    public List<NamesSimilaritiesDTO> deleteNamesSimilarities(List<NamesSimilaritiesDTO> namesSimilaritiesDTOList) {
+
+        String message = this.gsonService.getGson().toJson(namesSimilaritiesDTOList);
+        Object namesSimilarities = rabbitTemplate.convertSendAndReceive(binding.getExchange(), binding.getRoutingKey(), message);
+
+        if (namesSimilarities != null) {
+            String s = namesSimilarities.toString();
 
             Type listType = new TypeToken<ArrayList<NamesSimilaritiesDTO>>() {
             }.getType();
@@ -43,5 +45,4 @@ public class NSGetAllSender {
         }
         return new ArrayList<>();
     }
-
 }

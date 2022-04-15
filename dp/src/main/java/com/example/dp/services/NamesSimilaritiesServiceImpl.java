@@ -1,18 +1,15 @@
 package com.example.dp.services;
 
-import com.example.dp.mqtt.NSSender;
+import com.example.dp.mqtt.names.similarities.NSDeleteSender;
+import com.example.dp.mqtt.names.similarities.NSGetAllSender;
+import com.example.dp.mqtt.names.similarities.NSUpdateSender;
 import com.example.dp.services.interfaces.NamesSimilaritiesService;
 import dtos.NamesSimilaritiesDTO;
 import dtos.ResultEntityDTO;
 import dtos.TableTennisEventEntityDTO;
-import org.springframework.amqp.core.Binding;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -20,26 +17,33 @@ import java.util.Set;
 @Service
 public class NamesSimilaritiesServiceImpl implements NamesSimilaritiesService {
 
-    private final NSSender nsSender;
+    private final NSGetAllSender nsGetAllSender;
+
+    private final NSUpdateSender nsUpdateSender;
+
+    private final NSDeleteSender nsDeleteSender;
 
     @Autowired
-    public NamesSimilaritiesServiceImpl(NSSender nsSender) {
-        this.nsSender = nsSender;
+    public NamesSimilaritiesServiceImpl(
+            NSGetAllSender nsGetAllSender,
+            NSUpdateSender nsUpdateSender,
+            NSDeleteSender nsDeleteSender) {
+        this.nsGetAllSender = nsGetAllSender;
+        this.nsUpdateSender = nsUpdateSender;
+        this.nsDeleteSender = nsDeleteSender;
     }
 
 
     public List<NamesSimilaritiesDTO> getAll() {
-        return nsSender.getAllNamesSimilarities();
+        return this.nsGetAllSender.getAllNamesSimilarities();
     }
 
-    public NamesSimilaritiesDTO saveAndFlushNameSimilarity(NamesSimilaritiesDTO namesSimilaritiesDAO) {
-
-        throw new NotImplementedException();
+    public List<NamesSimilaritiesDTO> saveAndFlushNamesSimilarities(List<NamesSimilaritiesDTO> namesSimilaritiesDTOList) {
+        return this.nsUpdateSender.saveNamesSimilarities(namesSimilaritiesDTOList);
     }
 
-    public void deleteNameSimilarity(NamesSimilaritiesDTO namesSimilaritiesDAO) {
-
-        throw new NotImplementedException();
+    public List<NamesSimilaritiesDTO> deleteNamesSimilarities(List<NamesSimilaritiesDTO> namesSimilaritiesDTOList) {
+        return this.nsDeleteSender.deleteNamesSimilarities(namesSimilaritiesDTOList);
     }
 
     public void remapNamesSimilarities(List<ResultEntityDTO> resultEntityDTODAOList, List<NamesSimilaritiesDTO> namesSimilaritiesDAOList) {

@@ -19,6 +19,9 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @EnableScheduling
@@ -56,6 +59,7 @@ public class ScheduleDataProcessor {
 
     @Scheduled(fixedDelay = PROCESS_TABLE_TENNIS_EVENT_DELAY)
     public void processTableTennisData() {
+
         List<String> allPlatformNames = this.resultEntityRepository.getAllPlatformNames();
 
         List<ResultEntityDTO> resultEntityDTOList = new ArrayList<>();
