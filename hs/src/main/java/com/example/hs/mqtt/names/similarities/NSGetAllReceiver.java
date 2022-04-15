@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class NSReceiver {
+public class NSGetAllReceiver {
 
     private final Queue qu;
 
@@ -21,7 +21,7 @@ public class NSReceiver {
     private final GsonService gsonService;
 
     @Autowired
-    public NSReceiver(@Qualifier("nsQueue") Queue qu, NamesSimilaritiesService namesSimilaritiesService, GsonService gsonService) {
+    public NSGetAllReceiver(@Qualifier("nsQueue") Queue qu, NamesSimilaritiesService namesSimilaritiesService, GsonService gsonService) {
         this.qu = qu;
         this.namesSimilaritiesService = namesSimilaritiesService;
         this.gsonService = gsonService;
