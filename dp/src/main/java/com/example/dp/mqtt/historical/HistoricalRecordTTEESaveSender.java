@@ -1,4 +1,4 @@
-package com.example.dp.mqtt;
+package com.example.dp.mqtt.historical;
 
 import com.example.dp.services.helpers.GsonService;
 import dtos.HistoricalTableTennisEventWrapperDTO;
@@ -12,7 +12,7 @@ import java.util.List;
 
 
 @Component
-public class HTTESender {
+public class HistoricalRecordTTEESaveSender {
     private final RabbitTemplate rabbitTemplate;
 
     private final Binding binding;
@@ -20,9 +20,9 @@ public class HTTESender {
     private final GsonService gsonService;
 
     @Autowired
-    public HTTESender(RabbitTemplate rabbitTemplate,
-                      @Qualifier("htteQueueBinding") Binding binding,
-                      GsonService gsonService) {
+    public HistoricalRecordTTEESaveSender(RabbitTemplate rabbitTemplate,
+                                          @Qualifier("htteQueueBinding") Binding binding,
+                                          GsonService gsonService) {
         this.rabbitTemplate = rabbitTemplate;
         this.binding = binding;
         this.gsonService = gsonService;

@@ -1,6 +1,6 @@
 package com.example.dp.services;
 
-import com.example.dp.mqtt.HTTESender;
+import com.example.dp.mqtt.historical.HistoricalRecordTTEESaveSender;
 import com.example.dp.services.helpers.GsonService;
 import com.example.dp.services.interfaces.ArbitrageService;
 import com.google.gson.Gson;
@@ -9,7 +9,6 @@ import dtos.TableTennisEventEntityDTO;
 import dtos.TableTennisEventWrapperDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -21,12 +20,12 @@ public class ArbitrageServiceImpl implements ArbitrageService {
 
     private final GsonService gsonService;
 
-    private final HTTESender htteSender;
+    private final HistoricalRecordTTEESaveSender historicalRecordTTEESaveSender;
 
     @Autowired
-    public ArbitrageServiceImpl(GsonService gsonService, HTTESender htteSender) {
+    public ArbitrageServiceImpl(GsonService gsonService, HistoricalRecordTTEESaveSender historicalRecordTTEESaveSender) {
         this.gsonService = gsonService;
-        this.htteSender = htteSender;
+        this.historicalRecordTTEESaveSender = historicalRecordTTEESaveSender;
     }
 
     public List<Double> calculateBets(double investment, List<Double> odds, double arbitragePercentage) {
@@ -68,32 +67,6 @@ public class ArbitrageServiceImpl implements ArbitrageService {
         }
     }
 
-    @Override
-    public void persistPositiveArbitrageRecords(List<TableTennisEventWrapperDTO> eventWrapperList) {
 
-        Gson gson = gsonService.getGson();
-        List<HistoricalTableTennisEventWrapperDTO> forPersist = new ArrayList<>();
-        try {
-            for (TableTennisEventWrapperDTO eventWrapperDTO : eventWrapperList) {
-
-                if (eventWrapperDTO.getArbitragePercentage() != null && eventWrapperDTO.getArbitragePercentage() < 1d) {
-                    String currentEventWrapperAsJsonString = gson.toJson(eventWrapperDTO);
-                    Date detected = new Date(System.currentTimeMillis());
-
-                    HistoricalTableTennisEventWrapperDTO historicalTableTennisEventWrapperDAO = new HistoricalTableTennisEventWrapperDTO();
-                    historicalTableTennisEventWrapperDAO.setTime(detected);
-                    historicalTableTennisEventWrapperDAO.setHistoricalRecordEventWrapperAsJson(currentEventWrapperAsJsonString);
-
-                    forPersist.add(historicalTableTennisEventWrapperDAO);
-                }
-            }
-            if (forPersist.size() > 0) {
-                this.htteSender.sendHistoricalRecords(forPersist);
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 }
 

@@ -1,7 +1,8 @@
-package com.example.dp.mqtt.names.similarities;
+package com.example.dp.mqtt.historical;
 
 import com.example.dp.services.helpers.GsonService;
 import com.google.gson.reflect.TypeToken;
+import dtos.HistoricalTableTennisEventWrapperDTO;
 import dtos.NamesSimilaritiesDTO;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -13,10 +14,8 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @Component
-public class NSUpdateSender {
-
+public class HistoricalRecordTTEEGetAllSender {
     private final RabbitTemplate rabbitTemplate;
 
     private final Binding binding;
@@ -24,26 +23,26 @@ public class NSUpdateSender {
     private final GsonService gsonService;
 
     @Autowired
-    public NSUpdateSender(RabbitTemplate rabbitTemplate,
-                          @Qualifier("nsuQueueBinding") Binding binding,
-                          GsonService gsonService) {
+    public HistoricalRecordTTEEGetAllSender(RabbitTemplate rabbitTemplate,
+                                            @Qualifier("htteGetAllQueueBinding") Binding binding,
+                                            GsonService gsonService) {
         this.rabbitTemplate = rabbitTemplate;
         this.binding = binding;
         this.gsonService = gsonService;
     }
 
-    public List<NamesSimilaritiesDTO> saveNamesSimilarities(List<NamesSimilaritiesDTO> namesSimilaritiesDTOList) {
+    public List<HistoricalTableTennisEventWrapperDTO> getAllHistoricalRecords() {
 
-        String message = this.gsonService.getGson().toJson(namesSimilaritiesDTOList);
-        Object updatedNamesSimilarities = rabbitTemplate.convertSendAndReceive(binding.getExchange(), binding.getRoutingKey(), message);
-        if (updatedNamesSimilarities != null) {
-            String s = updatedNamesSimilarities.toString();
+        // The message sent doesn't matter(empty message produces exception)
+        Object getAllHistoricalRecords = rabbitTemplate.convertSendAndReceive(binding.getExchange(), binding.getRoutingKey(), "getAllHistoricalRecords");
 
-            Type listType = new TypeToken<ArrayList<NamesSimilaritiesDTO>>() {
+        if (getAllHistoricalRecords != null) {
+            String s = getAllHistoricalRecords.toString();
+
+            Type listType = new TypeToken<ArrayList<HistoricalTableTennisEventWrapperDTO>>() {
             }.getType();
             return gsonService.getGson().fromJson(s, listType);
         }
         return new ArrayList<>();
-
     }
 }

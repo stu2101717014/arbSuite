@@ -107,4 +107,28 @@ public class MQTTConfig {
     Binding nsdQueueBinding(@Qualifier("nsdQueue") final Queue nsdQu, @Qualifier("nsdTopicExchange") final TopicExchange nsdTopicExchange) {
         return BindingBuilder.bind(nsdQu).to(nsdTopicExchange).with(nsdRoutingKey);
     }
+
+    @Value("${htteGetAll.rabbitmq.queue}")
+    private String htteGetAllQueueName;
+
+    @Value("${htteGetAll.rabbitmq.exchange}")
+    private String htteGetAllExchange;
+
+    @Value("${htteGetAll.rabbitmq.routingkey}")
+    private String htteGetAllRoutingKey;
+
+    @Bean
+    Queue htteGetAllQueue() {
+        return new Queue(htteGetAllQueueName, Boolean.FALSE);
+    }
+
+    @Bean
+    TopicExchange htteGetAllTopicExchange() {
+        return new TopicExchange(htteGetAllExchange);
+    }
+
+    @Bean
+    Binding htteGetAllQueueBinding(@Qualifier("htteGetAllQueue") final Queue htteGetAllQu, @Qualifier("htteGetAllTopicExchange") final TopicExchange htteGetAllTopicExchange) {
+        return BindingBuilder.bind(htteGetAllQu).to(htteGetAllTopicExchange).with(htteGetAllRoutingKey);
+    }
 }

@@ -5,8 +5,10 @@ import com.example.dp.data.entities.ResultEntityDAO;
 import com.example.dp.data.repositories.PostProcessTableTennisWrapperRepository;
 import com.example.dp.data.repositories.ResultEntityRepository;
 import com.example.dp.services.interfaces.ArbitrageService;
+import com.example.dp.services.interfaces.HistoricalService;
 import com.example.dp.services.interfaces.NamesSimilaritiesService;
 import com.example.dp.services.interfaces.TableTennisService;
+import dtos.HistoricalTableTennisEventWrapperDTO;
 import dtos.NamesSimilaritiesDTO;
 import dtos.ResultEntityDTO;
 import dtos.TableTennisEventWrapperDTO;
@@ -43,18 +45,22 @@ public class ScheduleDataProcessor {
 
     private final ModelMapper modelMapper;
 
+    private final HistoricalService historicalService;
+
     @Autowired
     public ScheduleDataProcessor(ResultEntityRepository resultEntityRepository,
                                  TableTennisService tableTennisService,
                                  NamesSimilaritiesService namesSimilaritiesService,
                                  ArbitrageService arbitrageService,
-                                 PostProcessTableTennisWrapperRepository postProcessTableTennisWrapperRepository) {
+                                 PostProcessTableTennisWrapperRepository postProcessTableTennisWrapperRepository,
+                                 HistoricalService historicalService) {
         this.resultEntityRepository = resultEntityRepository;
         this.tableTennisService = tableTennisService;
         this.namesSimilaritiesService = namesSimilaritiesService;
         this.arbitrageService = arbitrageService;
         this.postProcessTableTennisWrapperRepository = postProcessTableTennisWrapperRepository;
         this.modelMapper = new ModelMapper();
+        this.historicalService = historicalService;
     }
 
     @Scheduled(fixedDelay = PROCESS_TABLE_TENNIS_EVENT_DELAY)
@@ -75,7 +81,7 @@ public class ScheduleDataProcessor {
 
         this.arbitrageService.checkForArbitrage(eventWrapperList);
 
-        this.arbitrageService.persistPositiveArbitrageRecords(eventWrapperList);
+        this.historicalService.persistPositiveArbitrageRecords(eventWrapperList);
 
         this.tableTennisService.persistPostProcessedData(eventWrapperList);
 

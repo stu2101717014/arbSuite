@@ -1,12 +1,14 @@
-package com.example.hs.services;
+package com.example.dp.services.interfaces;
 
-import com.example.hs.data.HistoricalTableTennisEventWrapperDAO;
+import dtos.HistoricalTableTennisEventWrapperDTO;
 import dtos.TableTennisEventWrapperDTO;
 
 import java.util.List;
 
 public interface HistoricalService {
+
+    List<HistoricalTableTennisEventWrapperDTO> getAllHistoricalRecords();
+
     void persistPositiveArbitrageRecords(List<TableTennisEventWrapperDTO> eventWrapperList);
 
-    List<HistoricalTableTennisEventWrapperDAO> getAll();
 }

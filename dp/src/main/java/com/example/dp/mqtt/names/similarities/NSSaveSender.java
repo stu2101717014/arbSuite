@@ -13,8 +13,9 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+
 @Component
-public class NSGetAllSender {
+public class NSSaveSender {
 
     private final RabbitTemplate rabbitTemplate;
 
@@ -23,26 +24,26 @@ public class NSGetAllSender {
     private final GsonService gsonService;
 
     @Autowired
-    public NSGetAllSender(RabbitTemplate rabbitTemplate,
-                          @Qualifier("nsQueueBinding") Binding binding,
-                          GsonService gsonService) {
+    public NSSaveSender(RabbitTemplate rabbitTemplate,
+                        @Qualifier("nsuQueueBinding") Binding binding,
+                        GsonService gsonService) {
         this.rabbitTemplate = rabbitTemplate;
         this.binding = binding;
         this.gsonService = gsonService;
     }
 
-    public List<NamesSimilaritiesDTO> getAllNamesSimilarities() {
+    public List<NamesSimilaritiesDTO> saveNamesSimilarities(List<NamesSimilaritiesDTO> namesSimilaritiesDTOList) {
 
-        // The message sent doesn't matter(empty message produces exception)
-        Object getNamesSimilarities = rabbitTemplate.convertSendAndReceive(binding.getExchange(), binding.getRoutingKey(), "getAllNamesSimilarities");
-        if (getNamesSimilarities != null) {
-            String s = getNamesSimilarities.toString();
+        String message = this.gsonService.getGson().toJson(namesSimilaritiesDTOList);
+        Object updatedNamesSimilarities = rabbitTemplate.convertSendAndReceive(binding.getExchange(), binding.getRoutingKey(), message);
+        if (updatedNamesSimilarities != null) {
+            String s = updatedNamesSimilarities.toString();
 
             Type listType = new TypeToken<ArrayList<NamesSimilaritiesDTO>>() {
             }.getType();
             return gsonService.getGson().fromJson(s, listType);
         }
         return new ArrayList<>();
-    }
 
+    }
 }

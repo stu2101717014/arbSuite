@@ -10,6 +10,5 @@ public interface ArbitrageService {
 
     void checkForArbitrage(List<TableTennisEventWrapperDTO> eventWrapperList);
 
-    void persistPositiveArbitrageRecords(List<TableTennisEventWrapperDTO> eventWrapperList);
 }
 

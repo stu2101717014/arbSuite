@@ -3,7 +3,6 @@ package com.example.hs.services;
 import com.example.hs.data.HistoricalTableTennisEventWrapperDAO;
 import com.example.hs.data.HistoricalTableTennisEventWrapperRepository;
 import com.google.gson.reflect.TypeToken;
-import com.sun.org.apache.xpath.internal.operations.Mod;
 import dtos.TableTennisEventWrapperDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,5 +31,10 @@ public class HistoricalServiceImpl implements HistoricalService {
         }.getType();
         List<HistoricalTableTennisEventWrapperDAO> resList = modelMapper.map(eventWrapperList, listType);
         this.historicalTableTennisEventWrapperRepository.saveAllAndFlush(resList);
+    }
+
+    @Override
+    public List<HistoricalTableTennisEventWrapperDAO> getAll() {
+        return this.historicalTableTennisEventWrapperRepository.findAll();
     }
 }

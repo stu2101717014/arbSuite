@@ -2,7 +2,7 @@ package com.example.dp.services;
 
 import com.example.dp.mqtt.names.similarities.NSDeleteSender;
 import com.example.dp.mqtt.names.similarities.NSGetAllSender;
-import com.example.dp.mqtt.names.similarities.NSUpdateSender;
+import com.example.dp.mqtt.names.similarities.NSSaveSender;
 import com.example.dp.services.interfaces.NamesSimilaritiesService;
 import dtos.NamesSimilaritiesDTO;
 import dtos.ResultEntityDTO;
@@ -19,17 +19,17 @@ public class NamesSimilaritiesServiceImpl implements NamesSimilaritiesService {
 
     private final NSGetAllSender nsGetAllSender;
 
-    private final NSUpdateSender nsUpdateSender;
+    private final NSSaveSender nsSaveSender;
 
     private final NSDeleteSender nsDeleteSender;
 
     @Autowired
     public NamesSimilaritiesServiceImpl(
             NSGetAllSender nsGetAllSender,
-            NSUpdateSender nsUpdateSender,
+            NSSaveSender nsSaveSender,
             NSDeleteSender nsDeleteSender) {
         this.nsGetAllSender = nsGetAllSender;
-        this.nsUpdateSender = nsUpdateSender;
+        this.nsSaveSender = nsSaveSender;
         this.nsDeleteSender = nsDeleteSender;
     }
 
@@ -39,7 +39,7 @@ public class NamesSimilaritiesServiceImpl implements NamesSimilaritiesService {
     }
 
     public List<NamesSimilaritiesDTO> saveAndFlushNamesSimilarities(List<NamesSimilaritiesDTO> namesSimilaritiesDTOList) {
-        return this.nsUpdateSender.saveNamesSimilarities(namesSimilaritiesDTOList);
+        return this.nsSaveSender.saveNamesSimilarities(namesSimilaritiesDTOList);
     }
 
     public List<NamesSimilaritiesDTO> deleteNamesSimilarities(List<NamesSimilaritiesDTO> namesSimilaritiesDTOList) {
