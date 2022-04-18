@@ -1,6 +1,5 @@
 package com.example.ui.views.names.similarities;
 
-import com.example.ui.entities.jpa.NamesSimilaritiesDAO;
 import com.example.ui.services.interfaces.NamesSimilaritiesService;
 import com.example.ui.views.MainLayout;
 import com.example.ui.security.utils.SecuredByRole;
@@ -11,6 +10,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.selection.SelectionEvent;
 import com.vaadin.flow.router.Route;
+import dtos.NamesSimilaritiesDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -22,11 +22,11 @@ import org.springframework.stereotype.Component;
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class NamesSimilaritiesView extends VerticalLayout {
 
-    private final Grid<NamesSimilaritiesDAO> grid = new Grid<>(NamesSimilaritiesDAO.class, true);
+    private final Grid<NamesSimilaritiesDTO> grid = new Grid<>(NamesSimilaritiesDTO.class, true);
 
     private final NamesSimilaritiesFormView namesSimilaritiesFormView;
 
-    private NamesSimilaritiesDAO selected;
+    private NamesSimilaritiesDTO selected;
 
     public NamesSimilaritiesView(@Autowired NamesSimilaritiesService namesSimilaritiesService) {
 
@@ -65,9 +65,9 @@ public class NamesSimilaritiesView extends VerticalLayout {
         grid.setHeightFull();
     }
 
-    private void onNameSimilaritiesSelected(SelectionEvent<Grid<NamesSimilaritiesDAO>, NamesSimilaritiesDAO> event) {
+    private void onNameSimilaritiesSelected(SelectionEvent<Grid<NamesSimilaritiesDTO>, NamesSimilaritiesDTO> event) {
         if (event.getFirstSelectedItem().isPresent()){
-            NamesSimilaritiesDAO firstSelectedItem = event.getFirstSelectedItem().get();
+            NamesSimilaritiesDTO firstSelectedItem = event.getFirstSelectedItem().get();
 
             this.namesSimilaritiesFormView.setNamesSimilarities(firstSelectedItem);
 

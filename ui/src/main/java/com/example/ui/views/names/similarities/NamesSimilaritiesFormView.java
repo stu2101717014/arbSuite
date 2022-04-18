@@ -1,12 +1,12 @@
 package com.example.ui.views.names.similarities;
 
-import com.example.ui.entities.jpa.NamesSimilaritiesDAO;
 import com.example.ui.services.interfaces.NamesSimilaritiesService;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import dtos.NamesSimilaritiesDTO;
 
 public class NamesSimilaritiesFormView extends VerticalLayout {
 
@@ -14,12 +14,12 @@ public class NamesSimilaritiesFormView extends VerticalLayout {
     private final TextField platformSpecificPlayerName;
     private final TextField universalPlayerName;
 
-    private NamesSimilaritiesDAO selected;
+    private NamesSimilaritiesDTO selected;
     private final NamesSimilaritiesService namesSimilaritiesService;
 
-    private final Grid<NamesSimilaritiesDAO> gridRef;
+    private final Grid<NamesSimilaritiesDTO> gridRef;
 
-    public NamesSimilaritiesFormView(NamesSimilaritiesService namesSimilaritiesService, Grid<NamesSimilaritiesDAO> grid) {
+    public NamesSimilaritiesFormView(NamesSimilaritiesService namesSimilaritiesService, Grid<NamesSimilaritiesDTO> grid) {
         this.gridRef = grid;
         this.namesSimilaritiesService =  namesSimilaritiesService;
         platformName = new TextField();
@@ -43,7 +43,7 @@ public class NamesSimilaritiesFormView extends VerticalLayout {
         this.setVisible(false);
     }
 
-    public void setNamesSimilarities(NamesSimilaritiesDAO namesSimilaritiesDAO){
+    public void setNamesSimilarities(NamesSimilaritiesDTO namesSimilaritiesDAO){
         if (namesSimilaritiesDAO == null){
             return;
         }
@@ -62,7 +62,7 @@ public class NamesSimilaritiesFormView extends VerticalLayout {
     }
 
     private void saveButtonClicked(ClickEvent<Button> buttonClickEvent) {
-        NamesSimilaritiesDAO namesSimilaritiesDAO = new NamesSimilaritiesDAO();
+        NamesSimilaritiesDTO namesSimilaritiesDAO = new NamesSimilaritiesDTO();
         namesSimilaritiesDAO.setPlatformSpecificPlayerName(platformSpecificPlayerName.getValue());
         namesSimilaritiesDAO.setPlatformName(platformName.getValue());
         namesSimilaritiesDAO.setUniversalPlayerName(universalPlayerName.getValue());

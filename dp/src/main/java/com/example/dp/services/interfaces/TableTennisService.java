@@ -7,13 +7,12 @@ import dtos.TableTennisEventWrapperDTO;
 import java.util.List;
 
 public interface TableTennisService {
-    List<TableTennisEventWrapperDTO> sortReshapedData(List<TableTennisEventWrapperDTO> tableTennisEventWrapperDTOList);
 
     List<TableTennisEventWrapperDTO> reshapeTableTennisEventsData(List<ResultEntityDTO> resultEntityDAOList);
 
     void persistPostProcessedData(List<TableTennisEventWrapperDTO> eventWrapperList);
 
-    PostProcessTableTennisWrapperDAO getProcessedData();
+    PostProcessTableTennisWrapperDAO getLatestData();
 
     List<String> getPlatformNames();
 }

@@ -17,10 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
-
-import static java.util.Comparator.naturalOrder;
-import static java.util.Comparator.nullsLast;
 
 @Service
 public class TableTennisServiceImpl implements TableTennisService {
@@ -45,13 +41,6 @@ public class TableTennisServiceImpl implements TableTennisService {
         this.modelMapper = new ModelMapper();
     }
 
-
-    public List<TableTennisEventWrapperDTO> sortReshapedData(List<TableTennisEventWrapperDTO> tableTennisEventWrapperDTOList) {
-        return tableTennisEventWrapperDTOList.stream().sorted(nullsLast(Comparator.comparing(e -> e.getTableTennisEventEntityShort().getEventDate(), nullsLast(naturalOrder()))))
-                .sorted(nullsLast(Comparator.comparing(e -> e.getTableTennisEventEntityShort().getSecondPlayer(), nullsLast(naturalOrder()))))
-                .sorted(nullsLast(Comparator.comparing(e -> e.getTableTennisEventEntityShort().getFirstPlayer(), nullsLast(naturalOrder()))))
-                .collect(Collectors.toList());
-    }
 
     public List<TableTennisEventWrapperDTO> reshapeTableTennisEventsData(List<ResultEntityDTO> resultEntityDAOList) {
 
@@ -101,7 +90,8 @@ public class TableTennisServiceImpl implements TableTennisService {
         postProcessTableTennisWrapperRepository.saveAndFlush(postProcessTableTennisWrapperDAO);
     }
 
-    public PostProcessTableTennisWrapperDAO getProcessedData() {
+    @Override
+    public PostProcessTableTennisWrapperDAO getLatestData() {
         return this.postProcessTableTennisWrapperRepository.getLatestProcessedData();
     }
 

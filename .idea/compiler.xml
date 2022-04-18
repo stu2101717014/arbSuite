@@ -7,12 +7,12 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="bets22" />
-        <module name="ui" />
         <module name="bwin" />
+        <module name="UI" />
         <module name="williamhill" />
         <module name="betwinner" />
-        <module name="dtos" />
         <module name="hs" />
+        <module name="dtos" />
         <module name="dp" />
       </profile>
     </annotationProcessing>
@@ -28,17 +28,19 @@
       <module name="bwin" target="8" />
       <module name="bwin-experimental" target="1.8" />
       <module name="commons" target="8" />
-      <module name="dp" target="1.8" />
+      <module name="dp" target="8" />
       <module name="dtos" target="8" />
-      <module name="hs" target="1.8" />
+      <module name="hs" target="8" />
       <module name="mybookie" target="1.8" />
       <module name="ui" target="1.8" />
+      <module name="UI" target="8" />
       <module name="williamhill" target="8" />
       <module name="williamhill-experimental" target="1.8" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="UI" options="-parameters" />
       <module name="arbUI" options="-parameters" />
       <module name="bet365" options="-parameters" />
       <module name="bets22" options="-parameters" />

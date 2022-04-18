@@ -13,11 +13,13 @@
         <option value="$PROJECT_DIR$/bets22/pom.xml" />
         <option value="$PROJECT_DIR$/bwin/pom.xml" />
         <option value="$PROJECT_DIR$/arbParentProject/pom.xml" />
-        <option value="$PROJECT_DIR$/dtos/pom.xml" />
         <option value="$PROJECT_DIR$/dp/pom.xml" />
         <option value="$PROJECT_DIR$/hs/pom.xml" />
       </list>
     </option>
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK" />
+  <component name="ProjectType">
+    <option name="id" value="jpab" />
+  </component>
 </project>

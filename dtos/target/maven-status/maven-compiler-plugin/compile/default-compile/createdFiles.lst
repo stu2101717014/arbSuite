@@ -1,0 +1,7 @@
+dtos\ResultEntityDTO.class
+dtos\PostProcessTableTennisWrapperDTO.class
+dtos\TableTennisEventEntityShortDTO.class
+dtos\TableTennisEventWrapperDTO.class
+dtos\TableTennisEventEntityDTO.class
+dtos\HistoricalTableTennisEventWrapperDTO.class
+dtos\NamesSimilaritiesDTO.class

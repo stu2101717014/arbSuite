@@ -3,7 +3,6 @@ package com.example.dp.mqtt.historical;
 import com.example.dp.services.helpers.GsonService;
 import com.google.gson.reflect.TypeToken;
 import dtos.HistoricalTableTennisEventWrapperDTO;
-import dtos.NamesSimilaritiesDTO;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;

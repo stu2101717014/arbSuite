@@ -1,13 +1,12 @@
 package com.example.ui.views.table.tennis;
 
-import com.example.ui.entities.helpers.TableTennisEventEntityDTO;
-import com.example.ui.entities.helpers.TableTennisEventWrapperDTO;
-import com.example.ui.entities.jpa.TableTennisEventEntityDAO;
 import com.example.ui.services.interfaces.ArbitrageService;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import dtos.TableTennisEventEntityDTO;
+import dtos.TableTennisEventWrapperDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
