@@ -12,6 +12,6 @@ public interface NamesSimilaritiesService {
 
     NamesSimilaritiesDTO saveAndFlushNameSimilarity(NamesSimilaritiesDTO namesSimilaritiesDAO);
 
-    void deleteNameSimilarity(NamesSimilaritiesDTO namesSimilaritiesDAO);
+    List<NamesSimilaritiesDTO> deleteNameSimilarity(NamesSimilaritiesDTO namesSimilaritiesDTO);
 
 }

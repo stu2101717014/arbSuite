@@ -210,4 +210,77 @@ public class MQTTConfig {
     Binding getPlatformNamesQueueBinding(@Qualifier("getPlatformNamesQueue") final Queue getPlatformNamesQu, @Qualifier("getPlatformNamesTopicExchange") final TopicExchange getPlatformNamesTopicExchange) {
         return BindingBuilder.bind(getPlatformNamesQu).to(getPlatformNamesTopicExchange).with(getPlatformNamesRoutingKey);
     }
+
+    @Value("${nsUIGetAll.rabbitmq.queue}")
+    private String nsUIGetAllQueueName;
+
+    @Value("${nsUIGetAll.rabbitmq.exchange}")
+    private String nsUIGetAllExchange;
+
+    @Value("${nsUIGetAll.rabbitmq.routingkey}")
+    private String nsUIGetAllRoutingKey;
+
+    @Bean
+    Queue nsUIGetAllQueue() {
+        return new Queue(nsUIGetAllQueueName, Boolean.FALSE);
+    }
+
+    @Bean
+    TopicExchange nsUIGetAllTopicExchange() {
+        return new TopicExchange(nsUIGetAllExchange);
+    }
+
+    @Bean
+    Binding nsUIGetAllQueueBinding(@Qualifier("nsUIGetAllQueue") final Queue nsUIGetAllQu, @Qualifier("nsUIGetAllTopicExchange") final TopicExchange nsUIGetAllTopicExchange) {
+        return BindingBuilder.bind(nsUIGetAllQu).to(nsUIGetAllTopicExchange).with(nsUIGetAllRoutingKey);
+    }
+
+
+    @Value("${nsUISaveAndFlush.rabbitmq.queue}")
+    private String nsUISaveAndFlushQueueName;
+
+    @Value("${nsUISaveAndFlush.rabbitmq.exchange}")
+    private String nsUISaveAndFlushExchange;
+
+    @Value("${nsUISaveAndFlush.rabbitmq.routingkey}")
+    private String nsUISaveAndFlushRoutingKey;
+
+    @Bean
+    Queue nsUISaveAndFlushQueue() {
+        return new Queue(nsUISaveAndFlushQueueName, Boolean.FALSE);
+    }
+
+    @Bean
+    TopicExchange nsUISaveAndFlushTopicExchange() {
+        return new TopicExchange(nsUISaveAndFlushExchange);
+    }
+
+    @Bean
+    Binding nsUISaveAndFlushQueueBinding(@Qualifier("nsUISaveAndFlushQueue") final Queue nsUISaveAndFlushQu, @Qualifier("nsUISaveAndFlushTopicExchange") final TopicExchange nsUISaveAndFlushTopicExchange) {
+        return BindingBuilder.bind(nsUISaveAndFlushQu).to(nsUISaveAndFlushTopicExchange).with(nsUISaveAndFlushRoutingKey);
+    }
+
+    @Value("${nsUIDelete.rabbitmq.queue}")
+    private String nsUIDeleteQueueName;
+
+    @Value("${nsUIDelete.rabbitmq.exchange}")
+    private String nsUIDeleteExchange;
+
+    @Value("${nsUIDelete.rabbitmq.routingkey}")
+    private String nsUIDeleteRoutingKey;
+
+    @Bean
+    Queue nsUIDeleteQueue() {
+        return new Queue(nsUIDeleteQueueName, Boolean.FALSE);
+    }
+
+    @Bean
+    TopicExchange nsUIDeleteTopicExchange() {
+        return new TopicExchange(nsUIDeleteExchange);
+    }
+
+    @Bean
+    Binding nsUIDeleteQueueBinding(@Qualifier("nsUIDeleteQueue") final Queue nsUIDeleteQu, @Qualifier("nsUIDeleteTopicExchange") final TopicExchange nsUIDeleteTopicExchange) {
+        return BindingBuilder.bind(nsUIDeleteQu).to(nsUIDeleteTopicExchange).with(nsUIDeleteRoutingKey);
+    }
 }

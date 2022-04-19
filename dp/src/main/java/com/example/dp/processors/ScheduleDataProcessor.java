@@ -31,7 +31,7 @@ public class ScheduleDataProcessor {
 
     private final static long PROCESS_TABLE_TENNIS_EVENT_DELAY = 40000L;
 
-    private final static long CLEANUP_OLD_DATA_OFFSET = 600000L;
+    private final static long CLEANUP_OLD_DATA_OFFSET = 120000L;
 
     private final ResultEntityRepository resultEntityRepository;
 
