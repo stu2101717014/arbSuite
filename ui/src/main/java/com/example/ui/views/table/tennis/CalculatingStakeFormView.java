@@ -1,12 +1,12 @@
 package com.example.ui.views.table.tennis;
 
-import com.example.ui.entities.helpers.TableTennisEventWrapperDTO;
-import com.example.ui.entities.jpa.TableTennisEventEntityDAO;
 import com.example.ui.services.interfaces.ArbitrageService;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import dtos.TableTennisEventEntityDTO;
+import dtos.TableTennisEventWrapperDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -78,16 +78,16 @@ public class CalculatingStakeFormView extends VerticalLayout {
 
         List<Double> winningOdds = new ArrayList<Double>();
 
-        Optional<TableTennisEventEntityDAO> firstPlayerTTEE = selected.getEventEntityMap().values().stream()
-                .max(Comparator.comparing(TableTennisEventEntityDAO::getFirstPlayerWinningOdd));
+        Optional<TableTennisEventEntityDTO> firstPlayerTTEE = selected.getEventEntityMap().values().stream()
+                .max(Comparator.comparing(TableTennisEventEntityDTO::getFirstPlayerWinningOdd));
         firstPlayerTTEE.ifPresent(ttee -> {
             this.playerOneOdd.setText("Highest odd : " + ttee.getFirstPlayerWinningOdd().toString());
             winningOdds.add(ttee.getFirstPlayerWinningOdd());
         });
 
 
-        Optional<TableTennisEventEntityDAO> secondPlayerTTEE = selected.getEventEntityMap().values().stream()
-                .max(Comparator.comparing(TableTennisEventEntityDAO::getSecondPlayerWinningOdd));
+        Optional<TableTennisEventEntityDTO> secondPlayerTTEE = selected.getEventEntityMap().values().stream()
+                .max(Comparator.comparing(TableTennisEventEntityDTO::getSecondPlayerWinningOdd));
         secondPlayerTTEE.ifPresent(ttee -> {
             this.playerTwoOdd.setText("Highest odd : " + ttee.getSecondPlayerWinningOdd().toString());
             winningOdds.add(ttee.getSecondPlayerWinningOdd());

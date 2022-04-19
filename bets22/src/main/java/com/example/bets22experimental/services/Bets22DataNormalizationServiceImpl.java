@@ -1,6 +1,6 @@
 package com.example.bets22experimental.services;
 
-import dtos.TableTennisEventEntity;
+import dtos.TableTennisEventEntityDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -8,8 +8,8 @@ import java.util.*;
 @Service
 public class Bets22DataNormalizationServiceImpl {
 
-    public Set<TableTennisEventEntity> normalise(Map map) {
-        Set<TableTennisEventEntity> resultList = new HashSet<TableTennisEventEntity>();
+    public Set<TableTennisEventEntityDTO> normalise(Map map) {
+        Set<TableTennisEventEntityDTO> resultList = new HashSet<TableTennisEventEntityDTO>();
 
         if (map != null) {
             Map.Entry<String, Object> value = ((Map<String, Object>) map)
@@ -39,7 +39,7 @@ public class Bets22DataNormalizationServiceImpl {
                         Double firstPlayerWinningOdd = firstPlayerWinningOddMap.get("C");
                         Double secondPlayerWinningOdd = secondPlayerWinningOddMap.get("C");
 
-                        TableTennisEventEntity tblTnsEventEnt = new TableTennisEventEntity();
+                        TableTennisEventEntityDTO tblTnsEventEnt = new TableTennisEventEntityDTO();
                         tblTnsEventEnt.setFirstPlayerName(firstPlayer);
                         tblTnsEventEnt.setSecondPlayerName(secondPlayer);
                         tblTnsEventEnt.setFirstPlayerWinningOdd(firstPlayerWinningOdd);

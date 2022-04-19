@@ -1,7 +1,7 @@
 package com.example.bets22experimental.services;
 
-import dtos.ResultEntity;
-import dtos.TableTennisEventEntity;
+import dtos.ResultEntityDTO;
+import dtos.TableTennisEventEntityDTO;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,32 +42,32 @@ public class Bets22Service {
 
     @Scheduled(fixedDelay = DELAY)
     public void getTableTennisData() {
-        ResultEntity resultEntity = new ResultEntity();
+        ResultEntityDTO resultEntityDTO = new ResultEntityDTO();
 
         try {
 
             Date date = new Date(System.currentTimeMillis());
-            resultEntity.setTime(date);
+            resultEntityDTO.setTime(date);
 
             String responseAsString = this.httpService.getResponseAsString(BETS_22_TABLE_TENNIS_REQUEST_URL);
             Map map = this.httpService.mapJSONToMap(responseAsString);
-            Set<TableTennisEventEntity> normaliseTableTennisEvents = this.dataNormalizationService.normalise(map);
+            Set<TableTennisEventEntityDTO> normaliseTableTennisEvents = this.dataNormalizationService.normalise(map);
 
-            resultEntity.setTableTennisEventEntitySet(normaliseTableTennisEvents);
+            resultEntityDTO.setTableTennisEventEntitySet(normaliseTableTennisEvents);
 
-            Set<ResultEntity> ents = new HashSet<>();
-            ents.add(resultEntity);
+            Set<ResultEntityDTO> ents = new HashSet<>();
+            ents.add(resultEntityDTO);
 
-            resultEntity.getTableTennisEventEntitySet().forEach(tte -> tte.setResultEntity(ents));
+            resultEntityDTO.getTableTennisEventEntitySet().forEach(tte -> tte.setResultEntity(ents));
 
-            resultEntity.setPlatformName(PLATFORM_NAME);
+            resultEntityDTO.setPlatformName(PLATFORM_NAME);
 
-            String message = this.httpService.serializeResultEnt(resultEntity);
+            String message = this.httpService.serializeResultEnt(resultEntityDTO);
 
             rabbitTemplate.convertAndSend(binding.getExchange(), binding.getRoutingKey(), message);
 
         } catch (Exception e) {
-            resultEntity.setException(e);
+            resultEntityDTO.setException(e);
         }
     }
 }

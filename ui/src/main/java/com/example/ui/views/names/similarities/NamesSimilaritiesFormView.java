@@ -1,12 +1,14 @@
 package com.example.ui.views.names.similarities;
 
-import com.example.ui.entities.jpa.NamesSimilaritiesDAO;
 import com.example.ui.services.interfaces.NamesSimilaritiesService;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import dtos.NamesSimilaritiesDTO;
+
+import java.util.List;
 
 public class NamesSimilaritiesFormView extends VerticalLayout {
 
@@ -14,14 +16,14 @@ public class NamesSimilaritiesFormView extends VerticalLayout {
     private final TextField platformSpecificPlayerName;
     private final TextField universalPlayerName;
 
-    private NamesSimilaritiesDAO selected;
+    private NamesSimilaritiesDTO selected;
     private final NamesSimilaritiesService namesSimilaritiesService;
 
-    private final Grid<NamesSimilaritiesDAO> gridRef;
+    private final Grid<NamesSimilaritiesDTO> gridRef;
 
-    public NamesSimilaritiesFormView(NamesSimilaritiesService namesSimilaritiesService, Grid<NamesSimilaritiesDAO> grid) {
+    public NamesSimilaritiesFormView(NamesSimilaritiesService namesSimilaritiesService, Grid<NamesSimilaritiesDTO> grid) {
         this.gridRef = grid;
-        this.namesSimilaritiesService =  namesSimilaritiesService;
+        this.namesSimilaritiesService = namesSimilaritiesService;
         platformName = new TextField();
         platformName.setLabel("Platform name");
 
@@ -43,8 +45,8 @@ public class NamesSimilaritiesFormView extends VerticalLayout {
         this.setVisible(false);
     }
 
-    public void setNamesSimilarities(NamesSimilaritiesDAO namesSimilaritiesDAO){
-        if (namesSimilaritiesDAO == null){
+    public void setNamesSimilarities(NamesSimilaritiesDTO namesSimilaritiesDAO) {
+        if (namesSimilaritiesDAO == null) {
             return;
         }
         this.selected = namesSimilaritiesDAO;
@@ -54,20 +56,19 @@ public class NamesSimilaritiesFormView extends VerticalLayout {
     }
 
     private void deleteButtonClicked(ClickEvent<Button> buttonClickEvent) {
-        if (selected != null){
-            namesSimilaritiesService.deleteNameSimilarity(selected);
+        if (selected != null) {
+            List<NamesSimilaritiesDTO> namesSimilaritiesDTOList = namesSimilaritiesService.deleteNameSimilarity(selected);
+            this.refreshGridData(namesSimilaritiesDTOList);
         }
         this.setVisible(false);
-        this.refreshGridData();
     }
 
     private void saveButtonClicked(ClickEvent<Button> buttonClickEvent) {
-        NamesSimilaritiesDAO namesSimilaritiesDAO = new NamesSimilaritiesDAO();
-        namesSimilaritiesDAO.setPlatformSpecificPlayerName(platformSpecificPlayerName.getValue());
-        namesSimilaritiesDAO.setPlatformName(platformName.getValue());
-        namesSimilaritiesDAO.setUniversalPlayerName(universalPlayerName.getValue());
+        this.selected.setPlatformSpecificPlayerName(platformSpecificPlayerName.getValue());
+        this.selected.setPlatformName(platformName.getValue());
+        this.selected.setUniversalPlayerName(universalPlayerName.getValue());
 
-        namesSimilaritiesService.saveAndFlushNameSimilarity(namesSimilaritiesDAO);
+        namesSimilaritiesService.saveAndFlushNameSimilarity(this.selected);
         this.setVisible(false);
         this.refreshGridData();
     }
@@ -78,8 +79,13 @@ public class NamesSimilaritiesFormView extends VerticalLayout {
         universalPlayerName.setValue("");
     }
 
-    private void refreshGridData(){
+    private void refreshGridData() {
         this.gridRef.setItems(this.namesSimilaritiesService.getAll());
+        this.gridRef.getDataProvider().refreshAll();
+    }
+
+    private void refreshGridData(List<NamesSimilaritiesDTO> updated) {
+        this.gridRef.setItems(updated);
         this.gridRef.getDataProvider().refreshAll();
     }
 }

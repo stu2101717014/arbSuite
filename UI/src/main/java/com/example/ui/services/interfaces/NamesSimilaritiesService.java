@@ -1,17 +1,17 @@
 package com.example.ui.services.interfaces;
 
-import com.example.ui.entities.jpa.NamesSimilaritiesDAO;
-import com.example.ui.entities.jpa.ResultEntityDAO;
+
+
+import dtos.NamesSimilaritiesDTO;
 
 import java.util.List;
 
 public interface NamesSimilaritiesService {
 
-    List<NamesSimilaritiesDAO> getAll();
+    List<NamesSimilaritiesDTO> getAll();
 
-    NamesSimilaritiesDAO saveAndFlushNameSimilarity(NamesSimilaritiesDAO namesSimilaritiesDAO);
+    NamesSimilaritiesDTO saveAndFlushNameSimilarity(NamesSimilaritiesDTO namesSimilaritiesDAO);
 
-    void deleteNameSimilarity(NamesSimilaritiesDAO namesSimilaritiesDAO);
+    List<NamesSimilaritiesDTO> deleteNameSimilarity(NamesSimilaritiesDTO namesSimilaritiesDTO);
 
-    void remapNamesSimilarities(List<ResultEntityDAO> resultEntityDAOList, List<NamesSimilaritiesDAO> namesSimilaritiesDAOList);
 }

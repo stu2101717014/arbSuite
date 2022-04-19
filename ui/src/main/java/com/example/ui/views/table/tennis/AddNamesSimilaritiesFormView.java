@@ -1,11 +1,11 @@
 package com.example.ui.views.table.tennis;
 
-import com.example.ui.entities.jpa.NamesSimilaritiesDAO;
 import com.example.ui.services.interfaces.NamesSimilaritiesService;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import dtos.NamesSimilaritiesDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -49,7 +49,7 @@ public class AddNamesSimilaritiesFormView extends VerticalLayout {
         String playerUniversalNameAsString = playerUniversalName.getValue();
         String platformNameAsString = platformName.getValue();
 
-        NamesSimilaritiesDAO namesSimilaritiesDAO = new NamesSimilaritiesDAO();
+        NamesSimilaritiesDTO namesSimilaritiesDAO = new NamesSimilaritiesDTO();
         namesSimilaritiesDAO.setUniversalPlayerName(playerUniversalNameAsString);
         namesSimilaritiesDAO.setPlatformName(platformNameAsString);
         namesSimilaritiesDAO.setPlatformSpecificPlayerName(playerPlatformSpecificNameAsString);

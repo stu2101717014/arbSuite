@@ -1,63 +1,57 @@
 package com.example.ui.services;
 
-import com.example.ui.entities.jpa.NamesSimilaritiesDAO;
-import com.example.ui.entities.jpa.ResultEntityDAO;
-import com.example.ui.entities.jpa.TableTennisEventEntityDAO;
-import com.example.ui.repos.NamesSimilaritiesRepository;
+
+import com.example.ui.mqtt.NamesSimilaritiesDeleteSender;
+import com.example.ui.mqtt.NamesSimilaritiesGetAllSender;
+import com.example.ui.mqtt.NamesSimilaritiesSaveAndFlushSender;
 import com.example.ui.services.interfaces.NamesSimilaritiesService;
+import dtos.NamesSimilaritiesDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
+import java.util.Optional;
 
 @Service
 public class NamesSimilaritiesServiceImpl implements NamesSimilaritiesService {
 
-    private final NamesSimilaritiesRepository namesSimilaritiesRepository;
+    private final NamesSimilaritiesGetAllSender namesSimilaritiesGetAllSender;
+
+    private final NamesSimilaritiesSaveAndFlushSender namesSimilaritiesSaveAndFlushSender;
+
+    private final NamesSimilaritiesDeleteSender namesSimilaritiesDeleteSender;
 
     @Autowired
-    public NamesSimilaritiesServiceImpl(NamesSimilaritiesRepository namesSimilaritiesRepository) {
-        this.namesSimilaritiesRepository = namesSimilaritiesRepository;
+    public NamesSimilaritiesServiceImpl(NamesSimilaritiesGetAllSender namesSimilaritiesGetAllSender,
+                                        NamesSimilaritiesSaveAndFlushSender namesSimilaritiesSaveAndFlushSender,
+                                        NamesSimilaritiesDeleteSender namesSimilaritiesDeleteSender) {
+        this.namesSimilaritiesGetAllSender = namesSimilaritiesGetAllSender;
+        this.namesSimilaritiesSaveAndFlushSender = namesSimilaritiesSaveAndFlushSender;
+        this.namesSimilaritiesDeleteSender = namesSimilaritiesDeleteSender;
     }
 
-    public List<NamesSimilaritiesDAO> getAll(){
-        return namesSimilaritiesRepository.findAll();
+    public List<NamesSimilaritiesDTO> getAll() {
+        List<NamesSimilaritiesDTO> allNamesSimilarities = this.namesSimilaritiesGetAllSender.getAllNamesSimilarities();
+        return allNamesSimilarities;
     }
 
-    public NamesSimilaritiesDAO saveAndFlushNameSimilarity(NamesSimilaritiesDAO namesSimilaritiesDAO){
-        return this.namesSimilaritiesRepository.saveAndFlush(namesSimilaritiesDAO);
-    }
-
-    public void deleteNameSimilarity(NamesSimilaritiesDAO namesSimilaritiesDAO){
-        namesSimilaritiesRepository.delete(namesSimilaritiesDAO);
-    }
-
-    public void remapNamesSimilarities(List<ResultEntityDAO> resultEntityDAOList, List<NamesSimilaritiesDAO> namesSimilaritiesDAOList) {
-
-        HashMap<String, HashMap<String, NamesSimilaritiesDAO>> helperMap = new HashMap<>();
-
-        for (NamesSimilaritiesDAO namesSimilarity : namesSimilaritiesDAOList) {
-            if (!helperMap.containsKey(namesSimilarity.getPlatformName())) {
-                helperMap.put(namesSimilarity.getPlatformName(), new HashMap<String, NamesSimilaritiesDAO>());
-            }
-            helperMap.get(namesSimilarity.getPlatformName()).put(namesSimilarity.getPlatformSpecificPlayerName(), namesSimilarity);
+    public NamesSimilaritiesDTO saveAndFlushNameSimilarity(NamesSimilaritiesDTO namesSimilaritiesDTO) {
+        List<NamesSimilaritiesDTO> namesSimilaritiesDTOList = new ArrayList<>();
+        namesSimilaritiesDTOList.add(namesSimilaritiesDTO);
+        List<NamesSimilaritiesDTO> resultList = this.namesSimilaritiesSaveAndFlushSender.saveAndFlushNamesSimilarities(namesSimilaritiesDTOList);
+        Optional<NamesSimilaritiesDTO> any = resultList.stream().findAny();
+        if (any.isPresent()) {
+            return any.get();
         }
+        return new NamesSimilaritiesDTO();
+    }
 
-        for (ResultEntityDAO resultEntity : resultEntityDAOList) {
-            Set<TableTennisEventEntityDAO> tableTennisEventEntitySet = resultEntity.getTableTennisEventEntitySet();
-            for (TableTennisEventEntityDAO ttee : tableTennisEventEntitySet) {
-                if (helperMap.containsKey(resultEntity.getPlatformName()) && helperMap.get(resultEntity.getPlatformName()).containsKey(ttee.getFirstPlayerName())) {
-                    NamesSimilaritiesDAO forReplace = helperMap.get(resultEntity.getPlatformName()).get(ttee.getFirstPlayerName());
-                    ttee.setFirstPlayerName(forReplace.getUniversalPlayerName());
-                }
-                if (helperMap.containsKey(resultEntity.getPlatformName()) && helperMap.get(resultEntity.getPlatformName()).containsKey(ttee.getSecondPlayerName())) {
-                    NamesSimilaritiesDAO forReplace = helperMap.get(resultEntity.getPlatformName()).get(ttee.getSecondPlayerName());
-                    ttee.setSecondPlayerName(forReplace.getUniversalPlayerName());
-                }
-            }
-        }
+    public List<NamesSimilaritiesDTO> deleteNameSimilarity(NamesSimilaritiesDTO namesSimilaritiesDTO) {
+        List<NamesSimilaritiesDTO> list = new ArrayList<>();
+        list.add(namesSimilaritiesDTO);
+        return this.namesSimilaritiesDeleteSender.deleteNamesSimilarities(list);
     }
 
 }

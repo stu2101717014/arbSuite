@@ -1,8 +1,5 @@
 package com.example.ui.views.table.tennis;
 
-import com.example.ui.entities.helpers.TableTennisEventWrapperDTO;
-import com.example.ui.entities.jpa.PostProcessTableTennisWrapperDAO;
-import com.example.ui.services.interfaces.NamesSimilaritiesService;
 import com.example.ui.services.interfaces.TableTennisService;
 import com.example.ui.views.MainLayout;
 import com.example.ui.security.utils.SecuredByRole;
@@ -16,6 +13,9 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 
+
+import dtos.PostProcessTableTennisWrapperDTO;
+import dtos.TableTennisEventWrapperDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -77,7 +77,7 @@ public class ListTableTennisEventsView extends VerticalLayout {
     }
 
     private List<TableTennisEventWrapperDTO> getTableTennisProcessedData(TableTennisService tableTennisService) {
-        PostProcessTableTennisWrapperDAO processedData = tableTennisService.getProcessedData();
+        PostProcessTableTennisWrapperDTO processedData = tableTennisService.getProcessedData();
 
         List<TableTennisEventWrapperDTO> tableTennisEvents = new Gson().fromJson(processedData.getResultAsJson(),
                 new TypeToken<ArrayList<TableTennisEventWrapperDTO>>() {

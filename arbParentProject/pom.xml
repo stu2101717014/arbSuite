@@ -26,6 +26,9 @@
         <module>../bets22</module>
         <module>../williamhill</module>
         <module>../bwin</module>
+        <module>../dp</module>
+        <module>../hs</module>
+        <module>../ui</module>
     </modules>
 
     <build>

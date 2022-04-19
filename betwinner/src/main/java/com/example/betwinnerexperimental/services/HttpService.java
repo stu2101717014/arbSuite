@@ -1,7 +1,7 @@
 package com.example.betwinnerexperimental.services;
 
 import com.google.gson.*;
-import dtos.ResultEntity;
+import dtos.ResultEntityDTO;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Type;
@@ -11,13 +11,13 @@ import java.time.format.DateTimeFormatter;
 @Service
 public class HttpService  {
 
-    public String serializeResultEnt(ResultEntity resultEntity) {
+    public String serializeResultEnt(ResultEntityDTO resultEntityDTO) {
         Gson gson = new GsonBuilder()
                 .setPrettyPrinting()
                 .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
                 .create();
 
-        return gson.toJson(resultEntity);
+        return gson.toJson(resultEntityDTO);
     }
 }
 
