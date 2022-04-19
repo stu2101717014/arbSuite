@@ -46,8 +46,10 @@ public class WilliamHillService {
 
     @Scheduled(fixedDelay = DELAY)
     public void getTableTennisData() {
+
         ResultEntityDTO resultEntityDTO = new ResultEntityDTO();
         HashSet<TableTennisEventEntityDTO> tableTennisEventEntities = new HashSet<>();
+
 
         HashSet<ResultEntityDTO> resultEntityDTOHashSet = new HashSet<>();
         resultEntityDTOHashSet.add(resultEntityDTO);
@@ -124,7 +126,9 @@ public class WilliamHillService {
 
 
                 } catch (Exception e) {
+
                     resultEntityDTO.setException(e);
+
                 }
 
             }
