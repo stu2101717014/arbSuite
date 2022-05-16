@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/ui/UI.iml" filepath="$PROJECT_DIR$/ui/UI.iml" />
+      <module fileurl="file://$PROJECT_DIR$/UI/UI.iml" filepath="$PROJECT_DIR$/UI/UI.iml" />
       <module fileurl="file://$PROJECT_DIR$/arbParentProject/arbParentProject.iml" filepath="$PROJECT_DIR$/arbParentProject/arbParentProject.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/arbitrage betting suite.iml" filepath="$PROJECT_DIR$/.idea/arbitrage betting suite.iml" />
       <module fileurl="file://$PROJECT_DIR$/bets22/bets22.iml" filepath="$PROJECT_DIR$/bets22/bets22.iml" />

@@ -7,12 +7,12 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="bets22" />
-        <module name="bwin" />
         <module name="UI" />
+        <module name="bwin" />
         <module name="williamhill" />
         <module name="betwinner" />
-        <module name="hs" />
         <module name="dtos" />
+        <module name="hs" />
         <module name="dp" />
       </profile>
     </annotationProcessing>
