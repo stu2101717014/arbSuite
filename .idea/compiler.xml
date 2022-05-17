@@ -6,6 +6,8 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="palmsbet" />
+        <module name="betano" />
         <module name="bets22" />
         <module name="UI" />
         <module name="bwin" />
@@ -21,6 +23,7 @@
       <module name="arbUI" target="1.8" />
       <module name="bet354Core" target="8" />
       <module name="bet365" target="1.8" />
+      <module name="betano" target="1.8" />
       <module name="bets22" target="8" />
       <module name="bets22experimental" target="1.8" />
       <module name="betwinner" target="8" />
@@ -32,6 +35,7 @@
       <module name="dtos" target="8" />
       <module name="hs" target="8" />
       <module name="mybookie" target="1.8" />
+      <module name="palmsbet" target="8" />
       <module name="ui" target="1.8" />
       <module name="UI" target="8" />
       <module name="williamhill" target="8" />
@@ -43,6 +47,7 @@
       <module name="UI" options="-parameters" />
       <module name="arbUI" options="-parameters" />
       <module name="bet365" options="-parameters" />
+      <module name="betano" options="-parameters" />
       <module name="bets22" options="-parameters" />
       <module name="bets22experimental" options="-parameters" />
       <module name="betwinner" options="-parameters" />
@@ -53,6 +58,7 @@
       <module name="dtos" options="-parameters" />
       <module name="hs" options="-parameters" />
       <module name="mybookie" options="-parameters" />
+      <module name="palmsbet" options="-parameters" />
       <module name="ui" options="-parameters" />
       <module name="williamhill" options="-parameters" />
       <module name="williamhill-experimental" options="-parameters" />
