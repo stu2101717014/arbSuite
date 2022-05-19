@@ -5,15 +5,19 @@ import com.example.ui.views.MainLayout;
 import com.example.ui.security.utils.SecuredByRole;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
 
 
+import dtos.MetricsDTO;
 import dtos.PostProcessTableTennisWrapperDTO;
 import dtos.TableTennisEventWrapperDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,9 +76,28 @@ public class ListTableTennisEventsView extends VerticalLayout {
         Button showAddNewNamesSimilarities = new Button("Add Name Similarity");
         showAddNewNamesSimilarities.addClickListener(e -> addNamesSimilaritiesFormView.setVisible(true));
 
-        addAndExpand(new HorizontalLayout(showAddNewNamesSimilarities, showStakesCalculator), content);
+        addAndExpand(new HorizontalLayout(showAddNewNamesSimilarities, showStakesCalculator), content, getMetrics());
         setHeightFull();
+
+
+
     }
+
+    private VerticalLayout getMetrics(){
+        MetricsDTO metrics = this.tableTennisService.getMetrics();
+        VerticalLayout verticalLayout = new VerticalLayout();
+        Label reshapeMetricLabel = new Label("Reshape data time : " + metrics.getDataReshapeTimeComplexity());
+        Label remapNamesMetricLabel =  new Label("Remap names time : " + metrics.getNameSimilaritiesRemapTimeComplexity());
+        verticalLayout.add(remapNamesMetricLabel);
+        verticalLayout.add(reshapeMetricLabel);
+
+        verticalLayout.getElement().getStyle().set("position","absolute");
+        verticalLayout.getElement().getStyle().set("bottom",20+"px");
+        verticalLayout.getElement().getStyle().set("left",20+"px");
+
+        return verticalLayout;
+    }
+
 
     private List<TableTennisEventWrapperDTO> getTableTennisProcessedData(TableTennisService tableTennisService) {
         PostProcessTableTennisWrapperDTO processedData = tableTennisService.getProcessedData();

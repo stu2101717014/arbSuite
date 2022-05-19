@@ -134,4 +134,28 @@ public class MQTTConfig {
     Binding nsUIDeleteQueueBinding(@Qualifier("nsUIDeleteQueue") final Queue nsUIDeleteQu, @Qualifier("nsUIDeleteTopicExchange") final TopicExchange nsUIDeleteTopicExchange) {
         return BindingBuilder.bind(nsUIDeleteQu).to(nsUIDeleteTopicExchange).with(nsUIDeleteRoutingKey);
     }
+
+    @Value("${dpMetrics.rabbitmq.queue}")
+    private String dpMetricsQueueName;
+
+    @Value("${dpMetrics.rabbitmq.exchange}")
+    private String dpMetricsExchange;
+
+    @Value("${dpMetrics.rabbitmq.routingkey}")
+    private String dpMetricsRoutingKey;
+
+    @Bean
+    Queue dpMetricsQueue() {
+        return new Queue(dpMetricsQueueName, Boolean.FALSE);
+    }
+
+    @Bean
+    TopicExchange dpMetricsTopicExchange() {
+        return new TopicExchange(dpMetricsExchange);
+    }
+
+    @Bean
+    Binding dpMetricsQueueBinding(@Qualifier("dpMetricsQueue") final Queue dpMetricsQu, @Qualifier("dpMetricsTopicExchange") final TopicExchange dpMetricsTopicExchange) {
+        return BindingBuilder.bind(dpMetricsQu).to(dpMetricsTopicExchange).with(dpMetricsRoutingKey);
+    }
 }

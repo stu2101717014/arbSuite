@@ -1,8 +1,10 @@
 package com.example.dp.services;
 
+import com.example.dp.data.entities.MetricsDAO;
 import com.example.dp.data.entities.PostProcessTableTennisWrapperDAO;
 import com.example.dp.data.entities.ResultEntityDAO;
 import com.example.dp.data.entities.TableTennisEventEntityDAO;
+import com.example.dp.data.repositories.MetricsRepository;
 import com.example.dp.data.repositories.PostProcessTableTennisWrapperRepository;
 import com.example.dp.data.repositories.ResultEntityRepository;
 import com.example.dp.services.helpers.GsonService;
@@ -29,16 +31,20 @@ public class TableTennisServiceImpl implements TableTennisService {
 
     private final GsonService gsonService;
 
+    private final MetricsRepository metricsRepository;
+
     @Autowired
     public TableTennisServiceImpl(PostProcessTableTennisWrapperRepository postProcessTableTennisWrapperRepository
             , ResultEntityRepository resultEntityRepository
             , GsonService gsonService
+            , MetricsRepository metricsRepository
     ) {
 
         this.postProcessTableTennisWrapperRepository = postProcessTableTennisWrapperRepository;
         this.resultEntityRepository = resultEntityRepository;
         this.gsonService = gsonService;
         this.modelMapper = new ModelMapper();
+        this.metricsRepository = metricsRepository;
     }
 
 
@@ -97,6 +103,24 @@ public class TableTennisServiceImpl implements TableTennisService {
 
     public List<String> getPlatformNames() {
         return this.resultEntityRepository.getAllPlatformNames();
+    }
+
+    public void persistMetrics(Long reshapeTime, Long remapNamesSimilaritiesTime) {
+        MetricsDAO metricsDAO = new MetricsDAO();
+        metricsDAO.setDataReshapeTimeComplexity(reshapeTime);
+        metricsDAO.setNameSimilaritiesRemapTimeComplexity(remapNamesSimilaritiesTime);
+
+        this.metricsRepository.deleteAll();
+        this.metricsRepository.saveAndFlush(metricsDAO);
+    }
+
+    public MetricsDAO getLastMetrics(){
+        List<MetricsDAO> all = this.metricsRepository.findAll();
+        Optional<MetricsDAO> first = all.stream().findFirst();
+        if (first.isPresent()){
+            return first.get();
+        }
+        return new MetricsDAO();
     }
 
 }

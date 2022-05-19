@@ -1,5 +1,6 @@
 package com.example.dp.services.interfaces;
 
+import com.example.dp.data.entities.MetricsDAO;
 import com.example.dp.data.entities.PostProcessTableTennisWrapperDAO;
 import dtos.ResultEntityDTO;
 import dtos.TableTennisEventWrapperDTO;
@@ -15,4 +16,8 @@ public interface TableTennisService {
     PostProcessTableTennisWrapperDAO getLatestData();
 
     List<String> getPlatformNames();
+
+    void persistMetrics(Long reshapeTime, Long remapNamesSimilaritiesTime);
+
+    MetricsDAO getLastMetrics();
 }

@@ -8,7 +8,6 @@ import com.example.dp.services.interfaces.ArbitrageService;
 import com.example.dp.services.interfaces.HistoricalService;
 import com.example.dp.services.interfaces.NamesSimilaritiesService;
 import com.example.dp.services.interfaces.TableTennisService;
-import dtos.HistoricalTableTennisEventWrapperDTO;
 import dtos.NamesSimilaritiesDTO;
 import dtos.ResultEntityDTO;
 import dtos.TableTennisEventWrapperDTO;
@@ -21,9 +20,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 @EnableScheduling
@@ -75,9 +71,20 @@ public class ScheduleDataProcessor {
         }
 
         List<NamesSimilaritiesDTO> namesSimilaritiesDTOList = this.namesSimilaritiesService.getAll();
+
+        long nameSimilaritiesRemapStartTime = System.currentTimeMillis();
+
         this.namesSimilaritiesService.remapNamesSimilarities(resultEntityDTOList, namesSimilaritiesDTOList);
 
+        long nameSimilaritiesRemapEstimatedTime = System.currentTimeMillis() - nameSimilaritiesRemapStartTime;
+
+        long dataReshapeStartTime = System.currentTimeMillis();
+
         List<TableTennisEventWrapperDTO> eventWrapperList = this.tableTennisService.reshapeTableTennisEventsData(resultEntityDTOList);
+
+        long dataReshapeEstimatedTime = System.currentTimeMillis() - dataReshapeStartTime;
+        
+        this.tableTennisService.persistMetrics(dataReshapeEstimatedTime, nameSimilaritiesRemapEstimatedTime);
 
         this.arbitrageService.checkForArbitrage(eventWrapperList);
 

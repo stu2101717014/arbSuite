@@ -1,5 +1,6 @@
 package com.example.dp.mqtt.post.process;
 
+import com.example.dp.data.entities.MetricsDAO;
 import com.example.dp.services.helpers.GsonService;
 import com.example.dp.services.interfaces.TableTennisService;
 import org.springframework.amqp.core.Queue;
@@ -8,11 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 
 @Component
-public class GetPlatformNamesReceiver {
+public class GetMetricsReceiver {
 
     private final Queue qu;
 
@@ -21,15 +20,17 @@ public class GetPlatformNamesReceiver {
     private final TableTennisService tableTennisService;
 
     @Autowired
-    public GetPlatformNamesReceiver(@Qualifier("getPlatformNamesQueue") Queue qu, GsonService gsonService, TableTennisService tableTennisService) {
+    public GetMetricsReceiver(@Qualifier("dpMetricsQueue") Queue qu, GsonService gsonService, TableTennisService tableTennisService) {
         this.qu = qu;
         this.gsonService = gsonService;
         this.tableTennisService = tableTennisService;
     }
 
-    @RabbitListener(queues = "#{getPlatformNamesQueue.getName()}")
+
+    @RabbitListener(queues = "#{dpMetricsQueue.getName()}")
     public String getNameSimilarity(String message) {
-        List<String> platformNames = this.tableTennisService.getPlatformNames();
-        return this.gsonService.getGson().toJson(platformNames);
+        MetricsDAO metricsDAO = this.tableTennisService.getLastMetrics();
+        return this.gsonService.getGson().toJson(metricsDAO);
     }
+
 }

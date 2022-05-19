@@ -2,6 +2,7 @@ package com.example.ui.services.interfaces;
 
 
 
+import dtos.MetricsDTO;
 import dtos.PostProcessTableTennisWrapperDTO;
 import dtos.TableTennisEventWrapperDTO;
 
@@ -14,4 +15,6 @@ public interface TableTennisService {
     PostProcessTableTennisWrapperDTO getProcessedData();
 
     List<String> getPlatformNames();
+
+    MetricsDTO getMetrics();
 }

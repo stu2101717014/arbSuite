@@ -1,13 +1,14 @@
 package com.example.ui.services;
 
+import com.example.ui.mqtt.GetMetricsSender;
 import com.example.ui.mqtt.GetPlatformNamesSender;
 import com.example.ui.mqtt.PPTTWGetLatestSender;
 import com.example.ui.services.interfaces.TableTennisService;
+import dtos.MetricsDTO;
 import dtos.PostProcessTableTennisWrapperDTO;
 import dtos.TableTennisEventWrapperDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -22,11 +23,15 @@ public class TableTennisServiceImpl implements TableTennisService {
 
     private final GetPlatformNamesSender getPlatformNamesSender;
 
+    private final GetMetricsSender getMetricsSender;
+
     @Autowired
     public TableTennisServiceImpl(PPTTWGetLatestSender ppttwGetLatestSender,
-                                  GetPlatformNamesSender getPlatformNamesSender) {
+                                  GetPlatformNamesSender getPlatformNamesSender,
+                                  GetMetricsSender getMetricsSender) {
         this.ppttwGetLatestSender = ppttwGetLatestSender;
         this.getPlatformNamesSender = getPlatformNamesSender;
+        this.getMetricsSender = getMetricsSender;
     }
 
     @Override
@@ -42,6 +47,11 @@ public class TableTennisServiceImpl implements TableTennisService {
     @Override
     public List<TableTennisEventWrapperDTO> sortReshapedData(List<TableTennisEventWrapperDTO> tableTennisEventWrapperDTOList) {
         return tableTennisEventWrapperDTOList.stream().sorted(nullsLast(Comparator.comparing(e -> e.getTableTennisEventEntityShort().getEventDate(), nullsLast(naturalOrder())))).sorted(nullsLast(Comparator.comparing(e -> e.getTableTennisEventEntityShort().getSecondPlayer(), nullsLast(naturalOrder())))).sorted(nullsLast(Comparator.comparing(e -> e.getTableTennisEventEntityShort().getFirstPlayer(), nullsLast(naturalOrder())))).collect(Collectors.toList());
+    }
+
+    @Override
+    public MetricsDTO getMetrics() {
+        return this.getMetricsSender.getMetrics();
     }
 }
 
