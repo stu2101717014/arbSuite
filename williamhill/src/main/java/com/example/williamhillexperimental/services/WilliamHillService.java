@@ -88,7 +88,7 @@ public class WilliamHillService {
 
         try {
 
-            final String regex = "datetime=\"(\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2})\\+\\d{2}:\\d{2}\"([\\s|\\S]*?)<div class=\"btmarket__link-name btmarket__link-name--2-rows\">[\\s|\\S]*?<span>([.|,|\\w\\s]*)<\\/span>[\\s|\\S]*?<span>([.|,|\\w\\s]*)<\\/span>[\\s|\\S]*?<\\/div>[\\s|\\S]*?(\\d+\\/\\d+)\" data-name=\"[\\s|\\S]*?<\\/span>[\\s|\\S]*?(\\d+\\/\\d+)";
+            final String regex = "datetime=\"(\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\+\\d{2}:\\d{2})\"([\\s|\\S]*?)<div class=\"btmarket__link-name btmarket__link-name--2-rows\">[\\s|\\S]*?<span>([.|,|\\w\\s]*)<\\/span>[\\s|\\S]*?<span>([.|,|\\w\\s]*)<\\/span>[\\s|\\S]*?<\\/div>[\\s|\\S]*?((\\d+\\/\\d+)|EVS)\" data-name=\"[\\s|\\S]*?<\\/span>[\\s|\\S]*?((\\d+\\/\\d+)|EVS)";
 
             final Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
             final Matcher matcher = pattern.matcher(pageAsString);
@@ -100,8 +100,16 @@ public class WilliamHillService {
                 String firstPlayer = matcher.group(3);
                 String secondPlayer = matcher.group(4);
 
-                String firstPlayerOdd = matcher.group(5);
-                String secondPlayerOdd = matcher.group(6);
+                String firstPlayerOdd = matcher.group(6);
+                String secondPlayerOdd = matcher.group(8);
+
+                if (firstPlayerOdd == null){
+                    firstPlayerOdd = "1/1";
+                }
+                if (secondPlayerOdd == null){
+                    secondPlayerOdd = "1/1";
+                }
+
 
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
                 Date eventDate = formatter.parse(dateAsString);
