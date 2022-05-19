@@ -5,13 +5,20 @@ import dtos.ResultEntityDTO;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.protocol.HttpClientContext;
+import org.apache.http.config.Registry;
+import org.apache.http.config.RegistryBuilder;
+import org.apache.http.conn.socket.ConnectionSocketFactory;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+import org.apache.http.ssl.SSLContexts;
 import org.apache.http.util.EntityUtils;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.net.InetSocketAddress;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
@@ -25,18 +32,43 @@ public class HttpServiceImpl {
         return map;
     }
 
-    public String getResponseAsString(String url) throws IOException {
-        CloseableHttpClient httpclient = HttpClientBuilder.create().build();
-        HttpGet httpget = new HttpGet(url);
+    public String getResponseAsString(String url) {
+        try {
 
-        CloseableHttpResponse response = httpclient.execute(httpget);
+            Registry<ConnectionSocketFactory> reg = RegistryBuilder.<ConnectionSocketFactory> create()
+                    .register("http", new MyConnectionSocketFactory())
+                    .register("https", new MySSLConnectionSocketFactory(SSLContexts.createSystemDefault())).build();
+            PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager(reg, new FakeDnsResolver());
+            CloseableHttpClient httpclient = HttpClients.custom().setConnectionManager(cm).build();
+            try {
+                InetSocketAddress socksaddr = new InetSocketAddress("127.0.0.1", 9150);
+                HttpClientContext context = HttpClientContext.create();
+                context.setAttribute("socks.address", socksaddr);
 
-        HttpEntity entity = response.getEntity();
+                HttpGet request = new HttpGet(url);
 
-        String responseString = EntityUtils.toString(entity, "UTF-8");
+                CloseableHttpResponse response = httpclient.execute(request, context);
+                try {
+                    if (response.getStatusLine().getStatusCode() == 200){
+                        HttpEntity entity = response.getEntity();
+                        return EntityUtils.toString(entity, "UTF-8");
+                    }
+                    EntityUtils.consume(response.getEntity());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    response.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                httpclient.close();
+            }
 
-        httpget.releaseConnection();
-        return responseString;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
     public String serializeResultEnt(ResultEntityDTO resultEntityDTO) {

@@ -23,7 +23,7 @@
       <module name="arbUI" target="1.8" />
       <module name="bet354Core" target="8" />
       <module name="bet365" target="1.8" />
-      <module name="betano" target="1.8" />
+      <module name="betano" target="8" />
       <module name="bets22" target="8" />
       <module name="bets22experimental" target="1.8" />
       <module name="betwinner" target="8" />

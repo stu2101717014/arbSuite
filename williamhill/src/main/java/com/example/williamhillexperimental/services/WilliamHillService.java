@@ -18,6 +18,8 @@ import java.math.RoundingMode;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 @EnableScheduling
@@ -57,9 +59,14 @@ public class WilliamHillService {
         Date date = new Date(System.currentTimeMillis());
         resultEntityDTO.setTime(date);
 
-        BrowserEngine browser = BrowserFactory.getWebKit();
+        String responseAsString = httpService.getResponseAsString(WILLIAM_HILL_TABLE_TENNIS_REQUEST_URL);
 
-        this.dataExtraction(resultEntityDTO, tableTennisEventEntities, resultEntityDTOHashSet, browser);
+        this.dataExtraction(resultEntityDTO, tableTennisEventEntities, resultEntityDTOHashSet, responseAsString);
+
+        resultEntityDTO.setTableTennisEventEntitySet(tableTennisEventEntities);
+        Set<ResultEntityDTO> resSet =  new HashSet<>();
+        resSet.add(resultEntityDTO);
+        tableTennisEventEntities.stream().forEach(e -> e.setResultEntity(resSet));
 
         String message = this.httpService.serializeResultEnt(resultEntityDTO);
 
@@ -72,69 +79,48 @@ public class WilliamHillService {
         return bd.doubleValue();
     }
 
-    private void dataExtraction(ResultEntityDTO resultEntityDTO, HashSet<TableTennisEventEntityDTO> tableTennisEventEntities, HashSet<ResultEntityDTO> resultEntityDTOHashSet, BrowserEngine browser) {
+    private void dataExtraction(ResultEntityDTO resultEntityDTO,
+                                HashSet<TableTennisEventEntityDTO> tableTennisEventEntities,
+                                HashSet<ResultEntityDTO> resultEntityDTOHashSet,
+                                String pageAsString
+    ) {
         resultEntityDTO.setPlatformName(PLATFORM_NAME);
 
-        try (Page page = browser.navigate(WILLIAM_HILL_TABLE_TENNIS_REQUEST_URL)) {
+        try {
 
-            List<Element> elements = page.getDocument().queryAll("div.btmarket");
+            final String regex = "datetime=\"(\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2})\\+\\d{2}:\\d{2}\"([\\s|\\S]*?)<div class=\"btmarket__link-name btmarket__link-name--2-rows\">[\\s|\\S]*?<span>([.|,|\\w\\s]*)<\\/span>[\\s|\\S]*?<span>([.|,|\\w\\s]*)<\\/span>[\\s|\\S]*?<\\/div>[\\s|\\S]*?(\\d+\\/\\d+)\" data-name=\"[\\s|\\S]*?<\\/span>[\\s|\\S]*?(\\d+\\/\\d+)";
 
-            for (Element el : elements) {
-                try {
-                    List<Element> dateEls = el.queryAll("span.btmarket__name.btmarket__name--disabled");
-                    if (dateEls.size() > 0) {
+            final Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
+            final Matcher matcher = pattern.matcher(pageAsString);
 
-                        Element element = dateEls.get(0);
-                        String text = element.getText();
+            while (matcher.find()) {
+                TableTennisEventEntityDTO tableTennisEventEntityDTO = new TableTennisEventEntityDTO();
 
-                        Date eventDate = parseEventDate(text);
+                String dateAsString = matcher.group(1);
+                String firstPlayer = matcher.group(3);
+                String secondPlayer = matcher.group(4);
 
-                        List<Element> playerNamesAsList = el.queryAll("div.btmarket__link-name");
-                        if (playerNamesAsList.size() > 0) {
+                String firstPlayerOdd = matcher.group(5);
+                String secondPlayerOdd = matcher.group(6);
 
-                            Element playerNames = playerNamesAsList.get(0);
-                            String playerNamesAsString = playerNames.getText();
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
+                Date eventDate = formatter.parse(dateAsString);
+                Calendar c = Calendar.getInstance();
+                c.setTime(eventDate);
+                c.add(Calendar.HOUR, 2);
+                tableTennisEventEntityDTO.setEventDate(c.getTime());
+                tableTennisEventEntityDTO.setFirstPlayerName(firstPlayer);
+                tableTennisEventEntityDTO.setSecondPlayerName(secondPlayer);
+                tableTennisEventEntityDTO.setFirstPlayerWinningOdd(round(1 + this.parseFraction(firstPlayerOdd), 2));
+                tableTennisEventEntityDTO.setSecondPlayerWinningOdd(round(1 + this.parseFraction(secondPlayerOdd), 2));
 
-                            String[] playersParts = playerNamesAsString.split("\\s+");
-
-                            if (playersParts.length == 4) {
-                                String firstPlayerName = playersParts[0] + " " + playersParts[1];
-                                String secondPlayerName = playersParts[2] + " " + playersParts[3];
-
-                                List<Element> oddsList = el.queryAll("div.btmarket__selection");
-
-                                if (oddsList.size() == 2) {
-                                    Double firstPlayerOdd = round(parseFraction(oddsList.get(0).getText().trim()) + 1, 2);
-                                    Double secondPlayerOdd = round(parseFraction(oddsList.get(1).getText().trim()) + 1, 2);
-
-                                    TableTennisEventEntityDTO tableTennisEventEntity = new TableTennisEventEntityDTO();
-                                    tableTennisEventEntity.setFirstPlayerName(firstPlayerName);
-                                    tableTennisEventEntity.setFirstPlayerWinningOdd(firstPlayerOdd);
-                                    tableTennisEventEntity.setSecondPlayerName(secondPlayerName);
-                                    tableTennisEventEntity.setSecondPlayerWinningOdd(secondPlayerOdd);
-                                    tableTennisEventEntity.setEventDate(eventDate);
-
-                                    tableTennisEventEntity.setResultEntity(resultEntityDTOHashSet);
-
-                                    tableTennisEventEntities.add(tableTennisEventEntity);
-                                }
-                            }
-                        }
-                    }
-
-                    resultEntityDTO.setTableTennisEventEntitySet(tableTennisEventEntities);
-
-
-                } catch (Exception e) {
-
-                    resultEntityDTO.setException(e);
-
-                }
+                tableTennisEventEntities.add(tableTennisEventEntityDTO);
 
             }
 
         } catch (Exception e) {
             resultEntityDTO.setException(e);
+            e.printStackTrace();
         }
     }
 
