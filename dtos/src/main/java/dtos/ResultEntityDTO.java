@@ -11,6 +11,8 @@ public class ResultEntityDTO {
 
     private Date time;
 
+    private Date finishedTime;
+
     private Set<TableTennisEventEntityDTO> tableTennisEventEntitySet;
 
     public String getPlatformName() {
@@ -35,6 +37,14 @@ public class ResultEntityDTO {
 
     public void setTime(Date time) {
         this.time = time;
+    }
+
+    public Date getFinishedTime() {
+        return finishedTime;
+    }
+
+    public void setFinishedTime(Date finishedTime) {
+        this.finishedTime = finishedTime;
     }
 
     public Set<TableTennisEventEntityDTO> getTableTennisEventEntitySet() {

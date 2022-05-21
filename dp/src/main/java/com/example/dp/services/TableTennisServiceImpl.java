@@ -66,13 +66,17 @@ public class TableTennisServiceImpl implements TableTennisService {
                     temporaryShort.setSecondPlayer(tableTennisEventEntity.getSecondPlayerName());
                     temporaryShort.setEventDate(tableTennisEventEntity.getEventDate());
 
+                    TableTennisEventEntityDTO tableTennisEventEntityDTO = this.modelMapper.map(tableTennisEventEntity, TableTennisEventEntityDTO.class);
+                    tableTennisEventEntityDTO.setStartExtraction(re.getTime());
+                    tableTennisEventEntityDTO.setFinishedExtraction(re.getFinishedTime());
+
                     if (resultMap.containsKey(temporaryShort)) {
-                        resultMap.get(temporaryShort).getEventEntityMap().put(re.getPlatformName(), this.modelMapper.map(tableTennisEventEntity, TableTennisEventEntityDTO.class));
+                        resultMap.get(temporaryShort).getEventEntityMap().put(re.getPlatformName(), tableTennisEventEntityDTO);
                     } else {
                         TableTennisEventWrapperDTO tableTennisEventWrapperDTO = new TableTennisEventWrapperDTO();
                         tableTennisEventWrapperDTO.setTableTennisEventEntityShort(temporaryShort);
                         tableTennisEventWrapperDTO.setEventEntityMap(new HashMap<>());
-                        tableTennisEventWrapperDTO.getEventEntityMap().put(re.getPlatformName(), this.modelMapper.map(tableTennisEventEntity, TableTennisEventEntityDTO.class));
+                        tableTennisEventWrapperDTO.getEventEntityMap().put(re.getPlatformName(), tableTennisEventEntityDTO);
                         resultMap.put(temporaryShort, tableTennisEventWrapperDTO);
                     }
                 }

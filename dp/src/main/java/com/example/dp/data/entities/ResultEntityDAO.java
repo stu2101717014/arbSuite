@@ -22,6 +22,9 @@ public class ResultEntityDAO {
     @Column(name="dateCreated", nullable = true)
     private Date time;
 
+    @Column(name="finishedTime", nullable = true)
+    private Date finishedTime;
+
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @JoinTable(
             name = "result_tableTennisEvent",
@@ -59,6 +62,14 @@ public class ResultEntityDAO {
 
     public void setTime(Date time) {
         this.time = time;
+    }
+
+    public Date getFinishedTime() {
+        return finishedTime;
+    }
+
+    public void setFinishedTime(Date finishedTime) {
+        this.finishedTime = finishedTime;
     }
 
     public Set<TableTennisEventEntityDAO> getTableTennisEventEntitySet() {

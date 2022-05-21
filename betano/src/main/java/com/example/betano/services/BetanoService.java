@@ -49,8 +49,7 @@ public class BetanoService {
 
         try {
 
-            Date date = new Date(System.currentTimeMillis());
-            resultEntityDTO.setTime(date);
+            resultEntityDTO.setTime(new Date(System.currentTimeMillis()));
 
             String responseAsString = this.httpService.getResponseAsString(BETANO_TABLE_TENNIS_REQUEST_URL);
             Map map = this.httpService.mapJSONToMap(responseAsString);
@@ -64,6 +63,8 @@ public class BetanoService {
             resultEntityDTO.getTableTennisEventEntitySet().forEach(tte -> tte.setResultEntity(ents));
 
             resultEntityDTO.setPlatformName(PLATFORM_NAME);
+
+            resultEntityDTO.setFinishedTime(new Date(System.currentTimeMillis()));
 
             String message = this.httpService.serializeResultEnt(resultEntityDTO);
 

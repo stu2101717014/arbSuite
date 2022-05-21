@@ -114,6 +114,8 @@ public class BetwinnerService {
 
             resultEntityDTO.setPlatformName(PLATFORM_NAME);
 
+            resultEntityDTO.setFinishedTime(new Date(System.currentTimeMillis()));
+
             String message = this.httpService.serializeResultEnt(resultEntityDTO);
 
             rabbitTemplate.convertAndSend(binding.getExchange(), binding.getRoutingKey(), message);

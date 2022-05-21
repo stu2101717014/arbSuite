@@ -17,6 +17,10 @@ public class TableTennisEventEntityDTO {
 
     private Date eventDate;
 
+    private Date startExtraction;
+
+    private Date finishedExtraction;
+
     public Set<ResultEntityDTO> getResultEntity() {
         return resultEntityDTO;
     }
@@ -61,6 +65,22 @@ public class TableTennisEventEntityDTO {
 
     public void setEventDate(Date eventDate) {
         this.eventDate = eventDate;
+    }
+
+    public Date getStartExtraction() {
+        return startExtraction;
+    }
+
+    public void setStartExtraction(Date startExtraction) {
+        this.startExtraction = startExtraction;
+    }
+
+    public Date getFinishedExtraction() {
+        return finishedExtraction;
+    }
+
+    public void setFinishedExtraction(Date finishedExtraction) {
+        this.finishedExtraction = finishedExtraction;
     }
 
     @Override
