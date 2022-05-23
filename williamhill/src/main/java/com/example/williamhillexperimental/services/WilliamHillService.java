@@ -2,34 +2,26 @@ package com.example.williamhillexperimental.services;
 
 import dtos.ResultEntityDTO;
 import dtos.TableTennisEventEntityDTO;
-import io.webfolder.ui4j.api.browser.BrowserEngine;
-import io.webfolder.ui4j.api.browser.BrowserFactory;
-import io.webfolder.ui4j.api.browser.Page;
-import io.webfolder.ui4j.api.dom.Element;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@Service
-@EnableScheduling
-public class WilliamHillService {
+@Component
+public class WilliamHillService implements ApplicationRunner {
 
     private static final String WILLIAM_HILL_TABLE_TENNIS_REQUEST_URL = "https://sports.williamhill.com/betting/en-gb/table-tennis/matches";
 
     private static final String PLATFORM_NAME = "WilliamHill";
-
-    public static final int DELAY = 30000;
 
     private final RabbitTemplate rabbitTemplate;
 
@@ -46,7 +38,11 @@ public class WilliamHillService {
         this.httpService = httpService;
     }
 
-    @Scheduled(fixedDelay = DELAY)
+    @Override
+    public void run(ApplicationArguments args) {
+        getTableTennisData();
+    }
+
     public void getTableTennisData() {
 
         ResultEntityDTO resultEntityDTO = new ResultEntityDTO();
@@ -73,6 +69,8 @@ public class WilliamHillService {
         String message = this.httpService.serializeResultEnt(resultEntityDTO);
 
         rabbitTemplate.convertAndSend(binding.getExchange(), binding.getRoutingKey(), message);
+
+        System.exit(0);
     }
 
     public static double round(double value, int places) {
@@ -144,37 +142,5 @@ public class WilliamHillService {
             return 1d;
         }
         return 0d;
-    }
-
-    private Date parseEventDate(String text) throws ParseException {
-        Date eventDate;
-        if (text.toLowerCase(Locale.ROOT).startsWith("live")) {
-            eventDate = Calendar.getInstance().getTime();
-        } else {
-            if (text.toLowerCase(Locale.ROOT).endsWith("live")) {
-                text = text.replace("Live", "");
-            }
-            SimpleDateFormat formatter = new SimpleDateFormat("dd MMM HH:mm");
-            eventDate = formatter.parse(text);
-
-            Calendar instance = Calendar.getInstance();
-            instance.setTime(eventDate);
-            instance.set(Calendar.YEAR, Calendar.getInstance().get(Calendar.YEAR));
-            eventDate = instance.getTime();
-            if (Calendar.getInstance().get(Calendar.MONTH) == Calendar.DECEMBER
-                    && instance.get(Calendar.MONTH) == Calendar.JANUARY) {
-                instance.set(Calendar.YEAR, (Calendar.getInstance().get(Calendar.YEAR) + 1));
-                eventDate = instance.getTime();
-            }
-        }
-
-        if (TimeZone.getDefault().inDaylightTime(new Date())) {
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(eventDate);
-            cal.add(Calendar.HOUR, -1);
-            return cal.getTime();
-        }
-
-        return eventDate;
     }
 }

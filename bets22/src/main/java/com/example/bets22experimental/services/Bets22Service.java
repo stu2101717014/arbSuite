@@ -5,17 +5,14 @@ import dtos.TableTennisEventEntityDTO;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
+import org.springframework.stereotype.Component;
 
 import java.util.*;
 
-@Service
-@EnableScheduling
-public class Bets22Service {
-
-    public static final int DELAY = 30000;
+@Component
+public class Bets22Service implements ApplicationRunner {
 
     private static final String BETS_22_TABLE_TENNIS_REQUEST_URL = "https://22betz.com/LineFeed/Get1x2_VZip?sports=10&count=5000&lng=en&tf=3000000&tz=2&mode=4&partner=151&getEmpty=true";
 
@@ -40,7 +37,11 @@ public class Bets22Service {
         this.binding = binding;
     }
 
-    @Scheduled(fixedDelay = DELAY)
+    @Override
+    public void run(ApplicationArguments args) {
+        getTableTennisData();
+    }
+
     public void getTableTennisData() {
         ResultEntityDTO resultEntityDTO = new ResultEntityDTO();
 
@@ -67,6 +68,8 @@ public class Bets22Service {
             String message = this.httpService.serializeResultEnt(resultEntityDTO);
 
             rabbitTemplate.convertAndSend(binding.getExchange(), binding.getRoutingKey(), message);
+
+            System.exit(0);
 
         } catch (Exception e) {
             resultEntityDTO.setException(e);

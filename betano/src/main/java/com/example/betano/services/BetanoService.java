@@ -5,22 +5,16 @@ import dtos.TableTennisEventEntityDTO;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
+import org.springframework.stereotype.Component;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
-@Service
-@EnableScheduling
-public class BetanoService {
+@Component
+public class BetanoService implements ApplicationRunner {
 
-    private static String BETANO_TABLE_TENNIS_REQUEST_URL ="https://sb2frontend-altenar2.biahosted.com/api/Sportsbook/GetEvents?timezoneOffset=-180&langId=6&skinName=alphawin2&configId=12&culture=bg-bg&countryCode=BG&deviceType=Desktop&numformat=en&integration=alphawin2&sportids=0&categoryids=669%2C962%2C1184&champids=0&group=AllEvents&period=periodall&withLive=false&outrightsDisplay=none&marketTypeIds=&couponType=0";
-
-    public static final int DELAY = 30000;
+    private static String BETANO_TABLE_TENNIS_REQUEST_URL = "https://sb2frontend-altenar2.biahosted.com/api/Sportsbook/GetEvents?timezoneOffset=-180&langId=6&skinName=alphawin2&configId=12&culture=bg-bg&countryCode=BG&deviceType=Desktop&numformat=en&integration=alphawin2&sportids=0&categoryids=669%2C962%2C1184&champids=0&group=AllEvents&period=periodall&withLive=false&outrightsDisplay=none&marketTypeIds=&couponType=0";
 
     private final HttpServiceImpl httpService;
 
@@ -34,8 +28,8 @@ public class BetanoService {
 
     @Autowired
     public BetanoService(RabbitTemplate rabbitTemplate,
-                           Binding binding,
-                           HttpServiceImpl httpService,
+                         Binding binding,
+                         HttpServiceImpl httpService,
                          BetanoDataNormalizationServiceImpl betanoDataNormalizationService) {
         this.rabbitTemplate = rabbitTemplate;
         this.binding = binding;
@@ -43,8 +37,12 @@ public class BetanoService {
         this.betanoDataNormalizationService = betanoDataNormalizationService;
     }
 
-    @Scheduled(fixedDelay = DELAY)
-    public void getTableTennisData(){
+    @Override
+    public void run(ApplicationArguments args) {
+        getTableTennisData();
+    }
+
+    public void getTableTennisData() {
         ResultEntityDTO resultEntityDTO = new ResultEntityDTO();
 
         try {
@@ -69,7 +67,9 @@ public class BetanoService {
             String message = this.httpService.serializeResultEnt(resultEntityDTO);
 
             rabbitTemplate.convertAndSend(binding.getExchange(), binding.getRoutingKey(), message);
-        }catch (Exception e){
+
+            System.exit(0);
+        } catch (Exception e) {
             resultEntityDTO.setException(e);
         }
     }

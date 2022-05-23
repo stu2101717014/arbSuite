@@ -5,19 +5,19 @@ import dtos.TableTennisEventEntityDTO;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-@Service
-@EnableScheduling
-public class BwinService {
+@Component
+public class BwinService implements ApplicationRunner {
 
     private static String BWIN_TABLE_TENNIS_REQUEST_URL ="https://cds-api.bwin.com/bettingoffer/fixtures?x-bwin-accessid=NTZiMjk3OGMtNjU5Mi00NjA5LWI2MWItZmU4MDRhN2QxZmEz&lang=en&country=BG&userCountry=BG&fixtureTypes=Standard&state=Latest&offerMapping=Filtered&offerCategories=Gridable&fixtureCategories=Gridable,NonGridable,Other&sportIds=56&regionIds=&competitionIds=&skip=0&take=5000&sortBy=Tags";
-
-    public static final int DELAY = 30000;
 
     private final BwinDataNormalizationServiceImpl dataNormalizationService;
 
@@ -40,7 +40,11 @@ public class BwinService {
         this.binding = binding;
     }
 
-    @Scheduled(fixedDelay = DELAY)
+    @Override
+    public void run(ApplicationArguments args) {
+        getTableTennisData();
+    }
+
     public void getTableTennisData(){
         ResultEntityDTO resultEntityDTO = new ResultEntityDTO();
 
@@ -67,6 +71,8 @@ public class BwinService {
             String message = this.httpService.serializeResultEnt(resultEntityDTO);
 
             rabbitTemplate.convertAndSend(binding.getExchange(), binding.getRoutingKey(), message);
+
+            System.exit(0);
         }catch (Exception e){
             resultEntityDTO.setException(e);
         }

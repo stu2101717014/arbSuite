@@ -12,6 +12,7 @@
         <module name="UI" />
         <module name="bwin" />
         <module name="williamhill" />
+        <module name="service-starter" />
         <module name="betwinner" />
         <module name="dtos" />
         <module name="hs" />
@@ -36,6 +37,7 @@
       <module name="hs" target="8" />
       <module name="mybookie" target="1.8" />
       <module name="palmsbet" target="8" />
+      <module name="service-starter" target="8" />
       <module name="ui" target="1.8" />
       <module name="UI" target="8" />
       <module name="williamhill" target="8" />
@@ -59,6 +61,7 @@
       <module name="hs" options="-parameters" />
       <module name="mybookie" options="-parameters" />
       <module name="palmsbet" options="-parameters" />
+      <module name="service-starter" options="-parameters" />
       <module name="ui" options="-parameters" />
       <module name="williamhill" options="-parameters" />
       <module name="williamhill-experimental" options="-parameters" />

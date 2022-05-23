@@ -5,22 +5,19 @@ import dtos.TableTennisEventEntityDTO;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-@Service
-@EnableScheduling
-public class PalmsbetService {
+@Component
+public class PalmsbetService implements ApplicationRunner {
 
     private static String PALMSBET_TABLE_TENNIS_REQUEST_URL ="https://fp.palmsbet.com/api/line/league/142813067/headers?languageId=9";
-
-    public static final int DELAY = 30000;
 
     private final HttpServiceImpl httpService;
 
@@ -43,7 +40,11 @@ public class PalmsbetService {
         this.palmsbetDataNormalizationService = palmsbetDataNormalizationService;
     }
 
-    @Scheduled(fixedDelay = DELAY)
+    @Override
+    public void run(ApplicationArguments args) {
+        getTableTennisData();
+    }
+
     public void getTableTennisData(){
         ResultEntityDTO resultEntityDTO = new ResultEntityDTO();
 
@@ -70,6 +71,8 @@ public class PalmsbetService {
             String message = this.httpService.serializeResultEnt(resultEntityDTO);
 
             rabbitTemplate.convertAndSend(binding.getExchange(), binding.getRoutingKey(), message);
+
+            System.exit(0);
         }catch (Exception e){
             resultEntityDTO.setException(e);
         }
