@@ -1,11 +1,11 @@
 package com.example.ui.views.table.tennis;
 
+import com.example.ui.security.utils.SecurityUtils;
 import com.example.ui.services.interfaces.TableTennisService;
 import com.example.ui.views.MainLayout;
 import com.example.ui.security.utils.SecuredByRole;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
@@ -13,7 +13,6 @@ import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
 
 
@@ -23,13 +22,18 @@ import dtos.TableTennisEventWrapperDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
-@SecuredByRole("ROLE_Admin")
+@SecuredByRole(SecurityUtils.ROLE_USER)
 @Component
 @Route(value = "tabletennisevents", layout = MainLayout.class)
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -46,10 +50,15 @@ public class ListTableTennisEventsView extends VerticalLayout {
 
     public static final Double INITIAL_AMOUNT = 100d;
 
+    public final Authentication auth;
+
     @Autowired
     public ListTableTennisEventsView(TableTennisService tableTennisService,
                                      CalculatingStakeFormView calculatingStakeFormView,
                                      AddNamesSimilaritiesFormView addNamesSimilaritiesFormView) {
+
+        this.auth = SecurityContextHolder.getContext().getAuthentication();
+
 
         this.tableTennisService = tableTennisService;
 
@@ -73,27 +82,31 @@ public class ListTableTennisEventsView extends VerticalLayout {
         });
 
         FlexLayout content = configureContent(addNamesSimilaritiesFormView, calculatingStakeFormView);
-        Button showAddNewNamesSimilarities = new Button("Add Name Similarity");
-        showAddNewNamesSimilarities.addClickListener(e -> addNamesSimilaritiesFormView.setVisible(true));
 
-        addAndExpand(new HorizontalLayout(showAddNewNamesSimilarities, showStakesCalculator), content, getMetrics());
+        Collection<? extends GrantedAuthority> authorities = this.auth.getAuthorities();
+        List<String> stringStream = authorities.stream().map(a -> a.getAuthority().toString()).filter(a -> a.equals(SecurityUtils.ROLE_ADMIN)).collect(Collectors.toList());
+
+        if (stringStream.size() > 0) {
+            Button showAddNewNamesSimilarities = new Button("Add Name Similarity");
+            showAddNewNamesSimilarities.addClickListener(e -> addNamesSimilaritiesFormView.setVisible(true));
+            addAndExpand(new HorizontalLayout(showAddNewNamesSimilarities, showStakesCalculator), content, getMetrics());
+        } else {
+            addAndExpand(new HorizontalLayout(showStakesCalculator), content, getMetrics());
+        }
         setHeightFull();
-
-
-
     }
 
-    private VerticalLayout getMetrics(){
+    private VerticalLayout getMetrics() {
         MetricsDTO metrics = this.tableTennisService.getMetrics();
         VerticalLayout verticalLayout = new VerticalLayout();
         Label reshapeMetricLabel = new Label("Reshape data time : " + metrics.getDataReshapeTimeComplexity());
-        Label remapNamesMetricLabel =  new Label("Remap names time : " + metrics.getNameSimilaritiesRemapTimeComplexity());
+        Label remapNamesMetricLabel = new Label("Remap names time : " + metrics.getNameSimilaritiesRemapTimeComplexity());
         verticalLayout.add(remapNamesMetricLabel);
         verticalLayout.add(reshapeMetricLabel);
 
-        verticalLayout.getElement().getStyle().set("position","absolute");
-        verticalLayout.getElement().getStyle().set("bottom",20+"px");
-        verticalLayout.getElement().getStyle().set("left",20+"px");
+        verticalLayout.getElement().getStyle().set("position", "absolute");
+        verticalLayout.getElement().getStyle().set("bottom", 20 + "px");
+        verticalLayout.getElement().getStyle().set("left", 20 + "px");
 
         return verticalLayout;
     }

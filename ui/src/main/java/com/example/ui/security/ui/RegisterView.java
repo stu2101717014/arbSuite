@@ -8,22 +8,25 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.router.BeforeEnterEvent;
-import com.vaadin.flow.router.BeforeEnterObserver;
-import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.*;
+import com.vaadin.flow.server.VaadinService;
+import com.vaadin.flow.server.VaadinServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
 @Component
 @Route(value = RegisterView.ROUTE)
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class RegisterView extends VerticalLayout implements BeforeEnterObserver {
+public class RegisterView extends VerticalLayout {
 
     public static final String ROUTE = "register";
 
-    private final UserService userService;
+    private final UserService userService; 
 
     private final TextField username;
 
@@ -49,6 +52,8 @@ public class RegisterView extends VerticalLayout implements BeforeEnterObserver 
 
         setAlignItems(Alignment.CENTER);
         setJustifyContentMode(JustifyContentMode.CENTER);
+
+
     }
 
 
@@ -59,9 +64,8 @@ public class RegisterView extends VerticalLayout implements BeforeEnterObserver 
         user.setPassword(this.passwordField.getValue());
         this.userService.setDefaultRole(user);
         this.userService.saveUser(user);
+
+        e.getSource().getUI().ifPresent(ie -> ie.getPage().setLocation("/login"));
     }
 
-    @Override
-    public void beforeEnter(BeforeEnterEvent event) {
-    }
 }

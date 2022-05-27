@@ -4,6 +4,7 @@ import com.example.ui.security.data.Role;
 import com.example.ui.security.data.RoleRepository;
 import com.example.ui.security.data.User;
 import com.example.ui.security.data.UserRepository;
+import com.example.ui.security.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -28,10 +29,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     private final RoleRepository roleRepository;
-
-    private static final String ROLE_USER = "ROLE_User";
-
-    private static final String ROLE_ADMIN = "ROLE_Admin";
 
     @Autowired
     public UserServiceImpl(UserRepository userRepo,
@@ -74,7 +71,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public User setDefaultRole(User user){
         List<Role> all = this.roleRepository.findAll();
-        Stream<Role> roleStream = all.stream().filter(role -> role.getName().equals(ROLE_USER));
+        Stream<Role> roleStream = all.stream().filter(role -> role.getName().equals(SecurityUtils.ROLE_USER));
         Role role = roleStream.findFirst().get();
         user.setRoles(role);
         return user;

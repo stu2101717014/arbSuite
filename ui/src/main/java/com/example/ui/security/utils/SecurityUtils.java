@@ -14,6 +14,10 @@ import java.util.stream.Stream;
 
 public final class SecurityUtils {
 
+    public static final String ROLE_USER  = "ROLE_User";
+
+    public static final String ROLE_ADMIN  = "ROLE_Admin";
+
     private SecurityUtils() {
         // Util methods only
     }
