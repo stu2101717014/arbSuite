@@ -2,8 +2,6 @@ package com.example.dp.services;
 
 import com.example.dp.data.entities.MetricsDAO;
 import com.example.dp.data.entities.PostProcessTableTennisWrapperDAO;
-import com.example.dp.data.entities.ResultEntityDAO;
-import com.example.dp.data.entities.TableTennisEventEntityDAO;
 import com.example.dp.data.repositories.MetricsRepository;
 import com.example.dp.data.repositories.PostProcessTableTennisWrapperRepository;
 import com.example.dp.data.repositories.ResultEntityRepository;
@@ -38,24 +36,25 @@ public class TableTennisServiceImpl implements TableTennisService {
             , ResultEntityRepository resultEntityRepository
             , GsonService gsonService
             , MetricsRepository metricsRepository
+            , ModelMapper modelMapper
     ) {
 
         this.postProcessTableTennisWrapperRepository = postProcessTableTennisWrapperRepository;
         this.resultEntityRepository = resultEntityRepository;
         this.gsonService = gsonService;
-        this.modelMapper = new ModelMapper();
+        this.modelMapper = modelMapper;
         this.metricsRepository = metricsRepository;
     }
 
 
-    public List<TableTennisEventWrapperDTO> reshapeTableTennisEventsData(List<ResultEntityDTO> resultEntityDAOList) {
+    public List<TableTennisEventWrapperDTO> reshapeTableTennisEventsData(List<ResultEntityDTO> resultEntityDTOList) {
 
         HashMap<TableTennisEventEntityShortDTO, TableTennisEventWrapperDTO> resultMap = new HashMap<>();
         List<TableTennisEventWrapperDTO> resultAsList = new ArrayList<>();
 
         try {
 
-            for (ResultEntityDTO re : resultEntityDAOList) {
+            for (ResultEntityDTO re : resultEntityDTOList) {
 
                 Set<TableTennisEventEntityDTO> tableTennisEventEntitySet = re.getTableTennisEventEntitySet();
 

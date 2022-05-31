@@ -1,32 +1,16 @@
 package com.example.dp.services;
 
-import com.example.dp.mqtt.historical.HistoricalRecordTTEESaveSender;
-import com.example.dp.services.helpers.GsonService;
 import com.example.dp.services.interfaces.ArbitrageService;
-import com.google.gson.Gson;
-import dtos.HistoricalTableTennisEventWrapperDTO;
 import dtos.TableTennisEventEntityDTO;
 import dtos.TableTennisEventWrapperDTO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 @Service
 public class ArbitrageServiceImpl implements ArbitrageService {
-
-    private final GsonService gsonService;
-
-    private final HistoricalRecordTTEESaveSender historicalRecordTTEESaveSender;
-
-    @Autowired
-    public ArbitrageServiceImpl(GsonService gsonService, HistoricalRecordTTEESaveSender historicalRecordTTEESaveSender) {
-        this.gsonService = gsonService;
-        this.historicalRecordTTEESaveSender = historicalRecordTTEESaveSender;
-    }
 
     public List<Double> calculateBets(double investment, List<Double> odds, double arbitragePercentage) {
         double oddsSize = odds.size();
@@ -35,9 +19,7 @@ public class ArbitrageServiceImpl implements ArbitrageService {
         for (int i = 0; i < oddsSize; i++) {
             double individualArbitragePercentage = (1 / odds.get(i)) * 100;
             resultList.add(((investment * individualArbitragePercentage) / arbitragePercentage) / 100);
-
         }
-
         return resultList;
     }
 
@@ -66,7 +48,4 @@ public class ArbitrageServiceImpl implements ArbitrageService {
             }
         }
     }
-
-
 }
-
