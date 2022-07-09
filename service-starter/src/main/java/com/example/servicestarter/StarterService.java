@@ -24,12 +24,6 @@ public class StarterService {
     @Scheduled(fixedDelay = DELAY)
     public void start() {
 
-        //                       port
-        //netstat -aon | findstr 8082
-        //             Thread_ID
-        //taskkill /PID 26240 /F
-        //mvn spring-boot:run
-
         Path parent = Paths.get(System.getProperty("user.dir")).getParent();
 
         //                            Betano    22Bet     BWin    WilliamHill  "palmsbet", "betwinner"
@@ -69,6 +63,8 @@ public class StarterService {
 
         createAndExecuteThreads(dirs, parent, " & mvn spring-boot:run ", "     RUN    ", "           ", threads);
 
+        System.out.println();
+        System.out.println();
     }
 
     private void createAndExecuteThreads(String[] dirs, Path parent, String x, String x1, String ___________, List<Thread> threads) {

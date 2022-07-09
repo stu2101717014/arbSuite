@@ -1,6 +1,5 @@
 package com.example.dp.services;
 
-
 import com.example.dp.data.entities.ResultEntityDAO;
 import com.example.dp.data.repositories.ResultEntityRepository;
 import com.example.dp.data.repositories.TableTennisEventEntityRepository;

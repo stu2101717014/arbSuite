@@ -8,7 +8,6 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
-import org.apache.http.conn.socket.ConnectionSocketFactory;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
@@ -16,7 +15,6 @@ import org.apache.http.ssl.SSLContexts;
 import org.apache.http.util.EntityUtils;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.lang.reflect.Type;
 import java.net.InetSocketAddress;
 import java.time.LocalDate;
@@ -35,9 +33,9 @@ public class HttpServiceImpl {
     public String getResponseAsString(String url) {
         try {
 
-            Registry<ConnectionSocketFactory> reg = RegistryBuilder.<ConnectionSocketFactory> create()
-                    .register("http", new MyConnectionSocketFactory())
-                    .register("https", new MySSLConnectionSocketFactory(SSLContexts.createSystemDefault())).build();
+            Registry<org.apache.http.conn.socket.ConnectionSocketFactory> reg = RegistryBuilder.<org.apache.http.conn.socket.ConnectionSocketFactory> create()
+                    .register("http", new ConnectionSocketFactory())
+                    .register("https", new SSLConnectionSocketFactory(SSLContexts.createSystemDefault())).build();
             PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager(reg, new FakeDnsResolver());
             CloseableHttpClient httpclient = HttpClients.custom().setConnectionManager(cm).build();
             try {

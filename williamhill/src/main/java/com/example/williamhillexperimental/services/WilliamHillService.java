@@ -48,21 +48,17 @@ public class WilliamHillService implements ApplicationRunner {
         ResultEntityDTO resultEntityDTO = new ResultEntityDTO();
         HashSet<TableTennisEventEntityDTO> tableTennisEventEntities = new HashSet<>();
 
-
-        HashSet<ResultEntityDTO> resultEntityDTOHashSet = new HashSet<>();
-        resultEntityDTOHashSet.add(resultEntityDTO);
-
         Date date = new Date(System.currentTimeMillis());
         resultEntityDTO.setTime(date);
 
         String responseAsString = httpService.getResponseAsString(WILLIAM_HILL_TABLE_TENNIS_REQUEST_URL);
 
-        this.dataExtraction(resultEntityDTO, tableTennisEventEntities, resultEntityDTOHashSet, responseAsString);
+        this.dataExtraction(resultEntityDTO, tableTennisEventEntities, responseAsString);
 
         resultEntityDTO.setTableTennisEventEntitySet(tableTennisEventEntities);
         Set<ResultEntityDTO> resSet =  new HashSet<>();
         resSet.add(resultEntityDTO);
-        tableTennisEventEntities.stream().forEach(e -> e.setResultEntity(resSet));
+        tableTennisEventEntities.forEach(e -> e.setResultEntity(resSet));
 
         resultEntityDTO.setFinishedTime(new Date(System.currentTimeMillis()));
 
@@ -81,7 +77,6 @@ public class WilliamHillService implements ApplicationRunner {
 
     private void dataExtraction(ResultEntityDTO resultEntityDTO,
                                 HashSet<TableTennisEventEntityDTO> tableTennisEventEntities,
-                                HashSet<ResultEntityDTO> resultEntityDTOHashSet,
                                 String pageAsString
     ) {
         resultEntityDTO.setPlatformName(PLATFORM_NAME);

@@ -40,7 +40,7 @@ public class ArbitrageServiceImplTest {
 
         TableTennisEventWrapperDTO tableTennisEventWrapperDTO1 = tableTennisEventWrapperDTOS.get(0);
         Double arbitragePercentage = tableTennisEventWrapperDTO1.getArbitragePercentage();
-        double roundDbl = Math.round(arbitragePercentage*100.0)/100.0;
+        double roundDbl = Math.round(arbitragePercentage * 100.0) / 100.0;
 
         assertEquals(0.91, roundDbl);
     }
@@ -54,7 +54,7 @@ public class ArbitrageServiceImplTest {
 
         TableTennisEventWrapperDTO tableTennisEventWrapperDTO1 = tableTennisEventWrapperDTOS.get(0);
         Double arbitragePercentage = tableTennisEventWrapperDTO1.getArbitragePercentage();
-        double roundDbl = Math.round(arbitragePercentage*100.0)/100.0;
+        double roundDbl = Math.round(arbitragePercentage * 100.0) / 100.0;
 
         assertEquals(0.91, roundDbl);
     }
@@ -69,8 +69,8 @@ public class ArbitrageServiceImplTest {
 
         List<Double> stakes = arbitrageService.calculateBets(100, Arrays.asList(2.2, 2.2), arbitragePercentage);
 
-        assertEquals(50,  stakes.get(0));
-        assertEquals(50,  stakes.get(1));
+        assertEquals(50, stakes.get(0));
+        assertEquals(50, stakes.get(1));
 
     }
 
@@ -82,11 +82,10 @@ public class ArbitrageServiceImplTest {
         TableTennisEventWrapperDTO tableTennisEventWrapperDTO1 = tableTennisEventWrapperDTOS.get(0);
         Double arbitragePercentage = tableTennisEventWrapperDTO1.getArbitragePercentage();
 
-        List<Double> stakes = arbitrageService.calculateBets(100, Arrays.asList(3.0, 2.0), arbitragePercentage);
+        List<Double> stakes = arbitrageService.calculateBets(100, Arrays.asList(2.0, 3.0), arbitragePercentage);
 
-        assertEquals(40,  Math.round(stakes.get(0)));
-        assertEquals(60,  Math.round(stakes.get(1)));
-
+        assertEquals(60, Math.round(stakes.get(0)));
+        assertEquals(40, Math.round(stakes.get(1)));
     }
 
     private void getTestData(List<TableTennisEventWrapperDTO> tableTennisEventWrapperDTOS

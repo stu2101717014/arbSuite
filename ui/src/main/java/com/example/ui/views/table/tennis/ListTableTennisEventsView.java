@@ -91,7 +91,7 @@ public class ListTableTennisEventsView extends VerticalLayout {
             showAddNewNamesSimilarities.addClickListener(e -> addNamesSimilaritiesFormView.setVisible(true));
             addAndExpand(new HorizontalLayout(showAddNewNamesSimilarities, showStakesCalculator), content, getMetrics());
         } else {
-            addAndExpand(new HorizontalLayout(showStakesCalculator), content, getMetrics());
+            addAndExpand(new HorizontalLayout(showStakesCalculator), content);
         }
         setHeightFull();
     }
@@ -99,8 +99,8 @@ public class ListTableTennisEventsView extends VerticalLayout {
     private VerticalLayout getMetrics() {
         MetricsDTO metrics = this.tableTennisService.getMetrics();
         VerticalLayout verticalLayout = new VerticalLayout();
-        Label reshapeMetricLabel = new Label("Reshape data time : " + metrics.getDataReshapeTimeComplexity());
-        Label remapNamesMetricLabel = new Label("Remap names time : " + metrics.getNameSimilaritiesRemapTimeComplexity());
+        Label reshapeMetricLabel = new Label("Reshape data time : " + metrics.getDataReshapeTimeComplexity() + " ms");
+        Label remapNamesMetricLabel = new Label("Remap names time : " + metrics.getNameSimilaritiesRemapTimeComplexity() + " ms");
         verticalLayout.add(remapNamesMetricLabel);
         verticalLayout.add(reshapeMetricLabel);
 

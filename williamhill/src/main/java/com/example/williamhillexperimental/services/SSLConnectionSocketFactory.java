@@ -1,7 +1,6 @@
 package com.example.williamhillexperimental.services;
 
 import org.apache.http.HttpHost;
-import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.protocol.HttpContext;
 
 import javax.net.ssl.SSLContext;
@@ -10,9 +9,9 @@ import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.Socket;
 
-public class MySSLConnectionSocketFactory extends SSLConnectionSocketFactory {
+public class SSLConnectionSocketFactory extends org.apache.http.conn.ssl.SSLConnectionSocketFactory {
 
-    public MySSLConnectionSocketFactory(final SSLContext sslContext) {
+    public SSLConnectionSocketFactory(final SSLContext sslContext) {
         // You may need this verifier if target site's certificate is not secure
         super(sslContext, ALLOW_ALL_HOSTNAME_VERIFIER);
     }
@@ -28,8 +27,7 @@ public class MySSLConnectionSocketFactory extends SSLConnectionSocketFactory {
     public Socket connectSocket(int connectTimeout, Socket socket, HttpHost host, InetSocketAddress remoteAddress,
                                 InetSocketAddress localAddress, HttpContext context) throws IOException {
         // Convert address to unresolved
-        InetSocketAddress unresolvedRemote = InetSocketAddress
-                .createUnresolved(host.getHostName(), remoteAddress.getPort());
+        InetSocketAddress unresolvedRemote = InetSocketAddress.createUnresolved(host.getHostName(), remoteAddress.getPort());
         return super.connectSocket(connectTimeout, socket, host, unresolvedRemote, localAddress, context);
     }
 }

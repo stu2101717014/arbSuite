@@ -4,6 +4,9 @@ import com.example.ui.security.data.User;
 import com.example.ui.security.services.UserService;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.H2;
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.PasswordField;
@@ -26,8 +29,9 @@ public class RegisterView extends VerticalLayout {
 
     public static final String ROUTE = "register";
 
-    private final UserService userService; 
+    private final UserService userService;
 
+    private final H1 registerLabel;
     private final TextField username;
 
     private final EmailField emailField;
@@ -38,6 +42,8 @@ public class RegisterView extends VerticalLayout {
     public RegisterView(UserService userService) {
         this.userService = userService;
 
+        this.registerLabel = new H1();
+        this.registerLabel.setText("Register");
         this.username = new TextField();
         this.username.setLabel("Username");
         this.emailField = new EmailField();
@@ -47,7 +53,7 @@ public class RegisterView extends VerticalLayout {
         Button register = new Button("Register");
         register.addClickListener(this::registerUser);
 
-        add(this.username, this.emailField, this.passwordField, register);
+        add(this.registerLabel, this.username, this.emailField, this.passwordField, register);
         setSizeFull();
 
         setAlignItems(Alignment.CENTER);

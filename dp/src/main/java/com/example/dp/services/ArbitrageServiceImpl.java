@@ -17,8 +17,7 @@ public class ArbitrageServiceImpl implements ArbitrageService {
         List<Double> resultList = new ArrayList<>();
 
         for (int i = 0; i < oddsSize; i++) {
-            double individualArbitragePercentage = (1 / odds.get(i)) * 100;
-            resultList.add(((investment * individualArbitragePercentage) / arbitragePercentage) / 100);
+            resultList.add((1 / odds.get(i)) * 100 * investment / arbitragePercentage / 100);
         }
         return resultList;
     }

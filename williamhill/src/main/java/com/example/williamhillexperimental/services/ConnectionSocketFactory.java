@@ -9,9 +9,9 @@ import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.Socket;
 
-public class MyConnectionSocketFactory extends PlainConnectionSocketFactory {
+public class ConnectionSocketFactory extends PlainConnectionSocketFactory {
     @Override
-    public Socket createSocket(final HttpContext context) throws IOException {
+    public Socket createSocket(final HttpContext context) {
         InetSocketAddress socksaddr = (InetSocketAddress) context.getAttribute("socks.address");
         Proxy proxy = new Proxy(Proxy.Type.SOCKS, socksaddr);
         return new Socket(proxy);
@@ -20,9 +20,8 @@ public class MyConnectionSocketFactory extends PlainConnectionSocketFactory {
     @Override
     public Socket connectSocket(int connectTimeout, Socket socket, HttpHost host, InetSocketAddress remoteAddress,
                                 InetSocketAddress localAddress, HttpContext context) throws IOException {
-        // Convert address to unresolved
-        InetSocketAddress unresolvedRemote = InetSocketAddress
-                .createUnresolved(host.getHostName(), remoteAddress.getPort());
+
+        InetSocketAddress unresolvedRemote = InetSocketAddress.createUnresolved(host.getHostName(), remoteAddress.getPort());
         return super.connectSocket(connectTimeout, socket, host, unresolvedRemote, localAddress, context);
     }
 }
